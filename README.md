@@ -19,9 +19,9 @@ In this project we will first configure a NVIDIA Tesla V100 GPU within a local c
 - [Dr Justin van Dijk](www.mappingdutchman.com)
 - [Dr Stephen Law](https://www.turing.ac.uk/people/researchers/stephen-law)
 - [Dr Anwar Musah](https://www.geog.ucl.ac.uk/people/academic-staff/anwar-musah)
-- [Mr Shunya Kimura](https://www.researchgate.net/profile/Shunya_Kimura)
 - [Mr Jason Chi Sing Tang](https://www.ucl.ac.uk/geospatial-analytics/people/jason-chi-sing-tang)
-
+- [Mr Shunya Kimura](https://www.researchgate.net/profile/Shunya_Kimura)
+- 
 ## License
 This work is licensed under a
 [Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].
