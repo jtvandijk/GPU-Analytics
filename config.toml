@@ -1,0 +1,6 @@
+baseURL = 'http://example.org/'
+languageCode = 'en-us'
+title = 'GPU-based analysis for social and geographic applications'
+theme = 'hugo-book'
+
+
