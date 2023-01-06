@@ -4,7 +4,3 @@ title = 'GPU-based analysis for social and geographic applications'
 theme = 'hugo-book'
 
 
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
