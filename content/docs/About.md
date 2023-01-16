@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "Preface"
 weight: 1
 # bookFlatSection: false
 # bookToc: true
@@ -12,7 +12,7 @@ weight: 1
 # GPU-based analysis for social and geographic applications
 
 ## Introduction 
-This document provides the tools, the code and utility of the graphics processing unit (GPU) for social and geographic research and applications.This project is funded by The British Academy's [Talent Development Award](https://www.thebritishacademy.ac.uk/funding/talent-development-awards/). Project reference: **TDA21\210069**.  
+This document provides the tools, the code and utility of the graphics processing unit (GPU) for social and geographic research and applications.This project is funded by The British Academy's [Talent Development Award](https://www.thebritishacademy.ac.uk/funding/talent-development-awards/). 
 
 In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations. A Graphics Processing Units (GPU), on the other hand, is designed to execute several tasks simultaneously. GPU-accelerated analytics harness the parallel-capabilities of the GPU to accelerate processing-intensive operations. This can be particularly useful for social and geographic research where the data sets are often large and complex. 
 
@@ -20,9 +20,7 @@ In this document, we will explore a collection of novel and innovative computati
 
 Second, whereas ‘Big Data’ can be very rich sources of information, they tend to be accidental (e.g. a by-product of online transactions) and highly diverse in quality and resolution. As a result, many ‘Big Data’ sources are not representative of the population or phenomenon of study and contain a variety of biases and uncertainties. An illustrative example of the problem is described in Van [Dijk et al. (2021)](https://doi.org/10.1111/rssa.12713) where, in the absence of frequently updated data on the nature of residential moves in the United Kingdom, the authors use population registers and administrative data to develop robust annual estimates of residential mobility between all UK neighbourhoods by ascribing individuals that seemingly vacate a property to their most probably residential destination. With circa 7.8 billion possible origin-destination pairings, this was a very time-consuming and computationally intensive model.
 
-This raises the question how technological innovations can be harnessed for the benefit of social and geographic data science research: both to enable future highly computationally intensive research as well as how to effectively communicate these new research pipelines to researchers and students within the domains of computational social sciences and quantitative geography. 
-
-
+This raises the question of how technological innovations can be harnessed for the benefit of social and geographic data science research: both to enable future highly computationally intensive research as well as how to effectively communicate these new research pipelines to researchers and students within the domains of computational social sciences and quantitative geography. 
 
 ## Who is this document for? 
 
@@ -51,3 +49,5 @@ This work is licensed under a
 [cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/
 [cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
 [cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg
+
+## Project reference: **TDA21\210069**.  
