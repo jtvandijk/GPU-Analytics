@@ -1,5 +1,5 @@
 ---
-title: "Case Study"
+title: "Case Studies"
 weight: 3
 # bookFlatSection: false
 # bookToc: true
