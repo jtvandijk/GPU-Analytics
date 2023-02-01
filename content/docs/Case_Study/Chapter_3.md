@@ -1,5 +1,5 @@
 ---
-title: "Chapter 3 - Dealing with Raster and Spatial Data"
+title: "Chapter 3 - Spatial queries and operations"
 weight: 1
 # bookFlatSection: false
 # bookToc: true
@@ -8,5 +8,4 @@ weight: 1
 # bookComments: false
 # bookSearchExclude: false
 ---
-bababba 
-
+Spatial queries and operations.

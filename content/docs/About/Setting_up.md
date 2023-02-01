@@ -12,7 +12,7 @@ weight: 1
 ## Introduction
 Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly.
 
-## Setting up: Google Colab
+## Getting started: Google Colab
 [Google Colab](https://colab.research.google.com/) is a cloud-based platform that allows you to run [Jupyter notebooks](https://jupyter.org/) in the Cloud with support for GPU-acceleration. Google Colab is free to use, and you do not need to install any software or setup CUDA manually. It comes with already pre-installed libraries such as *Pandas* or *NumPy*, so you do not need to run **pip install** by yourself.
 
 ### How to start?
@@ -95,10 +95,11 @@ if use_cuda:
 ### Best practices
 Google Colab is a great tool for running GPU-accelerated notebooks in the cloud. However, there are some limitations that you should be aware of.
 
-- **Notebooks are not persistent**: When you create a notebook in Google Colab, it is stored in the Cloud. However, the notebook is not persistent. This means that if you close the notebook, the notebook will be deleted. If you want to save your notebook, you need to download it to your local machine.
-- **Google Colab is not free**: Google Colab is free to use, but they limit the amount of time you can use the GPU. Google Colab will automatically disconnects the notebook if we leave it idle for more than 30 minutes, meaning that your training will be interrupted and you will have to restart it. Nevertheless, you can run the free of charge notebooks for at most 12 hours at a time as explained in the [FAQ](https://research.google.com/colaboratory/faq.html#gpu-time-limit). If you want to use the GPU for more than 12 consecutive hours or require access to more memory, you can consider [switching to the paid version of Colab](https://colab.research.google.com/signup/pricing?utm_source=resource_tab&utm_medium=link&utm_campaign=want_more_resources).
+**Notebooks are not persistent**: When you create a notebook in Google Colab, it is stored in the Cloud. However, the notebook is not persistent. This means that if you close the notebook, the notebook will be deleted. If you want to save your notebook, you need to download it to your local machine.
 
-- **Working with data**: You can access your files that are stored on Google Drive directly from Google Colab. To do this, you need to mount your Google Drive to the notebook. You can do this by running the following code in a code block in your notebook. Use the batch command ```!cd``` the *Files* panel on the left to access your files.
+**Google Colab is not an unrestricted resource**: Google Colab is free to use, but they limit the amount of time you can use the GPU. Google Colab will automatically disconnects the notebook if we leave it idle for more than 30 minutes, meaning that your training will be interrupted and you will have to restart it. Nevertheless, you can run the free of charge notebooks for at most 12 hours at a time as explained in the [FAQ](https://research.google.com/colaboratory/faq.html#gpu-time-limit). If you want to use the GPU for more than 12 consecutive hours or require access to more memory, you can consider [switching to the paid version of Colab](https://colab.research.google.com/signup/pricing?utm_source=resource_tab&utm_medium=link&utm_campaign=want_more_resources).
+
+**Working with data**: You can access your files that are stored on Google Drive directly from Google Colab. To do this, you need to mount your Google Drive to the notebook. You can do this by running the following code in a code block in your notebook. Use the batch command ```!cd``` the *Files* panel on the left to access your files.
 
 ```Python
 from google.colab import drive
@@ -115,7 +116,7 @@ files.upload()
 files.download('path/to/your/file')
 ```
 
-- **Ensure all files have been completely copied to your Google Drive**: As mentioned above, Colab can and will terminate your session due to inactivity. To ensure that your final model and data is saved to your Google Drive, call ```drive.flush_and_unmount()``` before you terminate your session. Furthermore, you can checkpoint your model during training process and save it to your Google Drive as well.
+**Ensure all files have been completely copied to your Google Drive**: As mentioned above, Colab can and will terminate your session due to inactivity. To ensure that your final model and data is saved to your Google Drive, call ```drive.flush_and_unmount()``` before you terminate your session. Furthermore, you can checkpoint your model during training process and save it to your Google Drive as well.
 
 ```Python
 from google.colab import drive
@@ -125,16 +126,16 @@ drive.flush_and_unmount()
 print('All changes made in this Colab session should now be visible in Drive.')
 ```
 
-Note that the completion of copying/writing files to /content/drive/MyDrive/ does not mean that all files are safely stored on Google Drive and that you can immediately terminate your Colab instance because the transfer of data between the Virtual Machine on which you run your analysis and Google’s infrastructure happens asynchronously, so performing this flushing will help ensure it is indeed safe to disconnect.
+Note that the completion of copying/writing files to /content/drive/MyDrive/ does not mean that all files are safely stored on Google Drive and that you can immediately terminate your Colab instance because the transfer of data between the Virtual Machine on which you run your analysis and Google's infrastructure happens asynchronously, so performing this flushing will help ensure it is indeed safe to disconnect.
 
-- **Disconnecting from the notebook**: Be a responsible user and disconnect from the notebook when you are finished with your GPU. Google will notice and reward you with a better GPU the next time you request one! So after you have copied your saved model files to Google Drive or Google Storage, you can disconnect from the notebook by clicking the *Disconnect* button in the *Runtime* menu. Or you can run the following code in a code block in your notebook.
+**Disconnecting from the notebook**: Be a responsible user and disconnect from the notebook when you are finished with your GPU. Google will notice and reward you with a better GPU the next time you request one! So after you have copied your saved model files to Google Drive or Google Storage, you can disconnect from the notebook by clicking the *Disconnect* button in the *Runtime* menu. Or you can run the following code in a code block in your notebook.
 
 ```Python
 from google.colab import runtime
 runtime.unassign()
 ```
 
-## Setting up: Remote server
+## Getting started: Remote server
 At UCL, Department of Geography, we have a dedicated GPU-server that we can use to run GPU-accelerated notebooks on a Tesla V100 GPU. In theory, you should be able to connect to the server from anywhere in the world and run your GPU analyses - although access to the server needs to be requested. Setting up the environment on the server is a bit more complicated than setting up on cloud-based solutions such as Google Colab. For the below to work you will need three things: access to the server, a correct installation of CUDA, and an installation of the **conda** package manager.
 
 ### ssh into the server
@@ -156,23 +157,25 @@ This will create a new **conda** environment called *gpu* and install the CUDA t
 
 ### Activate the environment
 You can activate the environment using the following bash command.
+
 ```bash
 conda activate gpu
 ```
 
 ### Start the JupyterLab server
 You can start the JupyterLab server using the following bash command.
+
 ```bash
 jupyter lab --no-browser
 ```
+
 This will start the JupyterLab server and you will be able to access it from your browser.
 
-## Setting up the environment on your local machine
-Setting up the environment on your local machine varies depending on your operating system. I will not go into details about how to install the CUDA toolkit on your local machine. Instead, I will refer you to the official documentation for installing CUDA on [Windows](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/).
+## Getting started: Local machine
+If your local machine has a supported GPU, you might be able to install the CUDA toolkit. Most of GPU-accelerated libraries build on top of the CUDA framework. Therefore, you need to have a GPU that supports CUDA. You can check the [CUDA GPU support matrix](https://developer.nvidia.com/cuda-gpus) to see if your GPU is supported. Of course, you should have a decent CPU, RAM and Storage to be able to do some leverage the power of the GPU.
 
-### Hardware and Software requirements
-Most of these GPU-accelerated libraries build on top of the CUDA framework. Therefore, you need to have a GPU that supports CUDA. You can check the [CUDA GPU support matrix](https://developer.nvidia.com/cuda-gpus) to see if your GPU is supported. But of course, you should have a decent CPU, RAM and Storage to be able to do some leverage the power of the GPU.
+For the minimum hardware requirements, we recommend the following:
+- **CPU**: Minimum 4 cores at 2.6GHz; at least 16GB of RAM.
+- **GPU**: NVIDIA GPU with at least 6GB of VRAM.
 
-For the minimum hardware requirements, I recommend the following:
-- **CPU**: Minimum 4 cores and at 2.6GHz, at least 16GB of RAM.
-- **GPU**: Nvidia GPU with at least 6GB of VRAM.
+As installations and setting up instructions depend on your operating system and hardware, please [refer to the official documentation](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/).
