@@ -12,13 +12,13 @@ weight: 1
 ## Introduction
 Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly.
 
-## Setting up the environment for Google Colab GPU
-Google Colab is a cloud-based platform that allows you to run Jupyter notebooks in the Cloud, with support GPUs-acceleration. Google Colab is free to use, and you do not need to install any software or setup CUDA manually. It comes with already pre-installed libraries such as pandas or NumPy, so you do not need to run “pip install” by yourself. Here are the steps to set up a GPU for use in Colab:
+## Setting up: Google Colab
+[Google Colab](https://colab.research.google.com/) is a cloud-based platform that allows you to run [Jupyter notebooks](https://jupyter.org/) in the Cloud with support for GPU-acceleration. Google Colab is free to use, and you do not need to install any software or setup CUDA manually. It comes with already pre-installed libraries such as *Pandas* or *NumPy*, so you do not need to run **pip install** by yourself.
 
 ### How to start?
 The first step is to create a new notebook in Google Colab. You can do this by going to the [Google Colab website](https://colab.research.google.com/), signing in with your Google account, and creating a new notebook.  
 
-<figure title = "test">
+<figure title = "New notebook">
      <center>
      <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_create.png?raw=true">
     <figcaption>
@@ -28,14 +28,14 @@ The first step is to create a new notebook in Google Colab. You can do this by g
     </center>
 </figure>
 
-### Enabling GPU support in Google Colab
-After creating a new notebook, you need to enable GPU support. To do this, go to the "Runtime" menu and select "Change runtime type." Then, set the "Hardware accelerator" to "GPU."
+### Enabling GPU support
+After creating a new notebook, you need to enable GPU support. To do this, go to the *Runtime* menu and select *Change runtime type*. Then, set the *Hardware accelerator* to *GPU*.
 
-<figure title = "test">
+<figure title = "Change runtime type">
      <center>
-     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_run_time.png?raw=true">
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_run_time.png?raw=true" width="70%">>
     <figcaption>
-    <b>Figure 2: Select "Change runtime type" in the "Runtime" menu.
+    <b>Figure 2: Select <em>Change runtime type</em> in the <em>Runtime</em> menu.
     </b>
     </figcaption>
     </center>
@@ -43,11 +43,11 @@ After creating a new notebook, you need to enable GPU support. To do this, go to
 
 After you change your runtime type, your notebook will restart, which means information from the previous session will be lost.
 
-<figure title = "test">
+<figure title = "Change runtime type">
      <center>
-     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_setting.png?raw=true">
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_setting.png?raw=true" width="70%">
     <figcaption>
-    <b>Figure 3: Select "GPU" in the "Hardware accelerator" menu.
+    <b>Figure 3: Select <em>GPU</em> in the <em>Hardware accelerator</em> menu.
     </b>
     </figcaption>
     </center>
@@ -56,50 +56,49 @@ After you change your runtime type, your notebook will restart, which means info
 You may also see the TPU option in the drop-down menu. TPU stands for a Tensor Processing Unit, which is a specialised chip designed to accelerate machine learning workloads. TPU is more powerful than GPU, but it is also more expensive.
 
 ### Verify GPU access
-After you enable GPU support, you can verify that the GPU is working properly by running the following code in a code block in your notebook. **nvidia-smi** (NVIDIA System Management Interface) is a tool to query, monitor and configure NVIDIA GPUs. It ships with and is installed along with the NVIDIA driver and it is tied to that specific driver version. It is a tool written using the NVIDIA Management Library (NVML), which you can also find the Python bindings in the PyPI package pynvml.
+After you enable GPU support, you can verify that the GPU is working properly by running the  code below in a code block in your notebook.
 
 ```Python
 !nvidia-smi
 ```
+**nvidia-smi** (NVIDIA System Management Interface) is a tool to query, monitor and configure NVIDIA GPUs. It ships with and is installed along with the NVIDIA driver and it is tied to that specific driver version. It is a tool written using the NVIDIA Management Library (NVML), which you can also find the Python bindings in the PyPI package *pynvml*.
 
-<figure title = "test">
-     <center>
-     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_smi.png?raw=true">
-    <figcaption>
-    <b>Figure 4: NVIDIA System Management Interface (nvidia-smi) output.
-    </b>
-    </figcaption>
-    </center>
-</figure>
-
-This outputs a summary table, where I find the following information useful:
+This outputs a summary table (see **Figure 4** for an example output), where you will find the following useful information:
 - **Name**: The name of the GPU.
 - **Memory**: The amount of memory available on the GPU.
 - **Utilisation**: The percentage of time the GPU is being used.
 - **Power usage**: The power usage of the GPU.
 - **Processes**: List of processes executing on the GPUs.
 
-In this example, we got a Tesla T4 GPU with 16GB of memory. The GPU is currently being used by the notebook, but we can also see that there is no other process running on the GPU.
+<figure title = "Verify GPU access">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_smi.png?raw=true">
+    <figcaption>
+    <b>Figure 4: NVIDIA System Management Interface output.
+    </b>
+    </figcaption>
+    </center>
+</figure>
 
-There are different ways to verify that the GPU is working properly. For example, you can run the following code to check find out the specification of the GPU.
+In this example, we got a Tesla T4 GPU with 16GB of memory. The GPU is currently being used by the notebook, but we can also see that there are no other processes running on the GPU. There is several other ways to verify that the GPU is working, for instance, directly with the *torch* library by running the following code:
 
 ```Python
 import torch
 use_cuda = torch.cuda.is_available() #Check if GPU is available
 if use_cuda:
-    print('__CUDNN VERSION:', torch.backends.cudnn.version()) #Which version of cudnn is being used
-    print('__Number CUDA Devices:', torch.cuda.device_count()) #How many GPUs are available
+    print('__CUDNN VERSION:', torch.backends.cudnn.version()) #Get the version of cudnn
+    print('__Number CUDA Devices:', torch.cuda.device_count()) #Get the number of available GPUs
     print('__CUDA Device Name:',torch.cuda.get_device_name(0)) #Get the name of the GPU
-    print('__CUDA Device Total Memory [GB]:',torch.cuda.get_device_properties(0).total_memory/1e9) # Get the total amount of memory available on the GPU
+    print('__CUDA Device Total Memory [GB]:',torch.cuda.get_device_properties(0).total_memory/1e9) #Get the total amount of memory available on the GPU
 ```
 
-### Best practices for using Google Colab
+### Best practices
 Google Colab is a great tool for running GPU-accelerated notebooks in the cloud. However, there are some limitations that you should be aware of.
 
-- **Notebooks are not persistent**: When you create a notebook in Google Colab, it is stored in the cloud. However, the notebook is not persistent. This means that if you close the notebook, the notebook will be deleted. If you want to save your notebook, you need to download it to your local machine.
-- **Google Colab is not free**: Google Colab is free to use, but they limit the amount of time you can use the GPU. Google Colab will automatically disconnects the notebook if we leave it idle for more than 30 minutes, meaning that your training will be interrupted and you will have to restart it. Nevertheless, you can run the free of charge notebooks for at most 12 hours at a time as explained in the [FAQ](https://research.google.com/colaboratory/faq.html#gpu-time-limit). If you want to use the GPU for a longer period of time and access to more memory, there is a paid version of Colab that you can [use](https://colab.research.google.com/signup/pricing?utm_source=resource_tab&utm_medium=link&utm_campaign=want_more_resources).
+- **Notebooks are not persistent**: When you create a notebook in Google Colab, it is stored in the Cloud. However, the notebook is not persistent. This means that if you close the notebook, the notebook will be deleted. If you want to save your notebook, you need to download it to your local machine.
+- **Google Colab is not free**: Google Colab is free to use, but they limit the amount of time you can use the GPU. Google Colab will automatically disconnects the notebook if we leave it idle for more than 30 minutes, meaning that your training will be interrupted and you will have to restart it. Nevertheless, you can run the free of charge notebooks for at most 12 hours at a time as explained in the [FAQ](https://research.google.com/colaboratory/faq.html#gpu-time-limit). If you want to use the GPU for more than 12 consecutive hours or require access to more memory, you can consider [switching to the paid version of Colab](https://colab.research.google.com/signup/pricing?utm_source=resource_tab&utm_medium=link&utm_campaign=want_more_resources).
 
-- **Working with data**: You can access your files that are stored in Google Drive from Google Colab. To do this, you need to mount your Google Drive to the notebook. You can do this by running the following code in a code block in your notebook. Use the batch command ```!cd``` the “Files” panel on the left to access your files.
+- **Working with data**: You can access your files that are stored on Google Drive directly from Google Colab. To do this, you need to mount your Google Drive to the notebook. You can do this by running the following code in a code block in your notebook. Use the batch command ```!cd``` the *Files* panel on the left to access your files.
 
 ```Python
 from google.colab import drive
@@ -116,43 +115,44 @@ files.upload()
 files.download('path/to/your/file')
 ```
 
-- **Ensure all files have been completely copied to your Gdrive**: As mentioned above, Colab can and will terminate your session due to inactivity. To ensure that your final model and data is saved to your Gdrive, call ```drive.flush_and_unmount()``` before you terminate your session. Furthermore, you can checkpoint your model during training process and save it to your Gdrive.
+- **Ensure all files have been completely copied to your Google Drive**: As mentioned above, Colab can and will terminate your session due to inactivity. To ensure that your final model and data is saved to your Google Drive, call ```drive.flush_and_unmount()``` before you terminate your session. Furthermore, you can checkpoint your model during training process and save it to your Google Drive as well.
 
 ```Python
 from google.colab import drive
 model.fit(...) # Training your model
 model.save('path/to/your/model') # Save your model
 drive.flush_and_unmount()
-print('All changes made in this colab session should now be visible in Drive.')
+print('All changes made in this Colab session should now be visible in Drive.')
 ```
-Note that the completion of copying/writing files to /content/drive/MyDrive/ does not mean that all files are safely on GDrive and that you can immediately terminate your Colab instance because the transfer of data between the VM and Google’s infrastructure happens asynchronously, so performing this flushing will help ensure it’s indeed safe to disconnect.
 
-- **Disconnecting from the notebook**: Be a responsible user and disconnect from the notebook when you are finished with your GPU. Google will notice and reward you with a better GPU the next time you request one! So after you’ve copied your saved model files to GDrive or Google Storage, you can disconnect from the notebook by clicking the “Disconnect” button in the “Runtime” menu. Or you can run the following code in a code block in your notebook.
+Note that the completion of copying/writing files to /content/drive/MyDrive/ does not mean that all files are safely stored on Google Drive and that you can immediately terminate your Colab instance because the transfer of data between the Virtual Machine on which you run your analysis and Google’s infrastructure happens asynchronously, so performing this flushing will help ensure it is indeed safe to disconnect.
+
+- **Disconnecting from the notebook**: Be a responsible user and disconnect from the notebook when you are finished with your GPU. Google will notice and reward you with a better GPU the next time you request one! So after you have copied your saved model files to Google Drive or Google Storage, you can disconnect from the notebook by clicking the *Disconnect* button in the *Runtime* menu. Or you can run the following code in a code block in your notebook.
 
 ```Python
 from google.colab import runtime
 runtime.unassign()
 ```
 
-## Setting up the environment on the server
-At UCL, Department of Geography, we have a dedicated server that we can use to run GPU-accelerated notebooks, installed with the Tesla V100 GPU. In theory, you should be able to connect to the server from anywhere in the world and run your GPU analyses.
-
-Setting up the environment on the server is a bit more complicated than setting up the environment on your local machine. However, it is not that difficult. The main difference is that you need to install the GPU-accelerated libraries from source. This is because the GPU-accelerated libraries are not available on the Anaconda package manager.
+## Setting up: Remote server
+At UCL, Department of Geography, we have a dedicated GPU-server that we can use to run GPU-accelerated notebooks on a Tesla V100 GPU. In theory, you should be able to connect to the server from anywhere in the world and run your GPU analyses - although access to the server needs to be requested. Setting up the environment on the server is a bit more complicated than setting up on cloud-based solutions such as Google Colab. For the below to work you will need three things: access to the server, a correct installation of CUDA, and an installation of the **conda** package manager.
 
 ### ssh into the server
-you can log into the server using the following bash command.
+If you have access to a dedicated GPU-server, you can log into the server using the following bash command:
+
 ```bash
 ssh username@server_ip port
 ```
+
 After this command, you will be prompted to enter your password.
 
-### Installing the libraries you will need
-You can initialize a new environment using the following bash command.
+### Installing libraries
+You can initialise a new **conda** environment using the following bash command.
 
 ```bash
 conda create -n gpu -c rapidsai -c nvidia -c conda-forge rapids=22.06 python=3.9 cudatoolkit=11.5 jupyterlab
 ```
-This will create a new conda environment called “gpu” and install all the libraries you need and the CUDA tookit.  
+This will create a new **conda** environment called *gpu* and install the CUDA toolkit with some of the essential libraries that you will need.  
 
 ### Activate the environment
 You can activate the environment using the following bash command.
