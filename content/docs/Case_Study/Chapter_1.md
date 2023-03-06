@@ -37,7 +37,7 @@ In the second step, we need a method to compare the input address with the refer
 The last step in the process is to evaluate the quality of the match between the input address string and the retrieved candidate addresses. The most common approach is to use a similarity score to evaluate the similarity among all potential candidate addresses. Depending on the application, the similarity score can be a simple percentage or a more complex score. For instance, we can define a threshold for the similarity score, and only return the candidate addresses that have a similarity score above the threshold. We can also evaluate the model performance by validating the results with a ground truth dataset.
 
 ## GPU Considerations
-The address matching problem is a computationally intensive problem. A core challenge is to understand which part of the process is the most computationally intensive and which part of the process can be efficiently parallelised on a GPU. In the first part, we can concatenate the address from its constituent parts, whereby treating each address as a sequence of unstructured text. In the second part, we can use a [character-based n-gram TF-IDF](https://medium.com/in-pursuit-of-artificial-intelligence/brief-introduction-to-n-gram-and-tf-idf-tokenization-e58d22555bab) to convert the address into a vector. While the terms in TF-IDF are usually words, this is not a requirement. We can use n-grams, sequences of N continuous characters, to convert the address into a vector representation based on the character level. For example:
+The address matching problem is a computationally intensive problem. A core challenge is to understand which part of the process is the most computationally intensive and which part of the process can be efficiently parallelized on a GPU. In the first part, we can concatenate the address from its constituent parts, whereby treating each address as a sequence of unstructured text. In the second part, we can use a [character-based n-gram TF-IDF](https://medium.com/in-pursuit-of-artificial-intelligence/brief-introduction-to-n-gram-and-tf-idf-tokenization-e58d22555bab) to convert the address into a vector. While the terms in TF-IDF are usually words, this is not a requirement. We can use n-grams, sequences of N continuous characters, to convert the address into a vector representation based on the character level. For example:
 
 ```python
 #Input
@@ -52,7 +52,7 @@ print(n_grams)
 
 In the third part, we can use a similarity score to evaluate the similarity among all potential candidate addresses; for instance by ranking the candidate addresses based on the similarity score.
 
-Using TF-IDF with n-grams as terms to find similar strings transforms the problem into a matrix multiplication problem, which is computationally much cheaper. This approach can significantly reduce the **memory** it takes to compare strings in comparison to a fuzzy string matching algorithm with TF-IDF and a nearest neighbours algorithm. More importantly, using a GPU for the matrix multiplication can further speed up the string comparison.
+Using TF-IDF with n-grams as terms to find similar strings transforms the problem into a matrix multiplication problem, which is computationally much cheaper. This approach can significantly reduce the **memory** it takes to compare strings in comparison to a fuzzy string matching algorithm with TF-IDF and a nearest neighbors algorithm. More importantly, using a GPU for the matrix multiplication can further speed up the string comparison.
 
 ## Case Study
 ### Example data
@@ -417,7 +417,7 @@ plt.title('Distribution of cosine similarity score')
 </figure>
 
 ## Conclusion
-In this Case Study we have explored the potential of utilising GPUs to speed up explicit data linkage process that rely on string comparisons. By implementing vectorisation and cosine similarity calculation on a GPU, we were able to significantly enhance the performance of the process. More importantly, we can see that the functions and code can rather easily be ported to a GPU without too much modification.
+In this case study, we explored the potential of GPUs to speed up explicit data linkage process that rely on string comparisons. By implementing vectorisation and cosine similarity calculation on a GPU, we were able to significantly enhance the performance of the process. More importantly, we can see that the functions and code can rather easily be ported to a GPU without too much modification.
 
 More general, however, address matching is a complex problem that involves many factors that can impact the accuracy of the model. Some of these challenges include the presence of special characters, abbreviations, changes and absence of unique identifiers in the data. Often the task of data linkage is not a one-time process, but rather an iterative process that requires constant monitoring on the performance of the model and making adjustments accordingly. GPU can be a great tool to help speed up such processes.
 

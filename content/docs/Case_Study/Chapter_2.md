@@ -8,4 +8,768 @@ weight: 1
 # bookComments: false
 # bookSearchExclude: false
 ---
-GeoAI and Deep Learning.
+
+
+## GeoAI and Deep Learning 
+
+GeoAI, or geospatial artificial intelligence (AI), has become a trending topic and the frontier for spatial analytics in Geography [(Li and Hsu, 2022)](https://www.mdpi.com/2220-9964/11/7/385/pdf). Although the field of AI has experienced highs and lows in the past decades, it has recently gained tremendous momentum because of breakthrough developments in deep (machine) learning, immense available computing power, and the pressing needs for mining and understanding big data. 
+
+
+## Objectives 
+
+The objective of the second *Case Study* is to showcase how we can use GPU for satellite image classification. We will be discussing two case studies - (1) training a CNN model from scratch using Pytorch to detect land use classification from satellite images (2) comparing model performance with a fine-tuned VGG16 model.
+
+While using a GPU is a commonly integrated into deep learning libraries, we will also provide best practices for maximizing your training efficiency. 
+
+
+## Case Study 1: Classifying EuraSat images using Convolutional Neural Networks (CNNs)
+
+In this case study, we will be using the EuraSat dataset to train a CNN model to classify land use from satellite images. The EuraSat dataset contains 27,000 images of 10 different land use classes. The dataset is available on Kaggle and can be downloaded [here](https://www.kaggle.com/phylake1337/eurasat-land-use-and-land-cover). The dataset is also available on the [PyTorch website](https://pytorch.org/vision/stable/datasets.html#eurasat).
+
+### Brief introduction to Convolutional Neural Networks (CNNs) 
+
+Convolutional Neural Networks (CNNs) are a type of artificial neural network that are designed to work with grid-structured data, such as an image, a speech signal, or a video. They are particularly effective for image and video classification, object detection and recognition, and natural language processing tasks.
+
+The key components of a CNN are convolutional layers, activation functions, pooling layers, and fully connected layers. 
+
+
+1. Convolutional layers: Convolutional layers are the building blocks of a CNN. They perform a convolution operation on the input data, where a small matrix (known as a filter or kernel) is moved across the input data, element-wise multiplication is performed between the elements of the filter and the input data, and then the results are summed up to produce a single output value. This process is repeated for every possible position of the filter, resulting in a set of outputs, called feature maps. Convolutional layers can extract features from the input data, such as edges, shapes, textures, etc.
+
+2. Activation functions: Activation functions are used to introduce non-linearity into the network. They are applied element-wise to the output of the convolutional layer. The most commonly used activation functions in CNNs are Rectified Linear Unit (ReLU) and sigmoid.
+
+3. Pooling layers: Pooling layers are used to reduce the spatial size of the feature maps, making the network less computationally expensive and more robust to changes in the position of objects in the input data. There are several types of pooling, including max pooling and average pooling. In max pooling, the maximum value in a region of the feature map is taken as the output, while in average pooling, the average value in a region is taken as the output.
+
+4. Fully connected layers: The fully connected layers are used to make the final prediction using the features extracted by the convolutional and pooling layers. They perform a weighted sum of the inputs, followed by a non-linear activation function, and then produce the final output of the network.
+
+
+The architecture of a CNN can be designed for a specific task by choosing the number of convolutional and fully connected layers, the size of the filters, the type of activation functions, and the type of pooling. The weights of the filters and the biases of the fully connected layers are learned from the training data using an optimization algorithm, such as stochastic gradient descent or Adam. 
+
+
+A classic CNN architecture would look something like this (Figure 1): 
+
+
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_cnn.png?raw=true">
+    <figcaption>
+    <b>Figure 1: Framework of a Convolutional Neural Network ,Illustration by [Mathworks](https://uk.mathworks.com/help/deeplearning/ug/introduction-to-convolutional-neural-networks.html)</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+
+For more information on CNNs, you can check out this cool [blog post](https://poloclub.github.io/cnn-explainer/).
+
+
+
+### Importing the libraries 
+
+We will be using the following libraries for this case study:
+
+```python
+#Importing the libraries
+#standard imports
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#sklearn standard functions
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score,mean_absolute_error,mean_squared_error
+
+
+#standard imports for pytorch
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torch.autograd import Variable
+from torch.utils.data import DataLoader, TensorDataset
+from torch import Tensor
+from torch.profiler import profile, record_function, ProfilerActivity 
+
+#torchvision imports
+import torchvision
+import torchvision.transforms as transforms
+
+#Other imports 
+import time
+import tqdm as tqdm 
+import seaborn as sns 
+sns.set_theme(style="whitegrid")
+```
+
+### Data preparation and preprocessing 
+
+The first step in any machine learning project is to prepare the data. In this step, we will be loading the data, performing data preprocessing, and splitting the data into training and test sets.
+
+
+```python
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
+#Define data pre-processing steps
+transform = transforms.Compose(
+    [
+    #Resize images for (64*64)
+    transforms.Resize((64,64)),
+    #Converts images into Pytorch tensor 
+    #Pytorch tensors are multi-dimensional arrays that can be processed on GPUs
+    transforms.ToTensor(), 
+    #Normalise the input data 
+    #input data is transformed by subtracting the mean and dividing by the standard deviation for each channel. 
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+#Batch size defines the number of samples processed before the model is updated.
+batch_size = 40 
+
+#Loading EuraSAT and transform using the defined function 
+dataset = torchvision.datasets.EuroSAT(root='./data', 
+                                        download=True, transform=transform)
+
+#Data loader creates a PyTorch data loader for a given dataset. 
+#The data loader provides an efficient way to iterate over the data in the dataset
+#and apply batch processing during training.      
+#num_workers: defines the number of threads to use for loading the data. 
+#If shuffle=True, the data loader will randomly shuffle the data before each epoch to ensure that the model sees a different set of samples each time it is trained.
+data_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
+                                          shuffle=True, num_workers=2)
+
+#Classes -> we have 10 labels 
+#'AnnualCrop', 'Forest', 'HerbaceousVegetation', 'Highway', 'Industrial', 'Pasture', 'PermanentCrop', 'Residential', 'River' 'SeaLake'
+classes = data_loader.dataset.classes
+
+split=len(dataset.targets)/4
+train_len=int(len(dataset.targets)-split)
+val_len=int(split) 
+
+#Spliting dataset in 75% training, 25% for testing  
+trainset,testset = torch.utils.data.random_split(dataset, [train_len,val_len])
+
+#Create dataloader for training and testing dataset 
+train_loader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
+                                          shuffle=True, num_workers=2)
+
+test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
+                                          shuffle=True, num_workers=2)
+```
+
+
+### Visualizing the data
+
+Let's visualize some images in the dataset.
+
+```python
+import os 
+import random 
+from PIL import Image
+
+ROOT_dir = './data/eurosat/2750'
+folders = os.listdir(ROOT_dir)
+
+plt.figure(figsize=(16,10))
+
+for i, label in enumerate(folders):
+    plt.subplot(4,5,i+1)
+    file_path = os.listdir("{}/{}".format(ROOT_dir,label))
+    image_ = Image.open(ROOT_dir+"/"+label+"/"+file_path[random.randint(1,100)])
+    plt.imshow(image_)
+    plt.title(label)
+    plt.axis("off") 
+```
+
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_example_data.png?raw=true">
+    <figcaption>
+    <b>Figure 2: Example classes and images</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+
+### Creating your CNN model for training
+
+Now that we have prepared the data, we can create our CNN model. We will be using the following architecture for our model:
+
+```python
+import torch.nn as nn
+import torch.nn.functional as F
+
+#Custom class extends the functionality of nn.Module class from PyTorch, 
+#which provides the basic building blocks for creating neural networks in PyTorch. 
+class Net(nn.Module):
+    #Setting up layers in CNN 
+    def __init__(self):
+        #Calling function from nn.Module
+        super().__init__()
+        #A 2D convolutional layer with 3 input channels, 6 output, and kernel (filter size) size of 5x5 
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        #A max-pooling layer with kernel size 2x2 and stride of 2
+        self.pool = nn.MaxPool2d(2, 2)
+        #Another convolution layer with 6 input channels, 16 output channels, and a kernel size of 5x5 
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        #Three fully-connected linear layers for processing the output of the second convolution network 
+        self.fc1 = nn.Linear(16 * 13 * 13, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    #Define the foward pass of the network i.e. the computation performed on each input tensor. 
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = torch.flatten(x, 1) # flatten all dimensions except batch
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+``` 
+
+We can use the following code to print out the summary of the model:
+
+
+```python
+from torchsummary import summary
+summary(Net(), (3,64,64),device='cpu')
+```
+
+```python
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1            [-1, 6, 60, 60]             456
+         MaxPool2d-2            [-1, 6, 30, 30]               0
+            Conv2d-3           [-1, 16, 26, 26]           2,416
+         MaxPool2d-4           [-1, 16, 13, 13]               0
+            Linear-5                  [-1, 120]         324,600
+            Linear-6                   [-1, 84]          10,164
+            Linear-7                   [-1, 10]             850
+================================================================
+Total params: 338,486
+Trainable params: 338,486
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.05
+Forward/backward pass size (MB): 0.31
+Params size (MB): 1.29
+Estimated Total Size (MB): 1.65
+----------------------------------------------------------------
+```
+### Inspecting CPU/GPU usage with PyTorch Profiler and TensorBoard 
+
+Before detailing the steps to train the model, we will first look at how to use the PyTorch profiler to inspect the CPU and GPU usage of the model. PyTorch Profiler is useful for measuring the training performance and resource utilization of your model. It tracks sequences of the execution steps that are the most costly in time and memory and visualize the workload distribution between GPUs and CPUs.
+
+Firstly, let's define a function to train the model. This function will be used to train the model for each batch of data. One important thing to note is that we will be using the `to()` function to copy the data to the device the model is on. 
+
+```python
+def train(model,data,criterion, optimizer,device = device):
+    # Copy the data to the device the model is on 
+    inputs, labels = data[0].to(device=device), data[1].to(device=device)
+
+    #Predict the output for given input
+    outputs = model(inputs)
+
+    #Compute the loss
+    loss = criterion(outputs, labels)
+
+    #Clear the previous gradients, compute gradients of all variables wrt loss
+    optimizer.zero_grad()
+
+    #Backpropagation, update weights
+    loss.backward()
+
+    #Update the parameters
+    optimizer.step()
+```
+
+Next, we can use the profiler to record the execution steps and save the logs to a file. We can then use TensorBoard to visualize the logs. The profiler includes a number of options to customize the profiling behavior. In this example, we will use the following options: 
+
+* **schedule**: defines the number of steps to wait before starting the profiling, the number of steps to run the profiling for, and the number of steps to repeat the profiling for. In this example, with repeat=4, profiler will record 4 spans, each span consists of 2 wait step, 2 warmup step and 3 active steps. For more information about wait/warmup/active, you can find it [here](https://pytorch.org/tutorials/recipes/recipes/profiler_recipe html#using-profiler-to-analyze-long-running-jobs#using-profiler-to-analyze-long-running-jobs). It is important to note we are not training the whole model in this example, as it would take a long time to run. Instead, we are only training the model for a few steps. 
+* **on_trace_ready**: defines the action to take when the profiling is complete. In this example, we will save the profiling logs to a file that can be used by TensorBoard.
+* **profile_memory**: enables memory profiling to measure tensor memory allocation/deallocation.  
+
+
+```python
+#GPU ----------------------------
+#Initialise model 
+#Define device on cuda:0 
+device = torch.device('cuda:0') 
+model = Net().to(device=device)
+#Define loss function 
+loss_fn =  nn.CrossEntropyLoss().cuda()#Loss function computes the value between the predicted values and the labels. In this case, we are using Cross-Entropy loss, but many other loss functions are also avaible from nn. Such as focal loss 
+
+#Define optimizer function 
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9) #Optimizer function aims to reduce the loss function's value by changing the weight vector values through backpropagation in neural networks. We are using Stochastic gradient decent as our optimiser, with learning rate 0.01 and momentum 0.9 
+
+#Set random seed for reproducibility
+torch.cuda.manual_seed(42)
+
+#Profiler
+with torch.profiler.profile(
+       schedule=torch.profiler.schedule(
+        wait=2,
+        warmup=2,
+        active=3,
+        repeat=4), 
+        #Saving the profiling logs to a file that can be used by TensorBoard 
+        on_trace_ready=torch.profiler.tensorboard_trace_handler('./log/gpu_profile'),
+        profile_memory=True,
+        ) as prof:
+    for step, batch_data in enumerate(train_loader,0):
+        if step >= (2 + 2 + 3) * 4:
+            break
+        train(model =model , data =batch_data, criterion = loss_fn, optimizer = optimizer,device=device)
+        prof.step()
+
+```
+
+```python
+#CPU ----------------------------
+#Reinitialise model, loss function, optimizer and random seed 
+device = torch.device('cpu')
+model = Net().to(device=device)
+loss_fn =  nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+torch.manual_seed(42)
+
+with torch.profiler.profile(
+       schedule=torch.profiler.schedule(
+        wait=2,
+        warmup=2,
+        active=3,
+        repeat=4),
+        #Saving the profiling logs to a file that can be used by TensorBoard 
+        on_trace_ready=torch.profiler.tensorboard_trace_handler('./log/cpu_profile'),
+        profile_memory=True,
+        ) as prof:
+    for step, batch_data in enumerate(train_loader,0):
+        if step >= (2 + 2 + 3) * 4:
+            break
+        train(model =model , data =batch_data, criterion = loss_fn, optimizer = optimizer,device=device)
+        prof.step()
+```
+
+We can then use TensorBoard to visualize the profiling logs. The following command will launch TensorBoard and open the profiling dashboard.
+
+```python
+%load_ext tensorboard
+%tensorboard --logdir ./log
+```
+
+Or in VSCode, you can press ```Ctrl+Shift+P``` and type "Open TensorBoard". Then select the log directory.
+
+
+The TensorBoard profiling dashboard includes a number of tabs that can be used to visualize the profiling logs. In this example, we will be focusing on the **Overview** which provides a high-level overview of the profiling results. The details of these metrics are [here](https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md).
+
+<figure title = "GPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_tb_gpu.png?raw=true">
+    <figcaption>
+    <b>Figure 3: Baseline - GPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+
+
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_tb_cpu.png?raw=true">
+    <figcaption>
+    <b>Figure 4: Baseline - CPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+
+From Figure 3, it can be observed that the model running on CUDA is not fully utilizing the GPU, with GPU utilization at around 9% and CPU utilization at around 45%. This suggests that the GPU is not being used to its full capacity, and the CPU is carrying out most of the work. This could be due to the size of the data and the model, as the small data size and parameter values in this example can result in a significant overhead in transferring data from the CPU to the GPU. In contrast, the model running on the CPU is not invoking the GPU kernel at all, and most of the work is being carried out by the CPU itself (Figure 4). We can further investigate the profiling logs with the following command line: 
+
+```python
+print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10)) 
+```
+
+The GPU profiling logs indicate that the CUDA model is taking an average of 28.665 ms on the CPU and 4.244 ms on the GPU to run. The majority of the time is spent on the ```enumerate(DataLoader)``` and ```ProfilerStep``` function, which is the function defined to profile and loop over the data. The data transfer from the CPU to the GPU at each step creates a significant overhead, as can be observed from ```the aten::copy_``` function, which copies the array back to CUDA as a tensor. In contrast, the CPU model takes about 35.136 ms to run - not much slower than the GPU model. However, the CPU profiling logs reveal that the most expensive function is the actual calculation steps for computing convolution and backpropagation.
+
+
+
+```python
+#GPU profile log ---------------------------- 
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg       CPU Mem  Self CPU Mem      CUDA Mem  Self CUDA Mem    # of Calls  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                          ProfilerStep*        38.03%      10.902ms        80.41%      23.050ms       7.683ms       0.000us         0.00%       2.117ms     705.667us       1.88 Mb      -5.63 Mb           0 b     -46.64 Mb             3  
+enumerate(DataLoader)_MultiProcessingDataLoaderIter...        13.73%       3.935ms        14.02%       4.019ms       1.340ms       0.000us         0.00%       0.000us       0.000us       7.50 Mb       7.50 Mb           0 b           0 b             3  
+                                               aten::to         0.06%      17.000us         8.47%       2.428ms     142.824us       0.000us         0.00%       1.079ms      63.471us           0 b           0 b       5.63 Mb           0 b            17  
+                                       cudaLaunchKernel         8.42%       2.415ms         8.42%       2.415ms       8.564us       0.000us         0.00%       0.000us       0.000us           0 b           0 b           0 b           0 b           282  
+                                         aten::_to_copy         0.18%      52.000us         8.41%       2.411ms     401.833us       0.000us         0.00%       1.079ms     179.833us           0 b           0 b       5.63 Mb           0 b             6  
+                                            aten::copy_         0.27%      77.000us         7.94%       2.275ms     379.167us       1.079ms        25.42%       1.079ms     179.833us           0 b           0 b           0 b           0 b             6  
+                                        cudaMemcpyAsync         6.77%       1.940ms         6.77%       1.940ms     323.333us       0.000us         0.00%       0.000us       0.000us           0 b           0 b           0 b           0 b             6  
+                                Optimizer.step#SGD.step         2.21%     633.000us         6.36%       1.822ms     607.333us       0.000us         0.00%     228.000us      76.000us         -12 b        -804 b           0 b           0 b             3  
+    autograd::engine::evaluate_function: AddmmBackward0         0.78%     223.000us         5.32%       1.524ms     169.333us       0.000us         0.00%     288.000us      32.000us           0 b           0 b       5.07 Mb      -1.34 Mb             9  
+                                             aten::add_         2.90%     830.000us         5.28%       1.513ms      15.760us     275.000us         6.48%     275.000us       2.865us           0 b           0 b           0 b           0 b            96  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 28.665ms
+Self CUDA time total: 4.244ms
+
+#CPU profile log ----------------------------
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg       CPU Mem  Self CPU Mem    # of Calls  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                          ProfilerStep*        12.69%       4.460ms        99.79%      35.061ms      11.687ms         -12 b     -23.04 Mb             3  
+autograd::engine::evaluate_function: ConvolutionBack...         0.24%      84.000us        27.60%       9.697ms       1.616ms     -14.81 Mb     -17.31 Mb             6  
+                                   ConvolutionBackward0         0.13%      45.000us        27.36%       9.613ms       1.602ms       2.50 Mb           0 b             6  
+                             aten::convolution_backward        26.92%       9.460ms        27.23%       9.568ms       1.595ms       2.50 Mb           0 b             6  
+                                           aten::conv2d         0.10%      34.000us        15.13%       5.316ms     886.000us      14.84 Mb           0 b             6  
+                                      aten::convolution         0.33%     115.000us        15.03%       5.282ms     880.333us      14.84 Mb           0 b             6  
+                                     aten::_convolution         0.20%      71.000us        14.71%       5.167ms     861.167us      14.84 Mb           0 b             6  
+                               aten::mkldnn_convolution        14.31%       5.029ms        14.50%       5.096ms     849.333us      14.84 Mb           0 b             6  
+enumerate(DataLoader)_MultiProcessingDataLoaderIter...        11.36%       3.990ms        11.54%       4.053ms       1.351ms       5.63 Mb       5.63 Mb             3  
+                                       aten::max_pool2d         1.39%     488.000us         6.47%       2.275ms     379.167us      11.13 Mb       2.47 Mb             6  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 35.136ms
+```
+
+
+### How can we improve the computation speed on GPU?
+
+Why do we care about profiling the network? Because we want to know where the bottlenecks are, and how we can improve the performance of the network. In case study 1, we saw that GPU is not always faster than CPU, and we found that the bottleneck is the data transfer between CPU and GPU. There are a few ways to improve the performance on the GPU. 
+
+1. Increase the batch size: By increasing the batch size, the number of times the data needs to be transferred between the CPU and GPU can be reduced, thus reducing the overhead.
+
+2. Use larger models and datasets: Larger models and datasets would increase the time taken for calculations on the CPU, making the overhead of transferring data from CPU to GPU a smaller proportion of the total time.
+
+3. Use data prefetching: By loading the next batch of data onto the GPU while the current batch is being processed, the overhead of data transfer can be reduced.
+
+4. Use different optimizers: The choice of optimizer may also affect the performance of the model depending on the complexity of the model, the amount of training data, and the available computational resources. For example, you might use the stochastic gradient descent (SGD) optimizer for a simple linear model, while you might use more advanced optimizers like Adam or Adagrad for more complex deep learning models.
+
+
+
+## Case Study 2: Comparing model performance with a fine-tune model 
+
+In this case study, we will be continuing our experiments with a pre-trained model. We will be using the same model and dataset as in case study 1. The only difference is that we will be a model that has already been trained on a large dataset.  
+
+
+### Pre-training and fine-tuning 
+
+Pretraining and fine-tuning are popular techniques in computer vision for improving the accuracy of deep learning models. **Pretraining** refers to training a deep learning model on a large dataset, typically using a general task like image classification or object detection, to learn general features that can be useful for a variety of tasks. These pretrained models are then fine-tuned on a smaller dataset specific to the target task. **Fine-tuning** involves taking the pretrained model and updating the weights of the final few layers to optimize for the target task. This allows the model to learn task-specific features and adapt to the new dataset, while still leveraging the general features learned during pretraining. By using pretrained models and fine-tuning, deep learning models can achieve higher accuracy on smaller datasets, reduce the amount of data required for training, and speed up the training process. 
+
+One example of a pretrained model is the VGG16 model, which was trained on the ImageNet dataset. The ImageNet dataset contains over 14 million images and 1000 classes. The VGG16 model was trained on the ImageNet dataset to learn general features that can be useful for a variety of tasks. The VGG16 model can be downloaded from the torchvision library. 
+
+### Initializing the model 
+
+We will be using the VGG16 model as our pretrained model. The VGG16 model has 16 layers, including 13 convolutional layers and 3 fully connected layers. The model is pretrained on the ImageNet dataset, which contains 1000 classes. We will be using the VGG16 model to classify our satellite imageries. To begin, we need to download the pretrained network and change the final fully connected layer of the VGG16 model to output 10 classes instead of 1000 classes. 
+
+```python
+vgg11_bn = torchvision.models.vgg11_bn(weights=True)
+# Freeze weights of all layers except the new classification layer
+for param in vgg11_bn.parameters():
+    param.requires_grad = False 
+num_ftrs = vgg11_bn.classifier[6].in_features
+# Replace the final classfication layer 
+vgg11_bn.classifier[6] = nn.Linear(num_ftrs,len(classes))
+vgg11_bn.classifier[6].requires_grad = True  
+vgg11_bn.train()
+``` 
+
+### Quick inspection of the model 
+
+Again we can use the summary function to see the architecture of the model.  
+
+The vgg16 model has in total 128,812,810 parameters, and estimated total size of 506.64 Mb, both of which are much larger than the model we trained in case study 1. 
+
+
+```python
+summary(vgg11_bn, (3,64,64),device='cpu')
+``` 
+
+```python
+
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1           [-1, 64, 64, 64]           1,792
+       BatchNorm2d-2           [-1, 64, 64, 64]             128
+              ReLU-3           [-1, 64, 64, 64]               0
+         MaxPool2d-4           [-1, 64, 32, 32]               0
+            Conv2d-5          [-1, 128, 32, 32]          73,856
+       BatchNorm2d-6          [-1, 128, 32, 32]             256
+              ReLU-7          [-1, 128, 32, 32]               0
+         MaxPool2d-8          [-1, 128, 16, 16]               0
+            Conv2d-9          [-1, 256, 16, 16]         295,168
+      BatchNorm2d-10          [-1, 256, 16, 16]             512
+             ReLU-11          [-1, 256, 16, 16]               0
+           Conv2d-12          [-1, 256, 16, 16]         590,080
+      BatchNorm2d-13          [-1, 256, 16, 16]             512
+             ReLU-14          [-1, 256, 16, 16]               0
+        MaxPool2d-15            [-1, 256, 8, 8]               0
+           Conv2d-16            [-1, 512, 8, 8]       1,180,160
+      BatchNorm2d-17            [-1, 512, 8, 8]           1,024
+             ReLU-18            [-1, 512, 8, 8]               0
+           Conv2d-19            [-1, 512, 8, 8]       2,359,808
+      BatchNorm2d-20            [-1, 512, 8, 8]           1,024
+             ReLU-21            [-1, 512, 8, 8]               0
+        MaxPool2d-22            [-1, 512, 4, 4]               0
+           Conv2d-23            [-1, 512, 4, 4]       2,359,808
+      BatchNorm2d-24            [-1, 512, 4, 4]           1,024
+             ReLU-25            [-1, 512, 4, 4]               0
+           Conv2d-26            [-1, 512, 4, 4]       2,359,808
+      BatchNorm2d-27            [-1, 512, 4, 4]           1,024
+             ReLU-28            [-1, 512, 4, 4]               0
+        MaxPool2d-29            [-1, 512, 2, 2]               0
+AdaptiveAvgPool2d-30            [-1, 512, 7, 7]               0
+           Linear-31                 [-1, 4096]     102,764,544
+             ReLU-32                 [-1, 4096]               0
+          Dropout-33                 [-1, 4096]               0
+           Linear-34                 [-1, 4096]      16,781,312
+             ReLU-35                 [-1, 4096]               0
+          Dropout-36                 [-1, 4096]               0
+           Linear-37                   [-1, 10]          40,970
+================================================================
+Total params: 128,812,810
+Trainable params: 40,970
+Non-trainable params: 128,771,840
+----------------------------------------------------------------
+Input size (MB): 0.05
+Forward/backward pass size (MB): 15.21
+Params size (MB): 491.38
+Estimated Total Size (MB): 506.64
+----------------------------------------------------------------
+``` 
+
+
+### Inspecting CPU and GPU usage with VGG16 
+
+Again, we can repeat the same process as in case study 1 to profile CPU and GPU usage - we can change the model input to VGG16 using ```vgg11_bn = VGG.to(device=device)```. 
+
+
+<figure title = "GPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_vgg_gpu.png?raw=true">
+    <figcaption>
+    <b>Figure 5: VGG16 - GPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+
+
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_vgg_cpu.png?raw=true">
+    <figcaption>
+    <b>Figure 6: VGG16 - CPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+
+Figure 5 and 6 show the GPU and CPU usage for VGG16. We can see that the GPU Utilization and memory usage are much higher than our baseline model in case study 1. This is because the required calculations are much higher for the VGG16 model. Therefore, in theory, we should expect the GPU runtime on VGG16 should outperform the CPU runtime significantly. 
+
+### Training the model 
+
+
+```python
+def train_model(model, dataloaders, criterion, optimizer, num_epochs=10, device=device):
+    
+    # Initialize time 
+    since = time.time()
+
+    # Initialize reporting metrics 
+    train_acc_history,val_acc_history,train_loss_history,val_loss_history = [],[],[],[]
+    best_acc = 0.0
+
+    for epoch in range(num_epochs):
+        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print('-' * 10)
+
+        # Each epoch has a training and validation phase
+        for phase in ['train', 'val']:
+            if phase == 'train':
+                model.train()  # Set model to training mode
+            else:
+                model.eval()   # Set model to evaluate mode
+
+            running_loss = 0.0
+            running_corrects = 0
+
+            # Iterate over data.
+            for inputs, labels in dataloaders[phase]:
+                inputs = inputs.to(device)
+                labels = labels.to(device)
+
+                # zero the parameter gradients
+                optimizer.zero_grad()
+
+                # forward
+                # track history if only in train
+                with torch.set_grad_enabled(phase == 'train'):
+                    # Get model outputs and calculate loss
+        
+                    outputs = model(inputs)
+                    loss = criterion(outputs, labels)
+                    _, preds = torch.max(outputs, 1)
+
+                    # backward + optimize only if in training phase
+                    if phase == 'train':
+                        loss.backward()
+                        optimizer.step()
+
+                # statistics
+                running_loss += loss.item() * inputs.size(0)
+                running_corrects += torch.sum(preds == labels.data).type(torch.float).item()
+
+            epoch_loss = running_loss / len(dataloaders[phase].dataset)
+            epoch_acc = running_corrects / len(dataloaders[phase].dataset)
+
+            print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+
+            if phase == 'train':
+                train_acc_history.append(epoch_acc)     
+                train_loss_history.append(epoch_loss)
+            else: 
+                val_acc_history.append(epoch_acc)
+                val_loss_history.append(epoch_loss)
+
+
+        print()
+
+    time_elapsed = time.time() - since
+    print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
+
+
+    return train_acc_history,val_acc_history,train_loss_history,val_loss_history,time_elapsed
+```
+
+### Speed comparison  
+
+We can now compare the speed and accuracy of the CPU and GPU implementations of VGG16 and the baseline model. It is important to note that we are re-initializing the loss function and optimizer on the same device as the model. This is because the loss function and optimizer are also part of the model and will be moved to the same device as the model. 
+
+
+
+```python
+#VGG16
+#CPU----------------------------------------------------------------------------------------------------------------
+device = torch.device('cpu') 
+vgg11_cpu = vgg11_bn.to(device=device)
+loss_fn =  nn.CrossEntropyLoss()
+optimizer = optim.SGD(vgg11_cpu.parameters(), lr=0.01, momentum=0.9) 
+train_acc_history,val_acc_history,train_loss_history,val_loss_history,vgg_cpu_time  = train_model(vgg11_cpu,dataloader_all,loss_fn, optimizer, num_epochs=10, device=device) 
+#GPU----------------------------------------------------------------------------------------------------------------
+device = torch.device('cuda:0') 
+vgg11_gpu = vgg11_bn.to(device=device)
+loss_fn =  nn.CrossEntropyLoss().cuda()
+optimizer = optim.SGD(vgg11_gpu.parameters(), lr=0.01, momentum=0.9) 
+train_acc_history,val_acc_history,train_loss_history,val_loss_history,vgg_gpu_time  = train_model(vgg11_gpu,dataloader_all,loss_fn, optimizer, num_epochs=10, device=device)
+
+
+```
+
+
+```python
+#Baseline
+#CPU----------------------------------------------------------------------------------------------------------------
+device = torch.device('cpu')
+base_cpu = Net().to(device=device)
+loss_fn =  nn.CrossEntropyLoss()
+optimizer = optim.SGD(base_cpu.parameters(), lr=0.01, momentum=0.9)
+base_train_acc_history,base_val_acc_history,base_train_loss_history,base_val_loss_history,baseline_cpu_time  = train_model(base_cpu,dataloader_all,loss_fn, optimizer, num_epochs=10, device=device)
+#GPU----------------------------------------------------------------------------------------------------------------
+device = torch.device('cuda:0')
+base_gpu = Net().to(device=device)
+loss_fn =  nn.CrossEntropyLoss().cuda()
+optimizer = optim.SGD(base_gpu.parameters(), lr=0.01, momentum=0.9)
+base_train_acc_history,base_val_acc_history,base_train_loss_history,base_val_loss_history,baseline_gpu_time  = train_model(base_gpu,dataloader_all,loss_fn, optimizer, num_epochs=10, device=device)
+```
+
+
+```python
+compute_time = pd.DataFrame([baseline_cpu_time,baseline_gpu_time,vgg_cpu_time,vgg_gpu_time],columns=['Time'])
+compute_time['Model'] = ['baseline','baseline','VGG16','VGG16']
+compute_time['Mode'] = ['CPU','GPU','CPU','GPU']
+g= sns.catplot(data=compute_time, kind='bar',x='Model',y='Time',hue='Mode')
+g.set_axis_labels("", "Total Time (Seconds)")
+
+```
+
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_model_speed_comparison.png?raw=true">
+    <figcaption>
+    <b>Figure 7: Speed comparisons between GPU and CPU on Baseline and VGG16</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+Based on Figure 7, it is evident that the VGG16 model implemented on a GPU is approximately 6 times faster than the same model implemented on a CPU. This can be attributed to the fact that the GPU is capable of parallel processing, thereby reducing the total time required for training the model. However, in the case of the baseline model, the GPU implementation does not exhibit a significant improvement over the CPU implementation. This is due to the fact that the baseline model is relatively simple and does not involve a large amount of computation.
+
+
+
+
+
+### Comparison of Model Accuracy 
+
+The final step is to evaluate the training model on the testing dataset. There are many ways to evaluate the performance of a model. In this case, we will use the accuracy score, which is defined as the number of correct predictions divided by the total number of predictions, and the confusion matrix, which is a table that shows the number of correct and incorrect predictions for each class. The following code block shows how to calculate the accuracy score and confusion matrix for the VGG16 and baseline model. 
+
+```python 
+fig,ax = plt.subplots(2,1,figsize=(20,20))
+def show_heatmap(test_loader,model,ax,name):
+    heatmap = pd.DataFrame(data=0,index=classes,columns=classes)
+    with torch.no_grad():
+        number_corrects = 0
+        number_samples = 0
+        for images, labels in test_loader:
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)
+            number_corrects += (predicted==labels).sum().item()
+            number_samples += labels.size(0)
+            for i in range(len(labels)):
+                true_label = labels[i].item()
+                predicted_label = predicted[i].item()
+                heatmap.iloc[true_label,predicted_label] += 1
+    sns.heatmap(heatmap, annot=True, fmt="d",cmap="YlGnBu",ax=ax) 
+    ax.set_title(f'{name}, Overall accuracy {(number_corrects / number_samples)*100}%') 
+
+show_heatmap(test_loader,vgg11_gpu,ax[0],"VGG16")
+show_heatmap(test_loader,base_gpu,ax[1],"Baseline")
+``` 
+
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_confusion_matrix.png?raw=true">
+    <figcaption>
+    <b>Figure 8: Overall accuracy and confusion matrix</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+
+From Figure 8, it is evident that the VGG16 model has a higher overall accuracy than the baseline model. This is expected because the VGG16 model is a more complex model that is capable of learning more complex patterns in the data. The baseline model is still able to achieve a respectable accuracy of 71% - in future experiments, we can try to improve the accuracy of the baseline model by increasing the number of epochs, optimizing the learning rate, or adding more layers to the model. 
+
+## Conclusion
+
+In this case study, we showcased the utilization of GPUs to accelerate the classification of satellite images, alongside the use of profiling tools like Tensorboard to visualize CPU/GPU bottlenecks. Our findings show that deep learning models can benefit greatly from GPUs, especially when the model is complex and the data size is substantial.
+
+While deep learning frameworks like PyTorch and TensorFlow offer a simple API to transfer model/tensor objects from the CPU to the GPU, the overhead of transferring data from the CPU to the GPU can be significant for smaller data or model sizes. Therefore, the performance of the GPU implementation may only be marginally better than that of the CPU implementation in such cases. Consequently, it is imperative to evaluate the data and computation sizes thoroughly before deciding to use a CPU or a GPU.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
