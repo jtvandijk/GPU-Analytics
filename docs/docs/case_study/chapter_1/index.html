@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Address geocoding # Address geocoding, or address matching, is an example of a broad class of data science problems known as data linkage. Data linkage problems involve connecting two datasets together by establishing an association between two records based on one or more common properties. In the case of address geocoding, one would try to assign XY coordinates to a list of address strings derived from, for instance, consumer sources that are not explicitly georeferenced (see, for instance, Lansley et al.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Chapter 1 - Address geocoding" />
+<meta property="og:description" content="Address geocoding # Address geocoding, or address matching, is an example of a broad class of data science problems known as data linkage. Data linkage problems involve connecting two datasets together by establishing an association between two records based on one or more common properties. In the case of address geocoding, one would try to assign XY coordinates to a list of address strings derived from, for instance, consumer sources that are not explicitly georeferenced (see, for instance, Lansley et al." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_1/" /><meta property="article:section" content="docs" />
+
+
+<title>Chapter 1 - Address geocoding | GPU-based analysis for social and geographic applications</title>
+<link rel="manifest" href="/GPU-Analytics/manifest.json">
+<link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
+  <script defer src="/GPU-Analytics/en.search.min.42877e2e624550bab0764f2a4b2e8da86d080649741a107bf9ce078294811d93.js" integrity="sha256-Qod&#43;LmJFULqwdk8qSy6NqG0IBkl0GhB7&#43;c4HgpSBHZM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/GPU-Analytics/"><span>GPU-based analysis for social and geographic applications</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/preface/about/" class="">Preface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Overview</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/gpu/" class="">GPU</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/setting_up/" class="">Setting up the environment for GPU</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Case Studies</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_1/" class="active">Chapter 1 - Address geocoding</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_2/" class="">Chapter 2 - GeoAI and Deep Learning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_3/" class="">Chapter 3 - Geospatial Operation and Analysis</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/GPU-Analytics/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Chapter 1 - Address geocoding</strong>
+
+  <label for="toc-control">
+    
+    <img src="/GPU-Analytics/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#address-geocoding">Address geocoding</a></li>
+    <li><a href="#objective">Objective</a></li>
+    <li><a href="#address-matching-pipeline">Address matching pipeline</a>
+      <ul>
+        <li><a href="#address-string-preprocessing">Address string-preprocessing</a></li>
+        <li><a href="#candidate-address-retrieval">Candidate address: retrieval</a></li>
+        <li><a href="#candidate-address-scoring-and-ranking">Candidate address: scoring and ranking</a></li>
+      </ul>
+    </li>
+    <li><a href="#gpu-considerations">GPU Considerations</a></li>
+    <li><a href="#case-study">Case Study</a>
+      <ul>
+        <li><a href="#example-data">Example data</a></li>
+        <li><a href="#setting-up">Setting up</a></li>
+        <li><a href="#tf-idf-vectorisation">TF-IDF vectorisation</a></li>
+        <li><a href="#cosine-similarity">Cosine similarity</a></li>
+        <li><a href="#similarity-scores">Similarity scores</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h2 id="address-geocoding">
+  Address geocoding
+  <a class="anchor" href="#address-geocoding">#</a>
+</h2>
+<p>Address geocoding, or address matching, is an example of a broad class of data science problems known as data linkage. Data linkage problems involve connecting two datasets together by establishing an association between two records based on one or more common properties. In the case of address geocoding, one would try to assign XY coordinates to a list of address strings derived from, for instance, consumer sources that are not explicitly georeferenced (see, for instance, <a href="https://doi.org/10.1111/rssa.12476">Lansley <em>et al.</em> 2019</a>). The process involves linking the address list to a authoritative reference database that contains address strings with their associated coordinates. However, due to the lack of a universal standard on how addresses are structured and stored, matching addresses becomes a significantly complicated task that requires a great deal of data preparation and processing (see <strong>Table 1</strong>).</p>
+<table>
+<thead>
+<tr>
+<th>Input address string</th>
+<th>Reference data to match against</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unstructured text</td>
+<td>Structured, tokenised</td>
+</tr>
+<tr>
+<td>Messy, containing typos and abbreviations</td>
+<td>Clean, standardised, (mostly) correct</td>
+</tr>
+<tr>
+<td>Incomplete</td>
+<td>Snapshot of addresses at a given time</td>
+</tr>
+<tr>
+<td>Range from historic to very recent addresses, including businesses</td>
+<td>Organisation / business names are not always part of the address</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 1: Summary of address matching challenges <a href="https://www.ons.gov.uk/methodology/methodologicalpublications/generalmethodology/onsworkingpaperseries/onsworkingpaperseriesno17usingdatasciencefortheaddressmatchingservice#:~:text=Address%20matching%20is%20an%20example,common%20property%20of%20the%20data.">(Office for National Statistics, 2022</a>).</strong></p>
+<h2 id="objective">
+  Objective
+  <a class="anchor" href="#objective">#</a>
+</h2>
+<p>Not only is address matching problem a complex problem, its complexity increases exponentially with an increase in data sizes. The objective of this first <strong>Case Study</strong>, therefore, is to showcase how we can utilise a GPU&rsquo;s processing capabilities for address matching - and data linkage more general.</p>
+<h2 id="address-matching-pipeline">
+  Address matching pipeline
+  <a class="anchor" href="#address-matching-pipeline">#</a>
+</h2>
+<p>The address matching process can be split into three high-level steps: data pre-processing, candidate address retrieval, and candidate scoring and ranking.</p>
+<h3 id="address-string-preprocessing">
+  Address string-preprocessing
+  <a class="anchor" href="#address-string-preprocessing">#</a>
+</h3>
+<p>At the most fundamental level, we need to prepare the data for the matching process. There are potentially different approach to do this, but the most common approach is to concatenate (join) the address into its constituent parts if this is not the case already. Alternatively, the input address can be split into corresponding parts, such as the street name, house number, postcode, and so on. The former approach is more common, but it ignores the information in the data about the address, and makes it impossible to rely on the natural structure of the address to help match the desired address with the input string. The latter approach is more complex, but flexible, it allows for more accurate comparison because comparing tokens precludes the possibility of the same word representing one element of the address being compared against an unrelated element of the address.</p>
+<h3 id="candidate-address-retrieval">
+  Candidate address: retrieval
+  <a class="anchor" href="#candidate-address-retrieval">#</a>
+</h3>
+<p>In the second step, we need a method to compare the input address with the reference data. The simplest approach is to compare each token of the input address / each address string with each token / each address string of the reference data. This approach is simple, but it cannot deal with typos and abbreviations. A common solution to deal with this is by using a probabilistic data matching algorithm, such as fuzzy string matching with similarity measures to accommodate typos and misspellings: to make sure that, for instance, &ldquo;Birmingam&rdquo; would match &ldquo;Birmingham&rdquo;.  However, in practice, when each record is compared against every other record using some type of similarity measure (e.g. the <a href="https://doi.org/10.1016/j.cosrev.2020.100300">Levenshtein distance</a>), the number of comparisons can be very large, thus leading to a very expensive computation that cannot effectively be deployed on a GPU. Instead, we can consider using a Natural Language Processing (NLP) approach to compare the addresses by assuming that the address is a sequence of unstructured text. One of the most common approaches is to convert the address into a vector and then compare the vector similarity (e.g., <a href="http://www.tfidf.com/">TF-IDF</a>) to select potentially matching candidates.</p>
+<h3 id="candidate-address-scoring-and-ranking">
+  Candidate address: scoring and ranking
+  <a class="anchor" href="#candidate-address-scoring-and-ranking">#</a>
+</h3>
+<p>The last step in the process is to evaluate the quality of the match between the input address string and the retrieved candidate addresses. The most common approach is to use a similarity score to evaluate the similarity among all potential candidate addresses. Depending on the application, the similarity score can be a simple percentage or a more complex score. For instance, we can define a threshold for the similarity score, and only return the candidate addresses that have a similarity score above the threshold. We can also evaluate the model performance by validating the results with a ground truth dataset.</p>
+<h2 id="gpu-considerations">
+  GPU Considerations
+  <a class="anchor" href="#gpu-considerations">#</a>
+</h2>
+<p>The address matching problem is a computationally intensive problem. A core challenge is to understand which part of the process is the most computationally intensive and which part of the process can be efficiently parallelized on a GPU. In the first part, we can concatenate the address from its constituent parts, whereby treating each address as a sequence of unstructured text. In the second part, we can use a <a href="https://medium.com/in-pursuit-of-artificial-intelligence/brief-introduction-to-n-gram-and-tf-idf-tokenization-e58d22555bab">character-based n-gram TF-IDF</a> to convert the address into a vector. While the terms in TF-IDF are usually words, this is not a requirement. We can use n-grams, sequences of N continuous characters, to convert the address into a vector representation based on the character level. For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Input</span>
+</span></span><span style="display:flex;"><span>text <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Birmingham&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Create a list of n-grams</span>
+</span></span><span style="display:flex;"><span>n_grams <span style="color:#f92672">=</span> [text[i:i<span style="color:#f92672">+</span><span style="color:#ae81ff">3</span>] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(text)<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)]
+</span></span><span style="display:flex;"><span>print(n_grams)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[&#39;Bir&#39;, &#39;irm&#39;, &#39;rmi&#39;, &#39;min&#39;, &#39;ing&#39;, &#39;ngh&#39;, &#39;gha&#39;, &#39;ham&#39;]</span>
+</span></span></code></pre></div><p>In the third part, we can use a similarity score to evaluate the similarity among all potential candidate addresses; for instance by ranking the candidate addresses based on the similarity score.</p>
+<p>Using TF-IDF with n-grams as terms to find similar strings transforms the problem into a matrix multiplication problem, which is computationally much cheaper. This approach can significantly reduce the <strong>memory</strong> it takes to compare strings in comparison to a fuzzy string matching algorithm with TF-IDF and a nearest neighbors algorithm. More importantly, using a GPU for the matrix multiplication can further speed up the string comparison.</p>
+<h2 id="case-study">
+  Case Study
+  <a class="anchor" href="#case-study">#</a>
+</h2>
+<h3 id="example-data">
+  Example data
+  <a class="anchor" href="#example-data">#</a>
+</h3>
+<p>In this tutorial, we will be using two US hospital data sets. The <a href="https://raw.githubusercontent.com/chris1610/pbpython/master/data/hospital_account_info.csv">first</a> is a data set that contains hospital banking details (see <strong>Table 2</strong>). The <a href="https://raw.githubusercontent.com/chris1610/pbpython/master/data/hospital_reimbursement.csv">second</a> data set contains information on payments hospitals have received from the insurance provider (see <strong>Table 3</strong>). We would like to linkt these two datasets for further analysis, however, unfortunately, they currently are not linked.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right"></th>
+<th style="text-align:right">Account_Num</th>
+<th style="text-align:left">Facility Name</th>
+<th style="text-align:left">Address</th>
+<th style="text-align:left">City</th>
+<th style="text-align:left">State</th>
+<th style="text-align:right">ZIP Code</th>
+<th style="text-align:left">County Name</th>
+<th style="text-align:left">Phone Number</th>
+<th style="text-align:left">Hospital Type</th>
+<th style="text-align:left">Hospital Ownership</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10605</td>
+<td style="text-align:left">SAGE MEMORIAL HOSPITAL</td>
+<td style="text-align:left">STATE ROUTE 264 SOUTH 191</td>
+<td style="text-align:left">GANADO</td>
+<td style="text-align:left">AZ</td>
+<td style="text-align:right">86505</td>
+<td style="text-align:left">APACHE</td>
+<td style="text-align:left">(928) 755-4541</td>
+<td style="text-align:left">Critical Access Hospitals</td>
+<td style="text-align:left">Voluntary non-profit - Private</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">24250</td>
+<td style="text-align:left">WOODRIDGE BEHAVIORAL CENTER</td>
+<td style="text-align:left">600 NORTH 7TH STREET</td>
+<td style="text-align:left">WEST MEMPHIS</td>
+<td style="text-align:left">AR</td>
+<td style="text-align:right">72301</td>
+<td style="text-align:left">CRITTENDEN</td>
+<td style="text-align:left">(870) 394-4113</td>
+<td style="text-align:left">Psychiatric</td>
+<td style="text-align:left">Proprietary</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 2: Sample of the account hospital data</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right"></th>
+<th style="text-align:right">Provider_Num</th>
+<th style="text-align:left">Provider Name</th>
+<th style="text-align:left">Provider Street Address</th>
+<th style="text-align:left">Provider City</th>
+<th style="text-align:left">Provider State</th>
+<th style="text-align:right">Provider Zip Code</th>
+<th style="text-align:right">Total Discharges</th>
+<th style="text-align:right">Average Covered Charges</th>
+<th style="text-align:right">Average Total Payments</th>
+<th style="text-align:right">Average Medicare Payments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td style="text-align:right">839987</td>
+<td style="text-align:left">SOUTHEAST ALABAMA MEDICAL CENTER</td>
+<td style="text-align:left">1108 ROSS CLARK CIRCLE</td>
+<td style="text-align:left">DOTHAN</td>
+<td style="text-align:left">AL</td>
+<td style="text-align:right">36301</td>
+<td style="text-align:right">118</td>
+<td style="text-align:right">20855.6</td>
+<td style="text-align:right">5026.19</td>
+<td style="text-align:right">4115.52</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">519118</td>
+<td style="text-align:left">MARSHALL MEDICAL CENTER SOUTH</td>
+<td style="text-align:left">2505 U S HIGHWAY 431 NORTH</td>
+<td style="text-align:left">BOAZ</td>
+<td style="text-align:left">AL</td>
+<td style="text-align:right">35957</td>
+<td style="text-align:right">43</td>
+<td style="text-align:right">13289.1</td>
+<td style="text-align:right">5413.63</td>
+<td style="text-align:right">4490.93</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 3: Sample of the reimbursement data</strong></p>
+<p>Below we compare the speed of computing TF-IDF using <em>sklearn</em> (CPU) and RAPIDS&rsquo; <em>cuML</em> (GPU) module. To make the difference more distinguishable, we will test how the increase of vocabulary size would affect the performance in multiple runs.</p>
+<h3 id="setting-up">
+  Setting up
+  <a class="anchor" href="#setting-up">#</a>
+</h3>
+<p>We start by importing the libraries that we will need, loading the individual data sets, and concatenating the individual address components in each of the data sets.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Import libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cudf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> cuml.feature_extraction.text <span style="color:#f92672">import</span> TfidfVectorizer <span style="color:#66d9ef">as</span> GPU_TfidfVectorizer
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.feature_extraction.text <span style="color:#f92672">import</span> TfidfVectorizer <span style="color:#66d9ef">as</span> CPU_TfidfVectorizer
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Load data</span>
+</span></span><span style="display:flex;"><span>data1_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://raw.githubusercontent.com/chris1610/pbpython/master/data/hospital_account_info.csv&#34;</span>
+</span></span><span style="display:flex;"><span>data2_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://raw.githubusercontent.com/chris1610/pbpython/master/data/hospital_reimbursement.csv&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>account <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(data1_url) <span style="color:#75715e">#Hospital account information</span>
+</span></span><span style="display:flex;"><span>reimbursement <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(data2_url) <span style="color:#75715e">#Hospital reimbursement information</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Converting facility name, address, city and state into one string</span>
+</span></span><span style="display:flex;"><span>account_full_address <span style="color:#f92672">=</span> account<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: <span style="color:#e6db74">&#34; &#34;</span><span style="color:#f92672">.</span>join([x[<span style="color:#e6db74">&#39;Facility Name&#39;</span>],x[<span style="color:#e6db74">&#39;Address&#39;</span>],x[<span style="color:#e6db74">&#39;City&#39;</span>],x[<span style="color:#e6db74">&#39;State&#39;</span>]]), axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>tolist()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Converting facility name, address, city and state into one string</span>
+</span></span><span style="display:flex;"><span>reimbursement_full_address <span style="color:#f92672">=</span> reimbursement<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: <span style="color:#e6db74">&#34; &#34;</span><span style="color:#f92672">.</span>join([x[<span style="color:#e6db74">&#39;Provider Name&#39;</span>],x[<span style="color:#e6db74">&#39;Provider Street Address&#39;</span>],x[<span style="color:#e6db74">&#39;Provider City&#39;</span>],x[<span style="color:#e6db74">&#39;Provider State&#39;</span>]]), axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>tolist()
+</span></span></code></pre></div><h3 id="tf-idf-vectorisation">
+  TF-IDF vectorisation
+  <a class="anchor" href="#tf-idf-vectorisation">#</a>
+</h3>
+<p>Now we are set-up, we can assess the impact of data size on computational time for both our CPU and GPU approach. To allow for a fair comparison between the CPU and GPU, we will be using the same data set and increase the size by the data set by <em>x</em> times on each run.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Inititate sklearn vectoriser and cuml vectosiser</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU vectorizer from sklearn</span>
+</span></span><span style="display:flex;"><span>cpu_vectorizer <span style="color:#f92672">=</span> CPU_TfidfVectorizer(analyzer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;char&#39;</span>,ngram_range<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#GPU vectorizer from cuml</span>
+</span></span><span style="display:flex;"><span>gpu_vectorizer <span style="color:#f92672">=</span> GPU_TfidfVectorizer(analyzer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;char&#39;</span>,ngram_range<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#analyzer=&#39;char&#39; means we are using character as the input</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#ngram_range = (1,2) means we are looking at both unigram and bigram for the model input</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Manually inflating number of rows with 10 run times</span>
+</span></span><span style="display:flex;"><span>total_datasize <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>cpu_time <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>gpu_time <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> run <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">50</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Manually inflating the number of records</span>
+</span></span><span style="display:flex;"><span>    input <span style="color:#f92672">=</span> reimbursement_full_address<span style="color:#f92672">*</span>i
+</span></span><span style="display:flex;"><span>    total_datasize<span style="color:#f92672">.</span>append(len(input))
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Cpu runtime --------------------------------  </span>
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    cpu_output <span style="color:#f92672">=</span> cpu_vectorizer<span style="color:#f92672">.</span>fit_transform(input)
+</span></span><span style="display:flex;"><span>    done <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    elapsed <span style="color:#f92672">=</span> done <span style="color:#f92672">-</span> start
+</span></span><span style="display:flex;"><span>    cpu_time<span style="color:#f92672">.</span>append(elapsed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#gpu runtime --------------------------------</span>
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Convert input to cudf series</span>
+</span></span><span style="display:flex;"><span>    gpu_output <span style="color:#f92672">=</span> gpu_vectorizer<span style="color:#f92672">.</span>fit_transform(cudf<span style="color:#f92672">.</span>Series(input))
+</span></span><span style="display:flex;"><span>    done <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    elapsed <span style="color:#f92672">=</span> done <span style="color:#f92672">-</span> start
+</span></span><span style="display:flex;"><span>    gpu_time<span style="color:#f92672">.</span>append(elapsed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Create a dataframe to store the results</span>
+</span></span><span style="display:flex;"><span>gpu_elapsed <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#34;time&#34;</span>:gpu_time,<span style="color:#e6db74">&#34;data_size&#34;</span>:total_datasize,<span style="color:#e6db74">&#39;label&#39;</span>:<span style="color:#e6db74">&#34;gpu&#34;</span>})
+</span></span><span style="display:flex;"><span>cpu_elapsed <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#34;time&#34;</span>:cpu_time,<span style="color:#e6db74">&#34;data_size&#34;</span>:total_datasize,<span style="color:#e6db74">&#39;label&#39;</span>:<span style="color:#e6db74">&#34;cpu&#34;</span>})
+</span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([gpu_elapsed,cpu_elapsed])<span style="color:#f92672">.</span>reset_index()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Plot results</span>
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>lineplot(x<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;data_size&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;time&#39;</span>,hue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;label&#39;</span>,data <span style="color:#f92672">=</span> result,ax <span style="color:#f92672">=</span> ax )
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Data Size&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Time Elapsed &#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Comparing the speed of TF-IDF vectorisation on CPU and GPU&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>print(cpu_output<span style="color:#f92672">.</span>shape) <span style="color:#75715e">#(25000, 874) -&gt; meaning we have 24273 rows of address and 874 characters in the vocabulary as input</span>
+</span></span></code></pre></div><figure title = "Speed comparison">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/tf_idf_vec.png?raw=true">
+    <figcaption>
+    <b>Figure 1: Comparing the speed of TF-IDF vectorisation on CPU and GPU.
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>There are few things we can observe in the code above. First, the code between the CPU and GPU is <em>almost</em> identical. The only difference is that we are using the functions from different libraries. Second, we can see that the GPU is able to process the data much faster than the CPU. On average, it takes less than <strong>0.1</strong> seconds to process around 25 thousand addresses on the GPU. In comparison, it takes <strong>1</strong> second on the CPU for the same input dataset. Furthermore, we can also observe that the run time of <em>CuML’s</em> TfidfVectorizer is almost constant as the input data size increases, whereas the run time of scikit-learn’s TfidfVectorizer grows exponentially. This is because the GPU is able to process the data in parallel, which makes it much more efficient than the CPU.</p>
+<h3 id="cosine-similarity">
+  Cosine similarity
+  <a class="anchor" href="#cosine-similarity">#</a>
+</h3>
+<p>Now that we have our TF-IDF matrix, we want to use the hospital reimbursement data to find the most relevant address from the hospital data. To do this, we can find the address with the smallest distance (or highest similarity) to our query address. For the second step, we will compare the speed of computing the cosine similarity using the CPU and GPU. We do this by comparing the computation time of calculating the pair-wise cosine similarity between two matrices using <em>NumPy</em>, <em>CuPy</em> and <em>Numba</em> from scratch. We will use the TF-IDF matrix we created from the reimbursement data in the previous step as the input, and hospital data as the target.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Vectorize the target address</span>
+</span></span><span style="display:flex;"><span>cpu_target <span style="color:#f92672">=</span>cpu_vectorizer<span style="color:#f92672">.</span>transform(account_full_address)
+</span></span><span style="display:flex;"><span>gpu_target <span style="color:#f92672">=</span> gpu_vectorizer<span style="color:#f92672">.</span>transform(cudf<span style="color:#f92672">.</span>Series(account_full_address))
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Import libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cupy <span style="color:#66d9ef">as</span> cp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> scipy
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gc
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> cupyx.scipy.sparse.linalg <span style="color:#f92672">import</span> norm <span style="color:#66d9ef">as</span> cp_norm
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> scipy.sparse.linalg <span style="color:#f92672">import</span> norm <span style="color:#66d9ef">as</span> sc_norm
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Numpy</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">np_cosine_similarity</span>(query, target):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Assert that the input matrices have the same number of columns</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span>(query<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> target<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Calculate the dot product</span>
+</span></span><span style="display:flex;"><span>    dot_product <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(query,target<span style="color:#f92672">.</span>T)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Calculate l2 norm for query and target</span>
+</span></span><span style="display:flex;"><span>    query_norm <span style="color:#f92672">=</span> sc_norm(query,axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    target_norm <span style="color:#f92672">=</span> sc_norm(target,axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> dot_product<span style="color:#f92672">/</span>(query_norm[:,np<span style="color:#f92672">.</span>newaxis]<span style="color:#f92672">*</span>target_norm[:,np<span style="color:#f92672">.</span>newaxis]<span style="color:#f92672">.</span>T)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Cupy</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cp_cosine_similarity</span>(query, target):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Assert that the input matrices have the same number of columns</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span>(query<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> target<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Initiate GPU instance</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> cp<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>Device(<span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Check whether the sparse matrix is compatible with Cupy, if not then convert</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> isinstance(query,scipy<span style="color:#f92672">.</span>sparse<span style="color:#f92672">.</span>_csr<span style="color:#f92672">.</span>csr_matrix) <span style="color:#f92672">and</span> isinstance(target,scipy<span style="color:#f92672">.</span>sparse<span style="color:#f92672">.</span>_csr<span style="color:#f92672">.</span>csr_matrix):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Convert the input matrices to sparse format and copy to the GPU</span>
+</span></span><span style="display:flex;"><span>            query <span style="color:#f92672">=</span> cp<span style="color:#f92672">.</span>sparse<span style="color:#f92672">.</span>csr_matrix(query, copy<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>            target <span style="color:#f92672">=</span> cp<span style="color:#f92672">.</span>sparse<span style="color:#f92672">.</span>csr_matrix(target, copy<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Dot product using cupy.dot()</span>
+</span></span><span style="display:flex;"><span>        dot_product <span style="color:#f92672">=</span> query<span style="color:#f92672">.</span>dot(target<span style="color:#f92672">.</span>T)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Calculate l2 norm for query and target</span>
+</span></span><span style="display:flex;"><span>        query_norm <span style="color:#f92672">=</span> cp_norm(query,axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        target_norm <span style="color:#f92672">=</span> cp_norm(target,axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Compute the cosine similarity</span>
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> dot_product <span style="color:#f92672">/</span> (cp<span style="color:#f92672">.</span>expand_dims(query_norm,axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> cp<span style="color:#f92672">.</span>expand_dims(target_norm,axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Converting back to numpy array</span>
+</span></span><span style="display:flex;"><span>        result <span style="color:#f92672">=</span> output<span style="color:#f92672">.</span>get()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result
+</span></span></code></pre></div><p>From the above code, we can see that again the differences between <em>NumPy</em> and <em>CuPy</em> are minimal. Most mathematics functions in <em>CuPy</em> such as calculating the dot products and l2 norm have the same API as <em>NumPy</em> and <em>SciPy</em>. However, there are few things worth noticing. Firstly, when using <em>CuPy</em>, we have to manually initiate the GPU instance by calling function <code>with cp.cuda.Device(0):</code>  and then execute your calculation. This allows to temporarily switching the currently active GPU device. Secondly, we need to manually specify the data type and transfer the data on the GPU instance by using <code>cp.sparse.csr_matrix(...,copy = True) </code>. This is to ensure we can properly prepare the data types for CUDA operation (for more information on the supporting data types, <a href="https://docs.cupy.dev/en/stable/overview.html">please refer to the <em>CuPy</em> documentation</a>). And lastly, to get the data from the GPU, we need to use <code>.get()</code> to return a copy of the array on host memory.</p>
+<h4 id="numba-optional">
+  Numba [Optional]
+  <a class="anchor" href="#numba-optional">#</a>
+</h4>
+<p>We can actually go a step further, we can actually explicitly write computing kernels with <em>Numba</em>. <em>Numba</em> is a Just-In-Time (JIT) compiler for Python that can take functions with numerical values or arrays and compile them to assembly, so they run at high speed. One advantage of writing with <em>Numba</em> is that we can write the low-level code in Python and then integrate it with CUDA assembly. In contrast to <em>CuPy</em>, <em>Numba</em> offers some flexibility in terms of the data types and kernels that can be used. However, <em>Numba</em> does not yet implement the full CUDA API, so some features are not available. It is worth noting here the goal of this post is to demonstrate the use of <em>Numba</em> and not to provide a comprehensive guide on how to use <em>Numba</em>. If you are interested in learning more about <em>Numba</em>, <a href="https://numba.pydata.org/">see the <em>Numba</em> documentation</a>. The following code shows an example of the implementation of the cosine similarity function using <em>Numba</em>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Numba ----------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> numba <span style="color:#f92672">import</span> cuda
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define the kernel for calculation</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@cuda.jit</span> <span style="color:#75715e">#compiler decorator</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">pairwise_cosine_similarity</span>(A, B, C):
+</span></span><span style="display:flex;"><span>    i, j <span style="color:#f92672">=</span> cuda<span style="color:#f92672">.</span>grid(<span style="color:#ae81ff">2</span>) <span style="color:#75715e">#use 1 for x</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> i <span style="color:#f92672">&lt;</span> C<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">and</span> j <span style="color:#f92672">&lt;</span> C<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]:
+</span></span><span style="display:flex;"><span>        dot <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+</span></span><span style="display:flex;"><span>        normA <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+</span></span><span style="display:flex;"><span>        normB <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> range(A<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]):
+</span></span><span style="display:flex;"><span>            a <span style="color:#f92672">=</span> A[i, k]
+</span></span><span style="display:flex;"><span>            b <span style="color:#f92672">=</span> B[j, k]
+</span></span><span style="display:flex;"><span>            dot <span style="color:#f92672">+=</span> a <span style="color:#f92672">*</span> b
+</span></span><span style="display:flex;"><span>            normA <span style="color:#f92672">+=</span> a <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>            normB <span style="color:#f92672">+=</span> b <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>        C[i, j] <span style="color:#f92672">=</span> dot <span style="color:#f92672">/</span> (normA <span style="color:#f92672">*</span> normB)<span style="color:#f92672">**</span><span style="color:#ae81ff">0.5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Numba_cuda_cosine_similarity</span>(query,target):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Assert that the input matrices have the same number of columns</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span>(query<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> target<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Allocate memory on the device for the result</span>
+</span></span><span style="display:flex;"><span>    output <span style="color:#f92672">=</span> cuda<span style="color:#f92672">.</span>device_array((query<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>],target<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Check whether the sparse matrix is compatible with numba, if not then convert</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(query,scipy<span style="color:#f92672">.</span>sparse<span style="color:#f92672">.</span>_csr<span style="color:#f92672">.</span>csr_matrix) <span style="color:#f92672">and</span> isinstance(target,scipy<span style="color:#f92672">.</span>sparse<span style="color:#f92672">.</span>_csr<span style="color:#f92672">.</span>csr_matrix):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Convert the input matrices to numpy array and copy to the GPU</span>
+</span></span><span style="display:flex;"><span>        query <span style="color:#f92672">=</span> cuda<span style="color:#f92672">.</span>to_device(query<span style="color:#f92672">.</span>toarray())
+</span></span><span style="display:flex;"><span>        target <span style="color:#f92672">=</span> cuda<span style="color:#f92672">.</span>to_device(target<span style="color:#f92672">.</span>toarray())
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Set the number of threads in a block -----</span>
+</span></span><span style="display:flex;"><span>    threadsperblock <span style="color:#f92672">=</span> (<span style="color:#ae81ff">32</span>,<span style="color:#ae81ff">32</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Calculate the number of thread blocks in the grid</span>
+</span></span><span style="display:flex;"><span>    blockspergrid_x <span style="color:#f92672">=</span> (output<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> (threadsperblock[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">//</span> threadsperblock[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    blockspergrid_y <span style="color:#f92672">=</span> (output<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> (threadsperblock[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">//</span> threadsperblock[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    blockspergrid <span style="color:#f92672">=</span> (blockspergrid_x, blockspergrid_y)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Starting the kernel</span>
+</span></span><span style="display:flex;"><span>    pairwise_cosine_similarity[blockspergrid, threadsperblock](query, target, output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Copy the result back to the host</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> output<span style="color:#f92672">.</span>copy_to_host()
+</span></span></code></pre></div><p>Let&rsquo;s break down the code. <code>@cuda.jit</code> is a decorator, and it defines functions which will compile on the GPU (kernels). The <code>pairwise_cosine_similarity</code> function defines the steps of calculation inside the kernel. The <code>cuda.grid</code> function returns the 2D grid indices for the current thread executing in a CUDA kernel. The CUDA programming model uses a grid of threads to perform parallel computation, where each thread operates on a different portion of the input data. In the example code, the <code>cuda.grid</code> function is used to determine the indices of the current thread in the grid, represented as <code>i</code> and <code>j</code> in the code. These indices are used to access the corresponding row of the input matrices <code>A</code> and <code>B</code>, and the corresponding location in the output matrix <code>C</code>. In essence, the <code>cuda.grid</code> function is used to ensure that each thread operates on a different portion of the input data and outputs its result to the corresponding location in the output matrix, thus enabling the parallel computation of the cosine similarity. Furthermore, we need to manually define the shape of matrix <code>C</code>, and allocate memory on the device for the result. This is because the kernels cannot return numerical values, so we can get around that by passing inputs and outputs.</p>
+<p>In the <code>Numba_cuda_cosine_similarity</code> function, we follow the same logic as with the <em>CuPy</em> function, however, we have to manually define the number of threads in a block and calculate the number of thread blocks in the grid. The <code>threadsperblock</code> defines a group of threads that can execute concurrently. A single thread represents the smallest unit of execution in a CUDA kernel. Each thread operates on a different portion of the input data and computes its result. The results computed by each thread are then combined to produce the final result. In general, the number of threads per block is a trade-off between performance and memory usage. Increasing the number of threads per block can increase performance by allowing more parallel computation, but it also increases the memory usage of the block. The GPU has a limited amount of shared memory that is shared by all threads in a block, and increasing the number of threads per block can cause the shared memory usage to exceed the available memory. The value of <code>32, 32</code> for <code>threadsperblock</code> is a common choice because it is a relatively small number of threads that can still provide good performance, while minimising the memory usage of the block. However, the optimal value for <code>threadsperblock</code> depends on the specific requirements of the computation and the hardware being used, and it may need to be adjusted for different computations or hardware.</p>
+<p>Next we define the number of thread blocks in the grid with the variable <code>blockspergrid</code>. The number of thread blocks in the grid is defined by the number of threads in each dimension of the block, and the number of rows and columns in the output matrix. The purpose of adding <code>(threadsperblock[0] - 1) to C.shape[0]</code> is to ensure that the integer division will round up to the nearest whole number, rather than rounding down. In the last step, we can invoke the kernel by the defined block size and thread size and passing the input matrices and the output matrix to the kernel function. The kernel function will then perform the computation in parallel on the GPU. After the computation is finished, we can copy the result back to the host. The code below compares the <em>Numba</em> implementation to the <em>CuPy</em> (GPU) and <em>sklearn</em> (CPU) implementations.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Result placeholders</span>
+</span></span><span style="display:flex;"><span>total_datasize <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>cpu_time <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>gpu_time <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>numba_time <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> size <span style="color:#f92672">in</span> tqdm(range(<span style="color:#ae81ff">1000</span>,cpu_output<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>],<span style="color:#ae81ff">5000</span>)):
+</span></span><span style="display:flex;"><span>    total_datasize<span style="color:#f92672">.</span>append(size)
+</span></span><span style="display:flex;"><span>    query <span style="color:#f92672">=</span> cpu_output[<span style="color:#ae81ff">0</span>:size,]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#CPU calculation</span>
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    _ <span style="color:#f92672">=</span> np_cosine_similarity(query,cpu_target)
+</span></span><span style="display:flex;"><span>    done <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    elapsed <span style="color:#f92672">=</span> done <span style="color:#f92672">-</span> start
+</span></span><span style="display:flex;"><span>    cpu_time<span style="color:#f92672">.</span>append(elapsed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#GPU calculation</span>
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    _ <span style="color:#f92672">=</span> cp_cosine_similarity(query,cpu_target)
+</span></span><span style="display:flex;"><span>    done <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    elapsed <span style="color:#f92672">=</span> done <span style="color:#f92672">-</span> start
+</span></span><span style="display:flex;"><span>    gpu_time<span style="color:#f92672">.</span>append(elapsed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Numba CUDA ----</span>
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    _ <span style="color:#f92672">=</span> Numba_cuda_cosine_similarity(query,cpu_target)
+</span></span><span style="display:flex;"><span>    done <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    elapsed <span style="color:#f92672">=</span> done <span style="color:#f92672">-</span> start
+</span></span><span style="display:flex;"><span>    numba_time<span style="color:#f92672">.</span>append(elapsed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Plot</span>
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>gpu_elapsed <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#34;time&#34;</span>:gpu_time,<span style="color:#e6db74">&#34;data_size&#34;</span>:total_datasize,<span style="color:#e6db74">&#39;label&#39;</span>:<span style="color:#e6db74">&#34;gpu&#34;</span>})
+</span></span><span style="display:flex;"><span>cpu_elapsed <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#34;time&#34;</span>:cpu_time,<span style="color:#e6db74">&#34;data_size&#34;</span>:total_datasize,<span style="color:#e6db74">&#39;label&#39;</span>:<span style="color:#e6db74">&#34;cpu&#34;</span>})
+</span></span><span style="display:flex;"><span>numba_elasped <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#34;time&#34;</span>:numba_time,<span style="color:#e6db74">&#34;data_size&#34;</span>:total_datasize,<span style="color:#e6db74">&#39;label&#39;</span>:<span style="color:#e6db74">&#34;numba&#34;</span>})
+</span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([gpu_elapsed,cpu_elapsed,numba_elasped])<span style="color:#f92672">.</span>reset_index()
+</span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>lineplot(x<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;data_size&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;time&#39;</span>,hue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;label&#39;</span>,data <span style="color:#f92672">=</span> result,ax <span style="color:#f92672">=</span> ax )
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Data Size&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Time Elapsed &#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Comparing the speed of matrix multiplication on CPU and GPU&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure title = "Speed comparison">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp1_matrix_multiplication.png?raw=true">
+    <figcaption>
+    <b>Figure 2: Comparing the speed of matrix multiplication on CPU and GPU.
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>Again we can see a major speed difference. Overall, the operations on GPU are much faster than the ones on CPU. Specifically, by leveraging JIT compilation and <em>Numba</em> CUDA, we can reduce the time of matrix multiplication from 10.8 seconds to around 1 second. The code above is a demonstration of matrix multiplication, but in practice, we can use functions such as <code>cosine_similarity</code> from <code>sklearn.metrics.pairwise</code> or <code>sparse_pairwise_distances </code>from <code>cuml.metrics</code> to calculate the cosine similarity between two matrices.</p>
+<h3 id="similarity-scores">
+  Similarity scores
+  <a class="anchor" href="#similarity-scores">#</a>
+</h3>
+<p>Now we know how to run and speed up string matching, we can have a look at the actual results of the task. In this step, we will use the address with the highest cosine similarity result to find the best match for each query. Since we do not have a ground truth, we will be using the zip code as a proxy to check the accuracy of the model.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Import libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> defaultdict
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Run analysis pipeline on the GPU</span>
+</span></span><span style="display:flex;"><span>reimbursement_tfidf<span style="color:#f92672">=</span> gpu_vectorizer<span style="color:#f92672">.</span>fit_transform(cudf<span style="color:#f92672">.</span>Series(reimbursement_full_address))
+</span></span><span style="display:flex;"><span>account_tfidf <span style="color:#f92672">=</span> gpu_vectorizer<span style="color:#f92672">.</span>transform(cudf<span style="color:#f92672">.</span>Series(account_full_address))
+</span></span><span style="display:flex;"><span>similarity_matrix <span style="color:#f92672">=</span> Numba_cuda_cosine_similarity(reimbursement_tfidf,account_tfidf)
+</span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> defaultdict(list)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Getting the reimbursement address and state, account address and state</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> index <span style="color:#f92672">in</span> range(similarity_matrix<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]):
+</span></span><span style="display:flex;"><span>    most_similar_index <span style="color:#f92672">=</span> similarity_matrix[index]<span style="color:#f92672">.</span>argmax()
+</span></span><span style="display:flex;"><span>    result[<span style="color:#e6db74">&#39;reimbursement_address&#39;</span>]<span style="color:#f92672">.</span>append(reimbursement_full_address[index])
+</span></span><span style="display:flex;"><span>    result[<span style="color:#e6db74">&#39;account_address&#39;</span>]<span style="color:#f92672">.</span>append(account_full_address[most_similar_index])  
+</span></span><span style="display:flex;"><span>    result[<span style="color:#e6db74">&#39;reimbursment_zip&#39;</span>]<span style="color:#f92672">.</span>append(reimbursement<span style="color:#f92672">.</span>loc[index,<span style="color:#e6db74">&#39;Provider State&#39;</span>])
+</span></span><span style="display:flex;"><span>    result[<span style="color:#e6db74">&#39;account_zip&#39;</span>]<span style="color:#f92672">.</span>append(account<span style="color:#f92672">.</span>loc[most_similar_index,<span style="color:#e6db74">&#39;State&#39;</span>])
+</span></span><span style="display:flex;"><span>    result[<span style="color:#e6db74">&#39;similarity_score&#39;</span>]<span style="color:#f92672">.</span>append(similarity_matrix[index][most_similar_index])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>result_df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(result)
+</span></span><span style="display:flex;"><span>print(result_df<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;similarity_score&#39;</span>,ascending<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>print(result_df<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;similarity_score&#39;</span>,ascending<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th style="text-align:right"></th>
+<th style="text-align:left">reimbursement_address</th>
+<th style="text-align:left">account_address</th>
+<th style="text-align:right">reimbursment_zip</th>
+<th style="text-align:right">account_zip</th>
+<th style="text-align:right">similarity_score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1325</td>
+<td style="text-align:left">UNITY HOSPITAL 550 OSBORNE ROAD FRIDLEY MN</td>
+<td style="text-align:left">UNITY HOSPITAL OF ROCHESTER 1555 LONG POND ROAD ROCHESTER NY</td>
+<td style="text-align:right">55432</td>
+<td style="text-align:right">14626</td>
+<td style="text-align:right">0.551186</td>
+</tr>
+<tr>
+<td style="text-align:right">1634</td>
+<td style="text-align:left">TLC HEALTH NETWORK 845 ROUTES 5 AND 20 IRVING NY</td>
+<td style="text-align:left">STANDING ROCK INDIAN HEALTH SERVICE HOSPITAL 10 NORTH RIVER ROAD FORT YATES ND</td>
+<td style="text-align:right">14081</td>
+<td style="text-align:right">58538</td>
+<td style="text-align:right">0.555283</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 4: Examples of matched records with the lowest cosine similarity score.</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right"></th>
+<th style="text-align:left">reimbursement_address</th>
+<th style="text-align:left">account_address</th>
+<th style="text-align:right">reimbursment_zip</th>
+<th style="text-align:right">account_zip</th>
+<th style="text-align:right">similarity_score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">2242</td>
+<td style="text-align:left">BAPTIST MEMORIAL HOSPITAL UNION CITY 1201 BISHOP ST, PO BOX 310 UNION CITY TN</td>
+<td style="text-align:left">BAPTIST MEMORIAL HOSPITAL UNION CITY 1201 BISHOP ST, PO BOX 310 UNION CITY TN</td>
+<td style="text-align:right">38261</td>
+<td style="text-align:right">38261</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:right">89</td>
+<td style="text-align:left">BANNER DESERT MEDICAL CENTER 1400 SOUTH  DOBSON ROAD MESA AZ</td>
+<td style="text-align:left">BANNER DESERT MEDICAL CENTER 1400 SOUTH  DOBSON ROAD MESA AZ</td>
+<td style="text-align:right">85202</td>
+<td style="text-align:right">85202</td>
+<td style="text-align:right">1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 5: Examples of matched records with the highest cosine similarity score.</strong></p>
+<p>The tables show  that the matched records with the lowest cosine similarity score are not the same, but the matched records with the highest cosine similarity score are  almost identical. This is a good sign that the model is working as expected, we still need the inspect the accuracy scores in a bit more detail.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Import libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> accuracy_score
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Get accuracy scores</span>
+</span></span><span style="display:flex;"><span>print(accuracy_score(result_df<span style="color:#f92672">.</span>reimbursment_zip,result_df<span style="color:#f92672">.</span>account_zip))
+</span></span></code></pre></div><p>The accuracy score is 0.97, which means that 97% of the time, the model identifies the best match within the same zip code. Furthermore, by inspecting the distribution of the similarity score (see <strong>Figure 3</strong>), we can see that majority of matched records have cosine similarity scores above 0.95. However, there are some records that have a similarity score below 0.5, this may be due to the absence of such address from the hospital account holders.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Import libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Plot</span>
+</span></span><span style="display:flex;"><span>fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>result_df<span style="color:#f92672">.</span>similarity_score<span style="color:#f92672">.</span>plot(kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;hist&#39;</span>,bins<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,ax<span style="color:#f92672">=</span>ax)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Cosine Similarity Score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Distribution of cosine similarity score&#39;</span>)
+</span></span></code></pre></div><figure title = "Similarity scores  ">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp1_cosine_distribution.png?raw=true">
+    <figcaption>
+    <b>Figure 3: Distribution of cosine similarity score among matched records.
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h2 id="conclusion">
+  Conclusion
+  <a class="anchor" href="#conclusion">#</a>
+</h2>
+<p>In this case study, we explored the potential of GPUs to speed up explicit data linkage process that rely on string comparisons. By implementing vectorisation and cosine similarity calculation on a GPU, we were able to significantly enhance the performance of the process. More importantly, we can see that the functions and code can rather easily be ported to a GPU without too much modification.</p>
+<p>More general, however, address matching is a complex problem that involves many factors that can impact the accuracy of the model. Some of these challenges include the presence of special characters, abbreviations, changes and absence of unique identifiers in the data. Often the task of data linkage is not a one-time process, but rather an iterative process that requires constant monitoring on the performance of the model and making adjustments accordingly. GPU can be a great tool to help speed up such processes.</p>
+<p>One last thing to be aware of, particularly when dealing with large datasets, is the memory limitation of the GPU. One might consider using a GPU in conjunction with a scaling tool such as DASK, which can distribute the computation across multiple machines and servers. This approach can help mitigate the GPU memory limitation that can arise when processing larger data sets. Additionally, we can consider the batch size or the number of records that can be processed at a time to ensure that the GPU&rsquo;s memory is not overloaded.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#address-geocoding">Address geocoding</a></li>
+    <li><a href="#objective">Objective</a></li>
+    <li><a href="#address-matching-pipeline">Address matching pipeline</a>
+      <ul>
+        <li><a href="#address-string-preprocessing">Address string-preprocessing</a></li>
+        <li><a href="#candidate-address-retrieval">Candidate address: retrieval</a></li>
+        <li><a href="#candidate-address-scoring-and-ranking">Candidate address: scoring and ranking</a></li>
+      </ul>
+    </li>
+    <li><a href="#gpu-considerations">GPU Considerations</a></li>
+    <li><a href="#case-study">Case Study</a>
+      <ul>
+        <li><a href="#example-data">Example data</a></li>
+        <li><a href="#setting-up">Setting up</a></li>
+        <li><a href="#tf-idf-vectorisation">TF-IDF vectorisation</a></li>
+        <li><a href="#cosine-similarity">Cosine similarity</a></li>
+        <li><a href="#similarity-scores">Similarity scores</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

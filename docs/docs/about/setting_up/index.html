@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Introduction # Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Setting up the environment for GPU" />
+<meta property="og:description" content="Introduction # Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jasoncpit.github.io/GPU-Analytics/docs/about/setting_up/" /><meta property="article:section" content="docs" />
+
+
+<title>Setting up the environment for GPU | GPU-based analysis for social and geographic applications</title>
+<link rel="manifest" href="/GPU-Analytics/manifest.json">
+<link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
+  <script defer src="/GPU-Analytics/en.search.min.42877e2e624550bab0764f2a4b2e8da86d080649741a107bf9ce078294811d93.js" integrity="sha256-Qod&#43;LmJFULqwdk8qSy6NqG0IBkl0GhB7&#43;c4HgpSBHZM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/GPU-Analytics/"><span>GPU-based analysis for social and geographic applications</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/preface/about/" class="">Preface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Overview</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/gpu/" class="">GPU</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/setting_up/" class="active">Setting up the environment for GPU</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Case Studies</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_1/" class="">Chapter 1 - Address geocoding</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_2/" class="">Chapter 2 - GeoAI and Deep Learning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_3/" class="">Chapter 3 - Geospatial Operation and Analysis</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/GPU-Analytics/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Setting up the environment for GPU</strong>
+
+  <label for="toc-control">
+    
+    <img src="/GPU-Analytics/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#getting-started-google-colab">Getting started: Google Colab</a>
+      <ul>
+        <li><a href="#how-to-start">How to start?</a></li>
+        <li><a href="#enabling-gpu-support">Enabling GPU support</a></li>
+        <li><a href="#verify-gpu-access">Verify GPU access</a></li>
+        <li><a href="#best-practices">Best practices</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started-remote-server">Getting started: Remote server</a>
+      <ul>
+        <li><a href="#ssh-into-the-server">ssh into the server</a></li>
+        <li><a href="#installing-libraries">Installing libraries</a></li>
+        <li><a href="#activate-the-environment">Activate the environment</a></li>
+        <li><a href="#start-the-jupyterlab-server">Start the JupyterLab server</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started-local-machine">Getting started: Local machine</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h2 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h2>
+<p>Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly.</p>
+<h2 id="getting-started-google-colab">
+  Getting started: Google Colab
+  <a class="anchor" href="#getting-started-google-colab">#</a>
+</h2>
+<p><a href="https://colab.research.google.com/">Google Colab</a> is a cloud-based platform that allows you to run <a href="https://jupyter.org/">Jupyter notebooks</a> in the Cloud with support for GPU-acceleration. Google Colab is free to use, and you do not need to install any software or setup CUDA manually. It comes with already pre-installed libraries such as <em>Pandas</em> or <em>NumPy</em>, so you do not need to run <strong>pip install</strong> by yourself.</p>
+<h3 id="how-to-start">
+  How to start?
+  <a class="anchor" href="#how-to-start">#</a>
+</h3>
+<p>The first step is to create a new notebook in Google Colab. You can do this by going to the <a href="https://colab.research.google.com/">Google Colab website</a>, signing in with your Google account, and creating a new notebook.</p>
+<figure title = "New notebook">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_create.png?raw=true">
+    <figcaption>
+    <b>Figure 1: Create a new notebook in Google Colab.
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h3 id="enabling-gpu-support">
+  Enabling GPU support
+  <a class="anchor" href="#enabling-gpu-support">#</a>
+</h3>
+<p>After creating a new notebook, you need to enable GPU support. To do this, go to the <em>Runtime</em> menu and select <em>Change runtime type</em>. Then, set the <em>Hardware accelerator</em> to <em>GPU</em>.</p>
+<figure title = "Change runtime type">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_run_time.png?raw=true" width="70%">>
+    <figcaption>
+    <b>Figure 2: Select <em>Change runtime type</em> in the <em>Runtime</em> menu.
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>After you change your runtime type, your notebook will restart, which means information from the previous session will be lost.</p>
+<figure title = "Change runtime type">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_setting.png?raw=true" width="70%">
+    <figcaption>
+    <b>Figure 3: Select <em>GPU</em> in the <em>Hardware accelerator</em> menu.
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>You may also see the TPU option in the drop-down menu. TPU stands for a Tensor Processing Unit, which is a specialised chip designed to accelerate machine learning workloads. TPU is more powerful than GPU, but it is also more expensive.</p>
+<h3 id="verify-gpu-access">
+  Verify GPU access
+  <a class="anchor" href="#verify-gpu-access">#</a>
+</h3>
+<p>After you enable GPU support, you can verify that the GPU is working properly by running the  code below in a code block in your notebook.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span>nvidia<span style="color:#f92672">-</span>smi
+</span></span></code></pre></div><p><strong>nvidia-smi</strong> (NVIDIA System Management Interface) is a tool to query, monitor and configure NVIDIA GPUs. It ships with and is installed along with the NVIDIA driver and it is tied to that specific driver version. It is a tool written using the NVIDIA Management Library (NVML), which you can also find the Python bindings in the PyPI package <em>pynvml</em>.</p>
+<p>This outputs a summary table (see <strong>Figure 4</strong> for an example output), where you will find the following useful information:</p>
+<ul>
+<li><strong>Name</strong>: The name of the GPU.</li>
+<li><strong>Memory</strong>: The amount of memory available on the GPU.</li>
+<li><strong>Utilisation</strong>: The percentage of time the GPU is being used.</li>
+<li><strong>Power usage</strong>: The power usage of the GPU.</li>
+<li><strong>Processes</strong>: List of processes executing on the GPUs.</li>
+</ul>
+<figure title = "Verify GPU access">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/Colab_smi.png?raw=true">
+    <figcaption>
+    <b>Figure 4: NVIDIA System Management Interface output.
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>In this example, we got a Tesla T4 GPU with 16GB of memory. The GPU is currently being used by the notebook, but we can also see that there are no other processes running on the GPU. There is several other ways to verify that the GPU is working, for instance, directly with the <em>torch</em> library by running the following code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span>use_cuda <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>is_available() <span style="color:#75715e">#Check if GPU is available</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> use_cuda:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;__CUDNN VERSION:&#39;</span>, torch<span style="color:#f92672">.</span>backends<span style="color:#f92672">.</span>cudnn<span style="color:#f92672">.</span>version()) <span style="color:#75715e">#Get the version of cudnn</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;__Number CUDA Devices:&#39;</span>, torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>device_count()) <span style="color:#75715e">#Get the number of available GPUs</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;__CUDA Device Name:&#39;</span>,torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>get_device_name(<span style="color:#ae81ff">0</span>)) <span style="color:#75715e">#Get the name of the GPU</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;__CUDA Device Total Memory [GB]:&#39;</span>,torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>get_device_properties(<span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>total_memory<span style="color:#f92672">/</span><span style="color:#ae81ff">1e9</span>) <span style="color:#75715e">#Get the total amount of memory available on the GPU</span>
+</span></span></code></pre></div><h3 id="best-practices">
+  Best practices
+  <a class="anchor" href="#best-practices">#</a>
+</h3>
+<p>Google Colab is a great tool for running GPU-accelerated notebooks in the cloud. However, there are some limitations that you should be aware of.</p>
+<p><strong>Notebooks are not persistent</strong>: When you create a notebook in Google Colab, it is stored in the Cloud. However, the notebook is not persistent. This means that if you close the notebook, the notebook will be deleted. If you want to save your notebook, you need to download it to your local machine.</p>
+<p><strong>Google Colab is not an unrestricted resource</strong>: Google Colab is free to use, but they limit the amount of time you can use the GPU. Google Colab will automatically disconnects the notebook if we leave it idle for more than 30 minutes, meaning that your training will be interrupted and you will have to restart it. Nevertheless, you can run the free of charge notebooks for at most 12 hours at a time as explained in the <a href="https://research.google.com/colaboratory/faq.html#gpu-time-limit">FAQ</a>. If you want to use the GPU for more than 12 consecutive hours or require access to more memory, you can consider <a href="https://colab.research.google.com/signup/pricing?utm_source=resource_tab&amp;utm_medium=link&amp;utm_campaign=want_more_resources">switching to the paid version of Colab</a>.</p>
+<p><strong>Working with data</strong>: You can access your files that are stored on Google Drive directly from Google Colab. To do this, you need to mount your Google Drive to the notebook. You can do this by running the following code in a code block in your notebook. Use the batch command <code>!cd</code> the <em>Files</em> panel on the left to access your files.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">from</span> google.colab <span style="color:#f92672">import</span> drive
+</span></span><span style="display:flex;"><span>drive<span style="color:#f92672">.</span>mount(<span style="color:#e6db74">&#39;/content/drive&#39;</span>)
+</span></span></code></pre></div><p>You can also upload or download a file (or files) from/to your computer using the following code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">from</span> google.colab <span style="color:#f92672">import</span> files
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Upload a file from your computer</span>
+</span></span><span style="display:flex;"><span>files<span style="color:#f92672">.</span>upload()
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Download a file to your computer</span>
+</span></span><span style="display:flex;"><span>files<span style="color:#f92672">.</span>download(<span style="color:#e6db74">&#39;path/to/your/file&#39;</span>)
+</span></span></code></pre></div><p><strong>Ensure all files have been completely copied to your Google Drive</strong>: As mentioned above, Colab can and will terminate your session due to inactivity. To ensure that your final model and data is saved to your Google Drive, call <code>drive.flush_and_unmount()</code> before you terminate your session. Furthermore, you can checkpoint your model during training process and save it to your Google Drive as well.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">from</span> google.colab <span style="color:#f92672">import</span> drive
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(<span style="color:#f92672">...</span>) <span style="color:#75715e"># Training your model</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#39;path/to/your/model&#39;</span>) <span style="color:#75715e"># Save your model</span>
+</span></span><span style="display:flex;"><span>drive<span style="color:#f92672">.</span>flush_and_unmount()
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#39;All changes made in this Colab session should now be visible in Drive.&#39;</span>)
+</span></span></code></pre></div><p>Note that the completion of copying/writing files to /content/drive/MyDrive/ does not mean that all files are safely stored on Google Drive and that you can immediately terminate your Colab instance because the transfer of data between the Virtual Machine on which you run your analysis and Google&rsquo;s infrastructure happens asynchronously, so performing this flushing will help ensure it is indeed safe to disconnect.</p>
+<p><strong>Disconnecting from the notebook</strong>: Be a responsible user and disconnect from the notebook when you are finished with your GPU. Google will notice and reward you with a better GPU the next time you request one! So after you have copied your saved model files to Google Drive or Google Storage, you can disconnect from the notebook by clicking the <em>Disconnect</em> button in the <em>Runtime</em> menu. Or you can run the following code in a code block in your notebook.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">from</span> google.colab <span style="color:#f92672">import</span> runtime
+</span></span><span style="display:flex;"><span>runtime<span style="color:#f92672">.</span>unassign()
+</span></span></code></pre></div><h2 id="getting-started-remote-server">
+  Getting started: Remote server
+  <a class="anchor" href="#getting-started-remote-server">#</a>
+</h2>
+<p>At UCL, Department of Geography, we have a dedicated GPU-server that we can use to run GPU-accelerated notebooks on a Tesla V100 GPU. In theory, you should be able to connect to the server from anywhere in the world and run your GPU analyses - although access to the server needs to be requested. Setting up the environment on the server is a bit more complicated than setting up on cloud-based solutions such as Google Colab. For the below to work you will need three things: access to the server, a correct installation of CUDA, and an installation of the <strong>conda</strong> package manager.</p>
+<h3 id="ssh-into-the-server">
+  ssh into the server
+  <a class="anchor" href="#ssh-into-the-server">#</a>
+</h3>
+<p>If you have access to a dedicated GPU-server, you can log into the server using the following bash command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh username@server_ip port
+</span></span></code></pre></div><p>After this command, you will be prompted to enter your password.</p>
+<h3 id="installing-libraries">
+  Installing libraries
+  <a class="anchor" href="#installing-libraries">#</a>
+</h3>
+<p>You can initialise a new <strong>conda</strong> environment using the following bash command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>conda create -n gpu -c rapidsai -c nvidia -c conda-forge rapids<span style="color:#f92672">=</span>22.06 python<span style="color:#f92672">=</span>3.9 cudatoolkit<span style="color:#f92672">=</span>11.5 jupyterlab
+</span></span></code></pre></div><p>This will create a new <strong>conda</strong> environment called <em>gpu</em> and install the CUDA toolkit with some of the essential libraries that you will need.</p>
+<h3 id="activate-the-environment">
+  Activate the environment
+  <a class="anchor" href="#activate-the-environment">#</a>
+</h3>
+<p>You can activate the environment using the following bash command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>conda activate gpu
+</span></span></code></pre></div><h3 id="start-the-jupyterlab-server">
+  Start the JupyterLab server
+  <a class="anchor" href="#start-the-jupyterlab-server">#</a>
+</h3>
+<p>You can start the JupyterLab server using the following bash command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jupyter lab --no-browser
+</span></span></code></pre></div><p>This will start the JupyterLab server and you will be able to access it from your browser.</p>
+<h2 id="getting-started-local-machine">
+  Getting started: Local machine
+  <a class="anchor" href="#getting-started-local-machine">#</a>
+</h2>
+<p>If your local machine has a supported GPU, you might be able to install the CUDA toolkit. Most of GPU-accelerated libraries build on top of the CUDA framework. Therefore, you need to have a GPU that supports CUDA. You can check the <a href="https://developer.nvidia.com/cuda-gpus">CUDA GPU support matrix</a> to see if your GPU is supported. Of course, you should have a decent CPU, RAM and Storage to be able to do some leverage the power of the GPU.</p>
+<p>For the minimum hardware requirements, we recommend the following:</p>
+<ul>
+<li><strong>CPU</strong>: Minimum 4 cores at 2.6GHz; at least 16GB of RAM.</li>
+<li><strong>GPU</strong>: NVIDIA GPU with at least 6GB of VRAM.</li>
+</ul>
+<p>As installations and setting up instructions depend on your operating system and hardware, please <a href="https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/">refer to the official documentation</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#getting-started-google-colab">Getting started: Google Colab</a>
+      <ul>
+        <li><a href="#how-to-start">How to start?</a></li>
+        <li><a href="#enabling-gpu-support">Enabling GPU support</a></li>
+        <li><a href="#verify-gpu-access">Verify GPU access</a></li>
+        <li><a href="#best-practices">Best practices</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started-remote-server">Getting started: Remote server</a>
+      <ul>
+        <li><a href="#ssh-into-the-server">ssh into the server</a></li>
+        <li><a href="#installing-libraries">Installing libraries</a></li>
+        <li><a href="#activate-the-environment">Activate the environment</a></li>
+        <li><a href="#start-the-jupyterlab-server">Start the JupyterLab server</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started-local-machine">Getting started: Local machine</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

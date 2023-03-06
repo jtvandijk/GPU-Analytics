@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GPU-based analysis for social and geographic applications</title>
+    <link>https://jasoncpit.github.io/GPU-Analytics/</link>
+    <description>Recent content on GPU-based analysis for social and geographic applications</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://jasoncpit.github.io/GPU-Analytics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Chapter 1 - Address geocoding</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_1/</guid>
+      <description>Address geocoding # Address geocoding, or address matching, is an example of a broad class of data science problems known as data linkage. Data linkage problems involve connecting two datasets together by establishing an association between two records based on one or more common properties. In the case of address geocoding, one would try to assign XY coordinates to a list of address strings derived from, for instance, consumer sources that are not explicitly georeferenced (see, for instance, Lansley et al.</description>
+    </item>
+    
+    <item>
+      <title>Chapter 2 - GeoAI and Deep Learning</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_2/</guid>
+      <description>GeoAI and Deep Learning # GeoAI, or geospatial artificial intelligence (AI), has become a trending topic and the frontier for spatial analytics in Geography (Li and Hsu, 2022). Although the field of AI has experienced highs and lows in the past decades, it has recently gained tremendous momentum because of breakthrough developments in deep (machine) learning, immense available computing power, and the pressing needs for mining and understanding big data.</description>
+    </item>
+    
+    <item>
+      <title>Chapter 3 - Geospatial Operation and Analysis</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_3/</guid>
+      <description>Introduction # Why are we interested in geospatial data? Geospatial data is a type of data that is associated with a location. This location can be a point, a line, a polygon, or a raster. Geospatial data is becoming more and more important, yet the sheer volume of information that is generated made it difficult to handle. In this chapter, we will be exploring the use of GPU for manipulating large-scale geospatial data, and provide a practical example of how we can predict the presence of Aedes aegypti across the globe.</description>
+    </item>
+    
+    <item>
+      <title>GPU</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/about/gpu/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/about/gpu/</guid>
+      <description>Introduction # Over the past few decades, social science research has faced challenges due to a lack of available data, the cost and time needed to conduct surveys, and limitations on computational power for analysis. These issues have been exacerbated by a decline in survey quality as well as an increase in biases in the characteristics of respondents. There was also no guarantee that long-term, time-consuming surveys would continue to be available due to fiscal austerity (Singleton et al.</description>
+    </item>
+    
+    <item>
+      <title>Preface</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/preface/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/preface/about/</guid>
+      <description>GPU-based analysis for social and geographic applications # Introduction # This document provides the tools, the code and utility of the graphics processing unit (GPU) for social and geographic research and applications.This project is funded by The British Academy&amp;rsquo;s Talent Development Award.
+In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations.</description>
+    </item>
+    
+    <item>
+      <title>Setting up the environment for GPU</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/about/setting_up/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/about/setting_up/</guid>
+      <description>Introduction # Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly.</description>
+    </item>
+    
+  </channel>
+</rss>

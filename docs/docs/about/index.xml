@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Overview on GPU-based analysis for social and geographic applications</title>
+    <link>https://jasoncpit.github.io/GPU-Analytics/docs/about/</link>
+    <description>Recent content in Overview on GPU-based analysis for social and geographic applications</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://jasoncpit.github.io/GPU-Analytics/docs/about/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GPU</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/about/gpu/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/about/gpu/</guid>
+      <description>Introduction # Over the past few decades, social science research has faced challenges due to a lack of available data, the cost and time needed to conduct surveys, and limitations on computational power for analysis. These issues have been exacerbated by a decline in survey quality as well as an increase in biases in the characteristics of respondents. There was also no guarantee that long-term, time-consuming surveys would continue to be available due to fiscal austerity (Singleton et al.</description>
+    </item>
+    
+    <item>
+      <title>Setting up the environment for GPU</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/about/setting_up/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/about/setting_up/</guid>
+      <description>Introduction # Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly.</description>
+    </item>
+    
+  </channel>
+</rss>

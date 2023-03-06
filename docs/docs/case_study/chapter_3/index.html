@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Introduction # Why are we interested in geospatial data? Geospatial data is a type of data that is associated with a location. This location can be a point, a line, a polygon, or a raster. Geospatial data is becoming more and more important, yet the sheer volume of information that is generated made it difficult to handle. In this chapter, we will be exploring the use of GPU for manipulating large-scale geospatial data, and provide a practical example of how we can predict the presence of Aedes aegypti across the globe.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Chapter 3 - Geospatial Operation and Analysis" />
+<meta property="og:description" content="Introduction # Why are we interested in geospatial data? Geospatial data is a type of data that is associated with a location. This location can be a point, a line, a polygon, or a raster. Geospatial data is becoming more and more important, yet the sheer volume of information that is generated made it difficult to handle. In this chapter, we will be exploring the use of GPU for manipulating large-scale geospatial data, and provide a practical example of how we can predict the presence of Aedes aegypti across the globe." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_3/" /><meta property="article:section" content="docs" />
+
+
+<title>Chapter 3 - Geospatial Operation and Analysis | GPU-based analysis for social and geographic applications</title>
+<link rel="manifest" href="/GPU-Analytics/manifest.json">
+<link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
+  <script defer src="/GPU-Analytics/en.search.min.42877e2e624550bab0764f2a4b2e8da86d080649741a107bf9ce078294811d93.js" integrity="sha256-Qod&#43;LmJFULqwdk8qSy6NqG0IBkl0GhB7&#43;c4HgpSBHZM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/GPU-Analytics/"><span>GPU-based analysis for social and geographic applications</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/preface/about/" class="">Preface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Overview</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/gpu/" class="">GPU</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/setting_up/" class="">Setting up the environment for GPU</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Case Studies</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_1/" class="">Chapter 1 - Address geocoding</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_2/" class="">Chapter 2 - GeoAI and Deep Learning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_3/" class="active">Chapter 3 - Geospatial Operation and Analysis</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/GPU-Analytics/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Chapter 3 - Geospatial Operation and Analysis</strong>
+
+  <label for="toc-control">
+    
+    <img src="/GPU-Analytics/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#objectives">Objectives</a></li>
+    <li><a href="#predicting-the-presence-of-aedes-aegypti">Predicting the Presence of Aedes aegypti</a>
+      <ul>
+        <li><a href="#load-datasets">Load datasets</a></li>
+        <li><a href="#data-visualization">Data Visualization</a></li>
+        <li><a href="#prepare-data-for-pseudo-background-points-as-absence">Prepare data for pseudo-background points as absence</a></li>
+        <li><a href="#calculate-point-in-polygon-with-geopandas-and-cuspatial">Calculate point in polygon with GeoPandas and CuSpatial</a></li>
+        <li><a href="#stress-test">Stress Test</a></li>
+        <li><a href="#visualize-point-patterns">Visualize point patterns</a></li>
+        <li><a href="#create-a-multi-band-raster-from-the-predictor-variables">Create a multi-band raster from the predictor variables</a></li>
+        <li><a href="#extraction-of-all-raster-values-from-predictor-variables-onto-presence-absence-points">Extraction of all raster values from predictor variables onto presence-absence points</a></li>
+        <li><a href="#preparation-of-training--test-data-for-prediction--model-cross-validation">Preparation of training &amp; test data for prediction &amp; model cross-validation</a></li>
+        <li><a href="#random-forest-classification-model-with-cuml-and-scikit-learn">Random Forest Classification Model with CuML and Scikit-learn</a></li>
+        <li><a href="#model-validation-and-examination-of-the-predictors-contribution">Model validation and examination of the predictor’s contribution</a></li>
+        <li><a href="#mapping-the-predicted-probability-of-presence-of-aedes-aegypti">Mapping the predicted probability of presence of Aedes aegypti</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h2 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h2>
+<p>Why are we interested in geospatial data? Geospatial data is a type of data that is associated with a location. This location can be a point, a line, a polygon, or a raster. Geospatial data is becoming more and more important, yet the sheer volume of information that is generated made it difficult to handle. In this chapter, we will be exploring the use of GPU for manipulating large-scale geospatial data, and provide a practical example of how we can predict the presence of Aedes aegypti across the globe.</p>
+<h2 id="objectives">
+  Objectives
+  <a class="anchor" href="#objectives">#</a>
+</h2>
+<p>The objective of the third <em>Case Study</em> is to demonstrate the practical application of the common spatial data structures and operation with GPU-accelerated Python packages. The goal here is in twofold: 1) compare the computational speed of calculating point in polygon and 2) compare the computational speed of a classification model with raster data.</p>
+<h2 id="predicting-the-presence-of-aedes-aegypti">
+  Predicting the Presence of Aedes aegypti
+  <a class="anchor" href="#predicting-the-presence-of-aedes-aegypti">#</a>
+</h2>
+<p>In this case study, we will be predicting the global presence and probability of Aedes aegypti, a mosquito species that is known to transmit dengue fever, chikungunya, and Zika virus. You can download the Aedes aegypti point occurrence data across the World from 1958 to 2014 <a href="https://github.com/jasoncpit/GPU-Analytics/blob/master/data/Chapter3/aedes_point.csv">here</a>. We will also be using precipitation, temperature, elevation, and population density as predictor variables to capture the climatic, environmental and demographics variables. You can download the raster data from the GitHub repository <a href="https://github.com/jasoncpit/GPU-Analytics/tree/master/data/Chapter3">here</a>.</p>
+<h3 id="load-datasets">
+  Load datasets
+  <a class="anchor" href="#load-datasets">#</a>
+</h3>
+<p>To begin, let&rsquo;s load the necessary libraries and datasets. It is important to note that all shape file and raster data (5km resolution) were projected to the CRS: WGS84 4236.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Import libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> rasterio
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> geopandas <span style="color:#66d9ef">as</span> gpd 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cuspatial
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cudf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load raster data </span>
+</span></span><span style="display:flex;"><span>precipitation <span style="color:#f92672">=</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/Precipitation/Global Averaged Precipitation 2000-14.tif&#39;</span>)
+</span></span><span style="display:flex;"><span>temp <span style="color:#f92672">=</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/Temperature/Global Averaged Temperature 2000-14.tif&#39;</span>)
+</span></span><span style="display:flex;"><span>elevation <span style="color:#f92672">=</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/Elevation/Global Land Surface Elevation.tif&#39;</span>)
+</span></span><span style="display:flex;"><span>pop_density <span style="color:#f92672">=</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/Population Density/Global Population Density AveragedEst.tif&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load Shapefile </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Loading global shapefile </span>
+</span></span><span style="display:flex;"><span>global_outline <span style="color:#f92672">=</span>gpd<span style="color:#f92672">.</span>read_file(<span style="color:#e6db74">&#39;./data/Global Shapefile/Global Outline/Global_All_0.shp&#39;</span>,crs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;EPSG:4326&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Loading country shapefiles </span>
+</span></span><span style="display:flex;"><span>country_outline <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>read_file(<span style="color:#e6db74">&#39;./data/Global Shapefile/Global with Country Outline/Global_Countries_1.shp&#39;</span>,crs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;EPSG:4326&#39;</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load Point occurrence data </span>
+</span></span><span style="display:flex;"><span>aedes <span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#39;./data/Global Raster/aedes_point.csv&#39;</span>)
+</span></span><span style="display:flex;"><span>aedes_point <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>GeoDataFrame(aedes,geometry<span style="color:#f92672">=</span>gpd<span style="color:#f92672">.</span>points_from_xy(aedes[<span style="color:#e6db74">&#39;longitude&#39;</span>],aedes[<span style="color:#e6db74">&#39;latitude&#39;</span>]),crs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;EPSG:4326&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Transformation </span>
+</span></span><span style="display:flex;"><span>global_outline<span style="color:#f92672">.</span>crs <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#39;+init=EPSG:4326&#39;</span>)
+</span></span><span style="display:flex;"><span>country_outline<span style="color:#f92672">.</span>crs <span style="color:#f92672">=</span>(<span style="color:#e6db74">&#39;+init=EPSG:4326&#39;</span>)  
+</span></span><span style="display:flex;"><span>aedes_point<span style="color:#f92672">.</span>crs <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#39;+init=EPSG:4326&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check CRS </span>
+</span></span><span style="display:flex;"><span>print(global_outline<span style="color:#f92672">.</span>crs <span style="color:#f92672">==</span>aedes_point<span style="color:#f92672">.</span>crs)
+</span></span></code></pre></div><h3 id="data-visualization">
+  Data Visualization
+  <a class="anchor" href="#data-visualization">#</a>
+</h3>
+<p>Let&rsquo;s visualize the point occurrence data and the predictor variables. We will be using the <code>matplotlib</code> and <code>rasterio</code> packages to visualize the data.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Visualise point patterns </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt 
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>, figsize <span style="color:#f92672">=</span> (<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>)) 
+</span></span><span style="display:flex;"><span>country_outline<span style="color:#f92672">.</span>plot(edgecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>,linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>,ax<span style="color:#f92672">=</span>ax,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;white&#34;</span>)
+</span></span><span style="display:flex;"><span>aedes_point<span style="color:#f92672">.</span>plot(ax<span style="color:#f92672">=</span>ax,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>,markersize <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>) 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#show(light,ax=ax,cmap=&#39;viridis&#39;)</span>
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#34;Distribution of aedes occurence across the World&#34;</span>)
+</span></span></code></pre></div><figure title = "Global Distribution">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_global.png?raw=true">
+    <figcaption>
+    <b>Figure 1: Global Distribution of Aedes aegypti 
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> rasterio.plot <span style="color:#f92672">import</span> show 
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(nrows<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,ncols<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">20</span>))
+</span></span><span style="display:flex;"><span>title <span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;precipitation&#34;</span>,<span style="color:#e6db74">&#34;temp&#34;</span>,<span style="color:#e6db74">&#34;elevation&#34;</span>,<span style="color:#e6db74">&#34;pop_density&#34;</span>] 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> index,attribute <span style="color:#f92672">in</span> enumerate([precipitation,temp,elevation,pop_density]): 
+</span></span><span style="display:flex;"><span>     image <span style="color:#f92672">=</span> show(attribute,ax<span style="color:#f92672">=</span>ax[index<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>,index<span style="color:#f92672">%</span><span style="color:#ae81ff">2</span>],cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nipy_spectral&#39;</span>,title <span style="color:#f92672">=</span> title[index])
+</span></span><span style="display:flex;"><span>     image<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>fig<span style="color:#f92672">.</span>subplots_adjust(hspace<span style="color:#f92672">=-</span><span style="color:#ae81ff">0.5</span>, wspace<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span></code></pre></div><figure title = "Predictors Distribution">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_predictors.png?raw=true">
+    <figcaption>
+    <b>Figure 2: Distribution of Predictors: Precipitation, Temperature, Elevation, and Population Density 
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h3 id="prepare-data-for-pseudo-background-points-as-absence">
+  Prepare data for pseudo-background points as absence
+  <a class="anchor" href="#prepare-data-for-pseudo-background-points-as-absence">#</a>
+</h3>
+<p>Next, we need to prepare the background data. What is the background data? With Background data we are not attempting to guess point locations where an event is absent. Here, we are rather trying to characterise the environment of the study region. In this sense, background is the same, irrespective of where the point fire are found or not. Background data establishes the environmental domain of the study, whilst presence data should establish under which conditions a fire is more likely to be present than on average.</p>
+<p>There are several ways to generate background data. In R, we can use the <code>spsample()</code> function from the <code>sp</code> package to generate randomly-distributed points with defined spatial boundaries. However, in Python, there is no pre-built function to help us. Instead, we will generate random points across the world and filter out the points that are outside of the country boundary. Here is the code to generate random points across the world.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># random seed </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> shapely.geometry <span style="color:#f92672">import</span> Point
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tqdm <span style="color:#f92672">import</span> tqdm
+</span></span><span style="display:flex;"><span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Random_Points_in_Polygon</span>(polygon, number):
+</span></span><span style="display:flex;"><span>    bound <span style="color:#f92672">=</span> polygon<span style="color:#f92672">.</span>bounds<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    minx, miny, maxx, maxy <span style="color:#f92672">=</span> bound[<span style="color:#ae81ff">0</span>],bound[<span style="color:#ae81ff">1</span>],bound[<span style="color:#ae81ff">2</span>],bound[<span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>    x_point,y_point <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(minx, maxx,size<span style="color:#f92672">=</span>number),np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(miny,maxy,size<span style="color:#f92672">=</span>number) 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> x_point,y_point
+</span></span><span style="display:flex;"><span>background_points <span style="color:#f92672">=</span> Random_Points_in_Polygon(global_outline,aedes_point<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">*</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>background_points_shp <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>GeoDataFrame(geometry<span style="color:#f92672">=</span>gpd<span style="color:#f92672">.</span>points_from_xy(x<span style="color:#f92672">=</span>background_points[<span style="color:#ae81ff">0</span>],y<span style="color:#f92672">=</span>background_points[<span style="color:#ae81ff">1</span>]),crs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;EPSG:4326&#39;</span>)
+</span></span><span style="display:flex;"><span>background_points_shp<span style="color:#f92672">.</span>crs <span style="color:#f92672">=</span> global_outline<span style="color:#f92672">.</span>crs 
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Number of background points: &#34;</span>,background_points_shp<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]) 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Number of background points:  171108 </span>
+</span></span></code></pre></div><p>Figure 3 shows the distribution of background points across the world. We generated 171,108 points that are evenly distributed across the world, with some points located in the ocean.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Visualise point patterns </span>
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>, figsize <span style="color:#f92672">=</span> (<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>)) 
+</span></span><span style="display:flex;"><span>global_outline<span style="color:#f92672">.</span>plot(edgecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>,linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,ax<span style="color:#f92672">=</span>ax,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;white&#34;</span>)
+</span></span><span style="display:flex;"><span>background_points_shp<span style="color:#f92672">.</span>plot(ax<span style="color:#f92672">=</span>ax,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>,markersize <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>) 
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#34;Distribution of background points across the World&#34;</span>)
+</span></span></code></pre></div><figure title = "Predictors Distribution">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_background_point.png?raw=true">
+    <figcaption>
+    <b>Figure 3: Generating pseudo-background points as absence 
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h3 id="calculate-point-in-polygon-with-geopandas-and-cuspatial">
+  Calculate point in polygon with GeoPandas and CuSpatial
+  <a class="anchor" href="#calculate-point-in-polygon-with-geopandas-and-cuspatial">#</a>
+</h3>
+<p>Now that we&rsquo;ve created the background points, we need to quickly determine which points occur in each country. This task is commonly known as a Point in Polygon (PIP) query, however, they are usually extremely slow. In Python, we can use the Shapely library&rsquo;s functions <code>.within()</code> and <code>.contains()</code> to determine if a point is within a polygon or if a polygon contains a point. Nevertheless, these functions are not designed to handle large datasets. Assuming that we have 1 million points and 100 polygons, the <code>.within()</code> function will take 100 million comparisons to determine which points are within which polygons. This is a very slow process.</p>
+<p>Let&rsquo;s first use the <code>.sjoin()</code> function from GeoPandas to determine which points are within which polygons. Using the <code>%%time</code> magic function, we can see that the <code>.sjoin()</code> function takes 8.6 seconds to compute 171108 points.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># pip query with geopandas </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">%%</span>time 
+</span></span><span style="display:flex;"><span>pointInPolys <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>sjoin(background_points_shp, country_outline) 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU times: user 8.6 s, sys: 43 ms, total: 8.65 s</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Wall time: 8.69 s</span>
+</span></span></code></pre></div><p>Next, we can use the <code>.point_in_polygon</code> function from the GPU-accelerated library <code>cuSpatial</code>. It is important to note here that the <code>.point_in_polygon</code> requires the points to be in the form of a <code>cudf.DataFrame</code> and the polygons to be in the form of a <code>cuspatial.GeoSeries</code>. Here, we are using the <code>cuspatial.read_polygon_shapefile()</code> function to make sure the resulting tuple <code>poly_offsets</code>, <code>poly_ring_offsets</code>, <code>poly_points</code> perfectly matches the input requirements of <code>point_in_polygon</code>.</p>
+<p>Because the <code>.point_in_polygon</code> function can only handle 31 polygons at a time, we need to split the polygons into batches of 31 polygons. The for loop shown below iterates through each batch and append true values in the array to a new Country ID, matching the spatial indices of the polygons.</p>
+<p>The <code>.point_in_polygon</code> function performs the PIP query in 0.5 seconds, which is 16 times faster than the <code>.sjoin()</code> function.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%%</span>time
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Cuspatial </span>
+</span></span><span style="display:flex;"><span>cu_countries_outline <span style="color:#f92672">=</span> cuspatial<span style="color:#f92672">.</span>read_polygon_shapefile(<span style="color:#e6db74">&#39;./data/Global Shapefile/Global with Country Outline/Global_Countries_1.shp&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>background_points_df <span style="color:#f92672">=</span> cudf<span style="color:#f92672">.</span>DataFrame() 
+</span></span><span style="display:flex;"><span>background_points_df[<span style="color:#e6db74">&#39;Long&#39;</span>] <span style="color:#f92672">=</span> background_points[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>background_points_df[<span style="color:#e6db74">&#39;Lat&#39;</span>] <span style="color:#f92672">=</span> background_points[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>background_points_df[<span style="color:#e6db74">&#39;LocationID&#39;</span>] <span style="color:#f92672">=</span>  cu_countries_outline[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>] 
+</span></span><span style="display:flex;"><span>pip_iterations <span style="color:#f92672">=</span> list(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>, cu_countries_outline[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>], <span style="color:#ae81ff">31</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(pip_iterations)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> pip_iterations[i]
+</span></span><span style="display:flex;"><span>    end <span style="color:#f92672">=</span> pip_iterations[i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    pip_countries <span style="color:#f92672">=</span> cuspatial<span style="color:#f92672">.</span>point_in_polygon(background_points_df[<span style="color:#e6db74">&#39;Long&#39;</span>],background_points_df[<span style="color:#e6db74">&#39;Lat&#39;</span>],cu_countries_outline[<span style="color:#ae81ff">0</span>][start:end],cu_countries_outline[<span style="color:#ae81ff">1</span>],cu_countries_outline[<span style="color:#ae81ff">2</span>][<span style="color:#e6db74">&#39;x&#39;</span>],cu_countries_outline[<span style="color:#ae81ff">2</span>][<span style="color:#e6db74">&#39;y&#39;</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> pip_countries<span style="color:#f92672">.</span>columns:
+</span></span><span style="display:flex;"><span>        background_points_df[<span style="color:#e6db74">&#39;LocationID&#39;</span>]<span style="color:#f92672">.</span>loc[pip_countries[j]] <span style="color:#f92672">=</span> j
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU times: user 553 ms, sys: 8.88 ms, total: 562 ms</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Wall time: 563 ms         </span>
+</span></span></code></pre></div><h3 id="stress-test">
+  Stress Test
+  <a class="anchor" href="#stress-test">#</a>
+</h3>
+<p>The differences may be marginal at this point, but the <code>.point_in_polygon</code> function will become more significant as the number of background points increases. We can run a stress test by increasing the number of background points. The code below generates 10-30 times more background points than the original dataset. We can see from Figure 4 that the <code>.sjoin()</code> function takes linearly longer to compute the PIP query, while the <code>.point_in_polygon</code> function takes a constant time to compute the PIP query, with average runtimes of less than 2.5 seconds.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span>cpu_time <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>gpu_time <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">30</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Generate random background points</span>
+</span></span><span style="display:flex;"><span>    background_points <span style="color:#f92672">=</span> Random_Points_in_Polygon(global_outline, aedes_point<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Preparing data on Geopandas </span>
+</span></span><span style="display:flex;"><span>    background_points_shp <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>GeoDataFrame(geometry<span style="color:#f92672">=</span>gpd<span style="color:#f92672">.</span>points_from_xy(x<span style="color:#f92672">=</span>background_points[<span style="color:#ae81ff">0</span>], y<span style="color:#f92672">=</span>background_points[<span style="color:#ae81ff">1</span>]), crs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;EPSG:4326&#39;</span>)
+</span></span><span style="display:flex;"><span>    background_points_shp<span style="color:#f92672">.</span>crs <span style="color:#f92672">=</span> global_outline<span style="color:#f92672">.</span>crs
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#cpu runtime -------------------------------- </span>
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    CPU_pointInPolys <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>sjoin(background_points_shp, country_outline)
+</span></span><span style="display:flex;"><span>    end <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    cpu_time<span style="color:#f92672">.</span>append(end <span style="color:#f92672">-</span> start)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Preparing data on cudf </span>
+</span></span><span style="display:flex;"><span>    background_points_df <span style="color:#f92672">=</span> cudf<span style="color:#f92672">.</span>DataFrame()
+</span></span><span style="display:flex;"><span>    background_points_df[<span style="color:#e6db74">&#39;Long&#39;</span>] <span style="color:#f92672">=</span> background_points[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    background_points_df[<span style="color:#e6db74">&#39;Lat&#39;</span>] <span style="color:#f92672">=</span> background_points[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    background_points_df[<span style="color:#e6db74">&#39;LocationID&#39;</span>] <span style="color:#f92672">=</span> cu_countries_outline[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    pip_iterations <span style="color:#f92672">=</span> list(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>, cu_countries_outline[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>], <span style="color:#ae81ff">31</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#gpu runtime --------------------------------</span>
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> iter <span style="color:#f92672">in</span> range(len(pip_iterations) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        pip_start <span style="color:#f92672">=</span> pip_iterations[iter]
+</span></span><span style="display:flex;"><span>        pip_end <span style="color:#f92672">=</span> pip_iterations[iter <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>        pip_countries <span style="color:#f92672">=</span> cuspatial<span style="color:#f92672">.</span>point_in_polygon(background_points_df[<span style="color:#e6db74">&#39;Long&#39;</span>], background_points_df[<span style="color:#e6db74">&#39;Lat&#39;</span>], cu_countries_outline[<span style="color:#ae81ff">0</span>][pip_start:pip_end], cu_countries_outline[<span style="color:#ae81ff">1</span>], cu_countries_outline[<span style="color:#ae81ff">2</span>][<span style="color:#e6db74">&#39;x&#39;</span>], cu_countries_outline[<span style="color:#ae81ff">2</span>][<span style="color:#e6db74">&#39;y&#39;</span>])
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> pip_countries<span style="color:#f92672">.</span>columns:
+</span></span><span style="display:flex;"><span>            background_points_df[<span style="color:#e6db74">&#39;LocationID&#39;</span>]<span style="color:#f92672">.</span>loc[pip_countries[j]] <span style="color:#f92672">=</span> j
+</span></span><span style="display:flex;"><span>    end <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    gpu_time<span style="color:#f92672">.</span>append(end <span style="color:#f92672">-</span> start)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Create a dataframe to store the results</span>
+</span></span><span style="display:flex;"><span>gpu_elapsed <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#34;time&#34;</span>:gpu_time,<span style="color:#e6db74">&#34;data_size&#34;</span>:[aedes_point<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">*</span> i <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">30</span>)],<span style="color:#e6db74">&#39;label&#39;</span>:<span style="color:#e6db74">&#34;cuspatial.point_in_polygon&#34;</span>})
+</span></span><span style="display:flex;"><span>cpu_elapsed <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#34;time&#34;</span>:cpu_time,<span style="color:#e6db74">&#34;data_size&#34;</span>:[aedes_point<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">*</span> i <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">30</span>)],<span style="color:#e6db74">&#39;label&#39;</span>:<span style="color:#e6db74">&#34;gpd.sjoin&#34;</span>})
+</span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([gpu_elapsed,cpu_elapsed])<span style="color:#f92672">.</span>reset_index()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Plot results</span>
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>lineplot(x<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;data_size&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;time&#39;</span>,hue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;label&#39;</span>,data <span style="color:#f92672">=</span> result,ax <span style="color:#f92672">=</span> ax )
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Data Size&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Time Elapsed &#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Comparing the speed of Point-in-Polygons calculation on CPU and GPU&#34;</span>) 
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure title = "PIP SPEED">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_pip.png?raw=true">
+    <figcaption>
+    <b>Figure 4: Comparing the speed of Point-in-Polygons calculation on CPU and GPU 
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h3 id="visualize-point-patterns">
+  Visualize point patterns
+  <a class="anchor" href="#visualize-point-patterns">#</a>
+</h3>
+<p>Now that we know how to calculate the PIP query, we can visualize the point patterns by selecting the background points that are within the polygon of a country. The code below visualizes the point patterns of the countries with the highest number of cases.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Visualise point patterns</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Recalculate the PIP query with Cuspatial </span>
+</span></span><span style="display:flex;"><span>background_points <span style="color:#f92672">=</span> Random_Points_in_Polygon(global_outline,aedes_point<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">*</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>background_points_df <span style="color:#f92672">=</span> cudf<span style="color:#f92672">.</span>DataFrame() 
+</span></span><span style="display:flex;"><span>background_points_df[<span style="color:#e6db74">&#39;Long&#39;</span>] <span style="color:#f92672">=</span> background_points[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>background_points_df[<span style="color:#e6db74">&#39;Lat&#39;</span>] <span style="color:#f92672">=</span> background_points[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>background_points_df[<span style="color:#e6db74">&#39;LocationID&#39;</span>] <span style="color:#f92672">=</span>  cu_countries_outline[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>] 
+</span></span><span style="display:flex;"><span>pip_iterations <span style="color:#f92672">=</span> list(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>, cu_countries_outline[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>], <span style="color:#ae81ff">31</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(pip_iterations)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> pip_iterations[i]
+</span></span><span style="display:flex;"><span>    end <span style="color:#f92672">=</span> pip_iterations[i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    pip_countries <span style="color:#f92672">=</span> cuspatial<span style="color:#f92672">.</span>point_in_polygon(background_points_df[<span style="color:#e6db74">&#39;Long&#39;</span>],background_points_df[<span style="color:#e6db74">&#39;Lat&#39;</span>],cu_countries_outline[<span style="color:#ae81ff">0</span>][start:end],cu_countries_outline[<span style="color:#ae81ff">1</span>],cu_countries_outline[<span style="color:#ae81ff">2</span>][<span style="color:#e6db74">&#39;x&#39;</span>],cu_countries_outline[<span style="color:#ae81ff">2</span>][<span style="color:#e6db74">&#39;y&#39;</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> pip_countries<span style="color:#f92672">.</span>columns:
+</span></span><span style="display:flex;"><span>        background_points_df[<span style="color:#e6db74">&#39;LocationID&#39;</span>]<span style="color:#f92672">.</span>loc[pip_countries[j]] <span style="color:#f92672">=</span> j
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pointInPolys <span style="color:#f92672">=</span> background_points_df<span style="color:#f92672">.</span>query(<span style="color:#e6db74">&#34;LocationID != 250&#34;</span>)  
+</span></span><span style="display:flex;"><span>pointInPolys <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>GeoDataFrame(geometry <span style="color:#f92672">=</span> gpd<span style="color:#f92672">.</span>points_from_xy(pointInPolys[<span style="color:#e6db74">&#39;Long&#39;</span>]<span style="color:#f92672">.</span>to_numpy(),pointInPolys[<span style="color:#e6db74">&#39;Lat&#39;</span>]<span style="color:#f92672">.</span>to_numpy()),crs<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;EPSG:4326&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt 
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>, figsize <span style="color:#f92672">=</span> (<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">10</span>)) 
+</span></span><span style="display:flex;"><span>global_outline<span style="color:#f92672">.</span>plot(edgecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>,linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,ax<span style="color:#f92672">=</span>ax,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;white&#34;</span>)
+</span></span><span style="display:flex;"><span>pointInPolys<span style="color:#f92672">.</span>plot(ax<span style="color:#f92672">=</span>ax,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>,markersize <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>) 
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#34;Distribution of background points across Brazil&#34;</span>)
+</span></span></code></pre></div><figure title = "Predictors Distribution">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_filtered_background.png?raw=true">
+    <figcaption>
+    <b>Figure 5: Filtering the pseudo-background points that are within the country boundary
+    </b>
+    </figcaption>
+    </center>
+</figure>
+```
+<h3 id="create-a-multi-band-raster-from-the-predictor-variables">
+  Create a multi-band raster from the predictor variables
+  <a class="anchor" href="#create-a-multi-band-raster-from-the-predictor-variables">#</a>
+</h3>
+<p>To facilitate the required analysis, it is necessary to construct a multi-band raster object from the predictor variables. A band is essentially a matrix of cell values, and a raster with multiple bands comprises multiple matrices of cell values that overlap spatially and represent the same geographic region. For example, the raster object for temperature is a single-band raster object. However, if we stack raster objects for variables such as precipitation, population density and elevation on top of the temperature raster, we create a multi-band raster object. This object will have four bands, each corresponding to a single matrix of cell values.</p>
+<p>The creation of this multi-band raster object is essential to perform the extraction of raster values from all variables at occurrence points in a single step. Additionally, the entire multi-band raster object is required for estimating and predicting spatial data.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>meta <span style="color:#f92672">=</span> precipitation<span style="color:#f92672">.</span>meta
+</span></span><span style="display:flex;"><span>meta<span style="color:#f92672">.</span>update(count <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/global_stack.tif&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>,<span style="color:#f92672">**</span>meta) <span style="color:#66d9ef">as</span> dst:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> index,attribute <span style="color:#f92672">in</span> enumerate([precipitation,temp,elevation,pop_density],start<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>): 
+</span></span><span style="display:flex;"><span>        dst<span style="color:#f92672">.</span>write(attribute<span style="color:#f92672">.</span>read(<span style="color:#ae81ff">1</span>),index) 
+</span></span><span style="display:flex;"><span>stack <span style="color:#f92672">=</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/global_stack.tif&#39;</span>)         
+</span></span></code></pre></div><h3 id="extraction-of-all-raster-values-from-predictor-variables-onto-presence-absence-points">
+  Extraction of all raster values from predictor variables onto presence-absence points
+  <a class="anchor" href="#extraction-of-all-raster-values-from-predictor-variables-onto-presence-absence-points">#</a>
+</h3>
+<p>Now, we are going to extract information from our raster stack to both the presence and background points. This can be done using the sample function in rasterio. For all occurrence points (i.e., presence), we need to add an indicator of 1 to signify presence; while for all background points (i.e., absence) - we need to also add an indicator of 0 to signify absence. We do this because we are modelling a probability and such niche models take outcomes that are from a Bernoulli or Binomial distribution.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Extrat raster values </span>
+</span></span><span style="display:flex;"><span>background_list <span style="color:#f92672">=</span> [(x,y) <span style="color:#66d9ef">for</span> x,y <span style="color:#f92672">in</span> zip(pointInPolys[<span style="color:#e6db74">&#39;geometry&#39;</span>]<span style="color:#f92672">.</span>x , pointInPolys[<span style="color:#e6db74">&#39;geometry&#39;</span>]<span style="color:#f92672">.</span>y)]
+</span></span><span style="display:flex;"><span>pointInPolys[<span style="color:#e6db74">&#39;value&#39;</span>] <span style="color:#f92672">=</span> [x <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> stack<span style="color:#f92672">.</span>sample(background_list)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>aedes_list <span style="color:#f92672">=</span> [(x,y) <span style="color:#66d9ef">for</span> x,y <span style="color:#f92672">in</span> zip(aedes_point[<span style="color:#e6db74">&#39;geometry&#39;</span>]<span style="color:#f92672">.</span>x , aedes_point[<span style="color:#e6db74">&#39;geometry&#39;</span>]<span style="color:#f92672">.</span>y)]
+</span></span><span style="display:flex;"><span>aedes_point[<span style="color:#e6db74">&#39;value&#39;</span>] <span style="color:#f92672">=</span> [x <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> stack<span style="color:#f92672">.</span>sample(aedes_list)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Convert into dataframe </span>
+</span></span><span style="display:flex;"><span>aedes_env <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(np<span style="color:#f92672">.</span>vstack(aedes_point[<span style="color:#e6db74">&#39;value&#39;</span>]),columns<span style="color:#f92672">=</span>title)
+</span></span><span style="display:flex;"><span>aedes_env[<span style="color:#e6db74">&#39;Presence&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>background_env <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(np<span style="color:#f92672">.</span>vstack(pointInPolys[<span style="color:#e6db74">&#39;value&#39;</span>]),columns<span style="color:#f92672">=</span>title)
+</span></span><span style="display:flex;"><span>background_env[<span style="color:#e6db74">&#39;Presence&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Merge </span>
+</span></span><span style="display:flex;"><span>input_data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([aedes_env,background_env],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>input_data[input_data<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">0</span>]  <span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p>#Save</p>
+<h3 id="preparation-of-training--test-data-for-prediction--model-cross-validation">
+  Preparation of training &amp; test data for prediction &amp; model cross-validation
+  <a class="anchor" href="#preparation-of-training--test-data-for-prediction--model-cross-validation">#</a>
+</h3>
+<p>Now, we need to prepare our data for model cross-validation. We are going to split our data into training and test data. The training data will be used to train the model, while the test data will be used to validate the model. The test data will be used to assess the model’s performance on data that it has not seen before. We are going to use a 80:20 split for training and test data, respectively.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Split train,test set </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+</span></span><span style="display:flex;"><span>y<span style="color:#f92672">=</span> input_data<span style="color:#f92672">.</span>pop(<span style="color:#e6db74">&#39;Presence&#39;</span>)
+</span></span><span style="display:flex;"><span>X <span style="color:#f92672">=</span> input_data 
+</span></span><span style="display:flex;"><span>X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X, y,train_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>)
+</span></span></code></pre></div><h3 id="random-forest-classification-model-with-cuml-and-scikit-learn">
+  Random Forest Classification Model with CuML and Scikit-learn
+  <a class="anchor" href="#random-forest-classification-model-with-cuml-and-scikit-learn">#</a>
+</h3>
+<p>Now, we can fit the random forest model, which tries to find the combination of environmental risk factors that best predicts the occurrence of the aedes aegypti.</p>
+<p>A random forest is an ensemble learning method for classification, regression and other tasks that operates by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees. For more information on random forest, check <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">here</a>.</p>
+<p>For demonstration purposes, we are going to use the random forest model from both Scikit-learn and cuML. cuML is a suite of libraries that implement machine learning algorithms and mathematical primitives functions on GPU. cuML is designed to be a drop-in replacement for Scikit-learn. For more information on cuML, check <a href="https://docs.rapids.ai/api/cuml/stable/">here</a>.</p>
+<p>As we can see the code below, the cuML random forest model is very similar to the Scikit-learn random forest model. The only difference is that we need to convert the training and test data into CuPy arrays.</p>
+<p>Overall, we can see that the cuML random forest model is much faster than the Scikit-learn random forest model, with a speedup of from 4.65s to 0.34s.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%%</span>time 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Random forest with sklearn </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.ensemble <span style="color:#f92672">import</span> RandomForestClassifier
+</span></span><span style="display:flex;"><span>sk_model <span style="color:#f92672">=</span> RandomForestClassifier(max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>,n_estimators<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>sk_model<span style="color:#f92672">.</span>fit(X_train,y_train)
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span>sk_model<span style="color:#f92672">.</span>predict(X_test) 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU times: user 4.63 s, sys: 9.95 ms, total: 4.64 s</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Wall time: 4.65 s</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%%</span>time 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Random forest with cuml </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cupy <span style="color:#66d9ef">as</span> cp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> cuml.ensemble <span style="color:#f92672">import</span> RandomForestClassifier <span style="color:#66d9ef">as</span> cuRFC
+</span></span><span style="display:flex;"><span>cuml_model <span style="color:#f92672">=</span> cuRFC(max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>,n_estimators<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>cuml_model<span style="color:#f92672">.</span>fit(cp<span style="color:#f92672">.</span>array(X_train),cp<span style="color:#f92672">.</span>array(y_train)) 
+</span></span><span style="display:flex;"><span>cuml_predict <span style="color:#f92672">=</span> cuml_model<span style="color:#f92672">.</span>predict(cp<span style="color:#f92672">.</span>array(X_test))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU times: user 2.81 s, sys: 359 ms, total: 3.17 s</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Wall time: 341 ms</span>
+</span></span></code></pre></div><h3 id="model-validation-and-examination-of-the-predictors-contribution">
+  Model validation and examination of the predictor’s contribution
+  <a class="anchor" href="#model-validation-and-examination-of-the-predictors-contribution">#</a>
+</h3>
+<p>Now that we have fitted the random forest model, we can examine the model’s performance. We can do this by the model’s accuracy, the area under the curve (AUC) and <code>max TPR+TNR</code>. The AUC is a measure of the model’s performance. The higher the AUC, the better the model is at distinguishing between the presence and absence of the aedes aegypti. The <code>max TPR+TNR</code> denotes the probability threshold at which our model maximizes the True Positive Rate and the True Negative Rate. It is generally accepted that this is an optimum value at which to set the threshold for binary classification of the predicted probabilities in our mapping outputs. Anything above value is deemed as a region environmentally suitable for outcome.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Model validation</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn <span style="color:#f92672">import</span> metrics
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Accuracy:&#34;</span>,metrics<span style="color:#f92672">.</span>accuracy_score(y_test,cp<span style="color:#f92672">.</span>asnumpy(cuml_predict)))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Accuracy: 0.9372446306966998</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> RocCurveDisplay
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>y_pred_proba <span style="color:#f92672">=</span> cuml_model<span style="color:#f92672">.</span>predict_proba(X_test)[::,<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>fpr, tpr, thresholds <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>roc_curve(y_test,  y_pred_proba)
+</span></span><span style="display:flex;"><span>auc <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>roc_auc_score(y_test, y_pred_proba)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(fpr,tpr)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(loc<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>], <span style="color:#e6db74">&#34;k--&#34;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;chance level (AUC = 0.5)&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#34;square&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#34;False Positive Rate&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;True Positive Rate&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;AUC = </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(auc))
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend()
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>optimal_idx <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(tpr <span style="color:#f92672">-</span> fpr)
+</span></span><span style="display:flex;"><span>optimal_threshold <span style="color:#f92672">=</span> thresholds[optimal_idx]
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Max TRP+TNR:&#34;</span>, optimal_threshold)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Max TRP+TNR: 0.36108708</span>
+</span></span></code></pre></div><p>From Figure 6, we can see that the AUC of the random forest model is amost 0.99, which is substantially higher than the baseline of 0.5. This means that the random forest model is able to distinguish between the presence and absence of Aedes aegypti with a high degree of accuracy.  The optimal probability threshold at which our model maximizes the True Positive Rate and the True Negative Rate is 0.3611 (36.1%). Hence, we will use predicted probability &gt; 0.3611 to delineate areas of suitability (or trigger points) for the presence of Aedes aegypti.</p>
+<figure title = "Predictors Distribution">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_ROC_curve.png?raw=true">
+    <figcaption>
+    <b>Figure 6: ROC Curve of the Random Forest Classification Model
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>We can also examine the feature importance of the random forest model. The feature importance is a measure of how much each predictor contributes to the model’s performance. The higher the feature importance, the more important the predictor is in predicting the outcome.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Feature importance </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span>feature_imp <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>Series(sk_model<span style="color:#f92672">.</span>feature_importances_,index<span style="color:#f92672">=</span>title)<span style="color:#f92672">.</span>sort_values(ascending<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Creating a bar plot</span>
+</span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>barplot(x<span style="color:#f92672">=</span>feature_imp, y<span style="color:#f92672">=</span>feature_imp<span style="color:#f92672">.</span>index)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add labels to your graph</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Feature Importance Score&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Features&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Visualizing Important Features&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend()
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><p>From Figure 7, we can see that population density is the most important predictor in predicting the presence of Aedes aegypti. However, it is important to note that cuML does not support the feature importance function.</p>
+<figure title = "Predictors Distribution">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_Feature_importance.png?raw=true">
+    <figcaption>
+    <b>Figure 7: Feature importance of the Random Forest Classification Model
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h3 id="mapping-the-predicted-probability-of-presence-of-aedes-aegypti">
+  Mapping the predicted probability of presence of Aedes aegypti
+  <a class="anchor" href="#mapping-the-predicted-probability-of-presence-of-aedes-aegypti">#</a>
+</h3>
+<p>To map the predicted probability of presence of Aedes aegypti, we need to predict the probability of presence of Aedes aegypti for each grid cell. To do this, we need to convert the environmental matrices into a 2D array. We can then use the <code>predict_proba</code> function from <code>sklearn</code> and <code>cuML</code> to predict the probability of presence of Aedes aegypti for each grid cell.</p>
+<p>Again, we can see a significant improvement in the speed of the prediction using <code>cuML</code> compared to <code>sklearn</code>, reducing the prediction time from 2min 51s to 2.06s.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Mapping predicted probability and suitability</span>
+</span></span><span style="display:flex;"><span>input_matrix <span style="color:#f92672">=</span> stack<span style="color:#f92672">.</span>read()  
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#input shape (4, 4320, 8640)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Convert into (4, 4320*8640)</span>
+</span></span><span style="display:flex;"><span>converted_env <span style="color:#f92672">=</span> [] 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>): 
+</span></span><span style="display:flex;"><span>    attr <span style="color:#f92672">=</span> input_matrix[i,:,:]<span style="color:#f92672">.</span>reshape(input_matrix<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span>input_matrix<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">2</span>],<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    converted_env<span style="color:#f92672">.</span>append(attr)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>converted_env <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(np<span style="color:#f92672">.</span>hstack(converted_env),columns<span style="color:#f92672">=</span>title)
+</span></span><span style="display:flex;"><span>converted_env[converted_env<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%%</span>time
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Predict the probability of presence of Aedes aegypti for each grid cell with sklearn</span>
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span>sk_model<span style="color:#f92672">.</span>predict_proba(converted_env)[::,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU times: user 2min 29s, sys: 22.1 s, total: 2min 51s</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Wall time: 2min 51s</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%%</span>time 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Predict the probability of presence of Aedes aegypti for each grid cell with cuML</span>
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span>cuml_model<span style="color:#f92672">.</span>predict_proba(converted_env)[::,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU times: user 1.73 s, sys: 871 ms, total: 2.6 s</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Wall time: 2.06 s</span>
+</span></span></code></pre></div><p>We can then convert the predicted probability of presence of Aedes aegypti into a raster file. Here, we converted probability estimate with less than 0.3611 as 0 and anything above as 1. The predicted probability &gt; 0.3611 4 are the areas that are expected to have the presence of Aedes aegypti.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Convert the predicted probability of presence of Aedes aegypti into a raster file</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/prediction.tif&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>,<span style="color:#f92672">**</span>meta) <span style="color:#66d9ef">as</span> dst:
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e"># convert to numpy array if the prediction is from cuML</span>
+</span></span><span style="display:flex;"><span>    dst<span style="color:#f92672">.</span>write(cp<span style="color:#f92672">.</span>asnumpy(y_pred)<span style="color:#f92672">.</span>reshape((input_matrix<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>],input_matrix<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">2</span>])),<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Generate final output which shows grid cells with probability &gt; 0.3611 </span>
+</span></span><span style="display:flex;"><span>trigger <span style="color:#f92672">=</span> y_pred
+</span></span><span style="display:flex;"><span>trigger[trigger <span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">0.36108708</span>]  <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>trigger[trigger <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.36108708</span>]  <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/trigger.tif&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>,<span style="color:#f92672">**</span>meta) <span style="color:#66d9ef">as</span> dst:
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e"># convert to numpy array if the prediction is from cuML</span>
+</span></span><span style="display:flex;"><span>    dst<span style="color:#f92672">.</span>write(cp<span style="color:#f92672">.</span>asnumpy(trigger)<span style="color:#f92672">.</span>reshape((input_matrix<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>],input_matrix<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">2</span>])),<span style="color:#ae81ff">1</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prediction <span style="color:#f92672">=</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/prediction.tif&#39;</span>) 
+</span></span><span style="display:flex;"><span>trigger <span style="color:#f92672">=</span> rasterio<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;./data/Global Raster/trigger.tif&#39;</span>)        
+</span></span></code></pre></div><p>We can then map the predicted probability of presence of Aedes aegypti and trigger points.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fig,ax<span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>,figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">20</span>))
+</span></span><span style="display:flex;"><span>country_outline<span style="color:#f92672">.</span>boundary<span style="color:#f92672">.</span>plot(edgecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;white&#39;</span>,linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>,ax<span style="color:#f92672">=</span>ax[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>show(prediction,cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nipy_spectral&#39;</span>,ax<span style="color:#f92672">=</span>ax[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>country_outline<span style="color:#f92672">.</span>boundary<span style="color:#f92672">.</span>plot(edgecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;white&#39;</span>,linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>,ax<span style="color:#f92672">=</span>ax[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>show(trigger,cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nipy_spectral&#39;</span>,ax<span style="color:#f92672">=</span>ax[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>set_axis_off()
+</span></span><span style="display:flex;"><span>ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>set_axis_off()
+</span></span><span style="display:flex;"><span>ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#39;Predicted Probability of Presence of Aedes aegypti&#39;</span>,fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#39;Trigger Points&#39;</span>,fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><figure title = "Predictors Distribution">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp3_maps.png?raw=true">
+    <figcaption>
+    <b>Figure 8: Predicted probability of presence of Aedes aegypti and trigger points 
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h3 id="conclusion">
+  Conclusion
+  <a class="anchor" href="#conclusion">#</a>
+</h3>
+<p>In this chapter, we demonstrated an end-to-end workflow of using GPU to 1) calculate the point in polygon function, 2) train a random forest classification model, and 3) predict the probability of presence of Aedes aegypti. In all three steps, using a GPU for working with raster files in Python can offer significant performance improvements.</p>
+<p>What we have shown here is just a small fraction of what we can do with GPU. More importantly, the functions provided here can be easily migrated into existing workflows where the data is too large to be processed on a CPU.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#objectives">Objectives</a></li>
+    <li><a href="#predicting-the-presence-of-aedes-aegypti">Predicting the Presence of Aedes aegypti</a>
+      <ul>
+        <li><a href="#load-datasets">Load datasets</a></li>
+        <li><a href="#data-visualization">Data Visualization</a></li>
+        <li><a href="#prepare-data-for-pseudo-background-points-as-absence">Prepare data for pseudo-background points as absence</a></li>
+        <li><a href="#calculate-point-in-polygon-with-geopandas-and-cuspatial">Calculate point in polygon with GeoPandas and CuSpatial</a></li>
+        <li><a href="#stress-test">Stress Test</a></li>
+        <li><a href="#visualize-point-patterns">Visualize point patterns</a></li>
+        <li><a href="#create-a-multi-band-raster-from-the-predictor-variables">Create a multi-band raster from the predictor variables</a></li>
+        <li><a href="#extraction-of-all-raster-values-from-predictor-variables-onto-presence-absence-points">Extraction of all raster values from predictor variables onto presence-absence points</a></li>
+        <li><a href="#preparation-of-training--test-data-for-prediction--model-cross-validation">Preparation of training &amp; test data for prediction &amp; model cross-validation</a></li>
+        <li><a href="#random-forest-classification-model-with-cuml-and-scikit-learn">Random Forest Classification Model with CuML and Scikit-learn</a></li>
+        <li><a href="#model-validation-and-examination-of-the-predictors-contribution">Model validation and examination of the predictor’s contribution</a></li>
+        <li><a href="#mapping-the-predicted-probability-of-presence-of-aedes-aegypti">Mapping the predicted probability of presence of Aedes aegypti</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

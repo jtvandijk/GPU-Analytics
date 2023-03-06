@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GeoAI and Deep Learning # GeoAI, or geospatial artificial intelligence (AI), has become a trending topic and the frontier for spatial analytics in Geography (Li and Hsu, 2022). Although the field of AI has experienced highs and lows in the past decades, it has recently gained tremendous momentum because of breakthrough developments in deep (machine) learning, immense available computing power, and the pressing needs for mining and understanding big data.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Chapter 2 - GeoAI and Deep Learning" />
+<meta property="og:description" content="GeoAI and Deep Learning # GeoAI, or geospatial artificial intelligence (AI), has become a trending topic and the frontier for spatial analytics in Geography (Li and Hsu, 2022). Although the field of AI has experienced highs and lows in the past decades, it has recently gained tremendous momentum because of breakthrough developments in deep (machine) learning, immense available computing power, and the pressing needs for mining and understanding big data." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_2/" /><meta property="article:section" content="docs" />
+
+
+<title>Chapter 2 - GeoAI and Deep Learning | GPU-based analysis for social and geographic applications</title>
+<link rel="manifest" href="/GPU-Analytics/manifest.json">
+<link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
+  <script defer src="/GPU-Analytics/en.search.min.42877e2e624550bab0764f2a4b2e8da86d080649741a107bf9ce078294811d93.js" integrity="sha256-Qod&#43;LmJFULqwdk8qSy6NqG0IBkl0GhB7&#43;c4HgpSBHZM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/GPU-Analytics/"><span>GPU-based analysis for social and geographic applications</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/preface/about/" class="">Preface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Overview</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/gpu/" class="">GPU</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/setting_up/" class="">Setting up the environment for GPU</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Case Studies</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_1/" class="">Chapter 1 - Address geocoding</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_2/" class="active">Chapter 2 - GeoAI and Deep Learning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_3/" class="">Chapter 3 - Geospatial Operation and Analysis</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/GPU-Analytics/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Chapter 2 - GeoAI and Deep Learning</strong>
+
+  <label for="toc-control">
+    
+    <img src="/GPU-Analytics/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#geoai-and-deep-learning">GeoAI and Deep Learning</a></li>
+    <li><a href="#objectives">Objectives</a></li>
+    <li><a href="#case-study-1-classifying-eurasat-images-using-convolutional-neural-networks-cnns">Case Study 1: Classifying EuraSat images using Convolutional Neural Networks (CNNs)</a>
+      <ul>
+        <li><a href="#brief-introduction-to-convolutional-neural-networks-cnns">Brief introduction to Convolutional Neural Networks (CNNs)</a></li>
+        <li><a href="#importing-the-libraries">Importing the libraries</a></li>
+        <li><a href="#data-preparation-and-preprocessing">Data preparation and preprocessing</a></li>
+        <li><a href="#visualizing-the-data">Visualizing the data</a></li>
+        <li><a href="#creating-your-cnn-model-for-training">Creating your CNN model for training</a></li>
+        <li><a href="#inspecting-cpugpu-usage-with-pytorch-profiler-and-tensorboard">Inspecting CPU/GPU usage with PyTorch Profiler and TensorBoard</a></li>
+        <li><a href="#how-can-we-improve-the-computation-speed-on-gpu">How can we improve the computation speed on GPU?</a></li>
+      </ul>
+    </li>
+    <li><a href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">Case Study 2: Comparing model performance with a fine-tune model</a>
+      <ul>
+        <li><a href="#pre-training-and-fine-tuning">Pre-training and fine-tuning</a></li>
+        <li><a href="#initializing-the-model">Initializing the model</a></li>
+        <li><a href="#quick-inspection-of-the-model">Quick inspection of the model</a></li>
+        <li><a href="#inspecting-cpu-and-gpu-usage-with-vgg16">Inspecting CPU and GPU usage with VGG16</a></li>
+        <li><a href="#training-the-model">Training the model</a></li>
+        <li><a href="#speed-comparison">Speed comparison</a></li>
+        <li><a href="#comparison-of-model-accuracy">Comparison of Model Accuracy</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h2 id="geoai-and-deep-learning">
+  GeoAI and Deep Learning
+  <a class="anchor" href="#geoai-and-deep-learning">#</a>
+</h2>
+<p>GeoAI, or geospatial artificial intelligence (AI), has become a trending topic and the frontier for spatial analytics in Geography <a href="https://www.mdpi.com/2220-9964/11/7/385/pdf">(Li and Hsu, 2022)</a>. Although the field of AI has experienced highs and lows in the past decades, it has recently gained tremendous momentum because of breakthrough developments in deep (machine) learning, immense available computing power, and the pressing needs for mining and understanding big data.</p>
+<h2 id="objectives">
+  Objectives
+  <a class="anchor" href="#objectives">#</a>
+</h2>
+<p>The objective of the second <em>Case Study</em> is to showcase how we can use GPU for satellite image classification. We will be discussing two case studies - (1) training a CNN model from scratch using Pytorch to detect land use classification from satellite images (2) comparing model performance with a fine-tuned VGG16 model.</p>
+<p>While using a GPU is a commonly integrated into deep learning libraries, we will also provide best practices for maximizing your training efficiency.</p>
+<h2 id="case-study-1-classifying-eurasat-images-using-convolutional-neural-networks-cnns">
+  Case Study 1: Classifying EuraSat images using Convolutional Neural Networks (CNNs)
+  <a class="anchor" href="#case-study-1-classifying-eurasat-images-using-convolutional-neural-networks-cnns">#</a>
+</h2>
+<p>In this case study, we will be using the EuraSat dataset to train a CNN model to classify land use from satellite images. The EuraSat dataset contains 27,000 images of 10 different land use classes. The dataset is available on Kaggle and can be downloaded <a href="https://www.kaggle.com/phylake1337/eurasat-land-use-and-land-cover">here</a>. The dataset is also available on the <a href="https://pytorch.org/vision/stable/datasets.html#eurasat">PyTorch website</a>.</p>
+<h3 id="brief-introduction-to-convolutional-neural-networks-cnns">
+  Brief introduction to Convolutional Neural Networks (CNNs)
+  <a class="anchor" href="#brief-introduction-to-convolutional-neural-networks-cnns">#</a>
+</h3>
+<p>Convolutional Neural Networks (CNNs) are a type of artificial neural network that are designed to work with grid-structured data, such as an image, a speech signal, or a video. They are particularly effective for image and video classification, object detection and recognition, and natural language processing tasks.</p>
+<p>The key components of a CNN are convolutional layers, activation functions, pooling layers, and fully connected layers.</p>
+<ol>
+<li>
+<p>Convolutional layers: Convolutional layers are the building blocks of a CNN. They perform a convolution operation on the input data, where a small matrix (known as a filter or kernel) is moved across the input data, element-wise multiplication is performed between the elements of the filter and the input data, and then the results are summed up to produce a single output value. This process is repeated for every possible position of the filter, resulting in a set of outputs, called feature maps. Convolutional layers can extract features from the input data, such as edges, shapes, textures, etc.</p>
+</li>
+<li>
+<p>Activation functions: Activation functions are used to introduce non-linearity into the network. They are applied element-wise to the output of the convolutional layer. The most commonly used activation functions in CNNs are Rectified Linear Unit (ReLU) and sigmoid.</p>
+</li>
+<li>
+<p>Pooling layers: Pooling layers are used to reduce the spatial size of the feature maps, making the network less computationally expensive and more robust to changes in the position of objects in the input data. There are several types of pooling, including max pooling and average pooling. In max pooling, the maximum value in a region of the feature map is taken as the output, while in average pooling, the average value in a region is taken as the output.</p>
+</li>
+<li>
+<p>Fully connected layers: The fully connected layers are used to make the final prediction using the features extracted by the convolutional and pooling layers. They perform a weighted sum of the inputs, followed by a non-linear activation function, and then produce the final output of the network.</p>
+</li>
+</ol>
+<p>The architecture of a CNN can be designed for a specific task by choosing the number of convolutional and fully connected layers, the size of the filters, the type of activation functions, and the type of pooling. The weights of the filters and the biases of the fully connected layers are learned from the training data using an optimization algorithm, such as stochastic gradient descent or Adam.</p>
+<p>A classic CNN architecture would look something like this (Figure 1):</p>
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_cnn.png?raw=true">
+    <figcaption>
+    <b>Figure 1: Framework of a Convolutional Neural Network ,Illustration by [Mathworks](https://uk.mathworks.com/help/deeplearning/ug/introduction-to-convolutional-neural-networks.html)</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>For more information on CNNs, you can check out this cool <a href="https://poloclub.github.io/cnn-explainer/">blog post</a>.</p>
+<h3 id="importing-the-libraries">
+  Importing the libraries
+  <a class="anchor" href="#importing-the-libraries">#</a>
+</h3>
+<p>We will be using the following libraries for this case study:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Importing the libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#standard imports</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#sklearn standard functions</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> r2_score,mean_absolute_error,mean_squared_error
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#standard imports for pytorch</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.optim <span style="color:#66d9ef">as</span> optim
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#66d9ef">as</span> F
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.autograd <span style="color:#f92672">import</span> Variable
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.utils.data <span style="color:#f92672">import</span> DataLoader, TensorDataset
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch <span style="color:#f92672">import</span> Tensor
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.profiler <span style="color:#f92672">import</span> profile, record_function, ProfilerActivity 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#torchvision imports</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torchvision
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torchvision.transforms <span style="color:#66d9ef">as</span> transforms
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Other imports </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tqdm <span style="color:#66d9ef">as</span> tqdm 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns 
+</span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>set_theme(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;whitegrid&#34;</span>)
+</span></span></code></pre></div><h3 id="data-preparation-and-preprocessing">
+  Data preparation and preprocessing
+  <a class="anchor" href="#data-preparation-and-preprocessing">#</a>
+</h3>
+<p>The first step in any machine learning project is to prepare the data. In this step, we will be loading the data, performing data preprocessing, and splitting the data into training and test sets.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> ssl
+</span></span><span style="display:flex;"><span>ssl<span style="color:#f92672">.</span>_create_default_https_context <span style="color:#f92672">=</span> ssl<span style="color:#f92672">.</span>_create_unverified_context
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define data pre-processing steps</span>
+</span></span><span style="display:flex;"><span>transform <span style="color:#f92672">=</span> transforms<span style="color:#f92672">.</span>Compose(
+</span></span><span style="display:flex;"><span>    [
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Resize images for (64*64)</span>
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>Resize((<span style="color:#ae81ff">64</span>,<span style="color:#ae81ff">64</span>)),
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Converts images into Pytorch tensor </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Pytorch tensors are multi-dimensional arrays that can be processed on GPUs</span>
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>ToTensor(), 
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Normalise the input data </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#input data is transformed by subtracting the mean and dividing by the standard deviation for each channel. </span>
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>Normalize((<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>), (<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>))])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Batch size defines the number of samples processed before the model is updated.</span>
+</span></span><span style="display:flex;"><span>batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">40</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Loading EuraSAT and transform using the defined function </span>
+</span></span><span style="display:flex;"><span>dataset <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>datasets<span style="color:#f92672">.</span>EuroSAT(root<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./data&#39;</span>, 
+</span></span><span style="display:flex;"><span>                                        download<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, transform<span style="color:#f92672">=</span>transform)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Data loader creates a PyTorch data loader for a given dataset. </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#The data loader provides an efficient way to iterate over the data in the dataset</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#and apply batch processing during training.      </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#num_workers: defines the number of threads to use for loading the data. </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#If shuffle=True, the data loader will randomly shuffle the data before each epoch to ensure that the model sees a different set of samples each time it is trained.</span>
+</span></span><span style="display:flex;"><span>data_loader <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>DataLoader(dataset, batch_size<span style="color:#f92672">=</span>batch_size,
+</span></span><span style="display:flex;"><span>                                          shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, num_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Classes -&gt; we have 10 labels </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#&#39;AnnualCrop&#39;, &#39;Forest&#39;, &#39;HerbaceousVegetation&#39;, &#39;Highway&#39;, &#39;Industrial&#39;, &#39;Pasture&#39;, &#39;PermanentCrop&#39;, &#39;Residential&#39;, &#39;River&#39; &#39;SeaLake&#39;</span>
+</span></span><span style="display:flex;"><span>classes <span style="color:#f92672">=</span> data_loader<span style="color:#f92672">.</span>dataset<span style="color:#f92672">.</span>classes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>split<span style="color:#f92672">=</span>len(dataset<span style="color:#f92672">.</span>targets)<span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>train_len<span style="color:#f92672">=</span>int(len(dataset<span style="color:#f92672">.</span>targets)<span style="color:#f92672">-</span>split)
+</span></span><span style="display:flex;"><span>val_len<span style="color:#f92672">=</span>int(split) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Spliting dataset in 75% training, 25% for testing  </span>
+</span></span><span style="display:flex;"><span>trainset,testset <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>random_split(dataset, [train_len,val_len])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Create dataloader for training and testing dataset </span>
+</span></span><span style="display:flex;"><span>train_loader <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>DataLoader(trainset, batch_size<span style="color:#f92672">=</span>batch_size,
+</span></span><span style="display:flex;"><span>                                          shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, num_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test_loader <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>DataLoader(testset, batch_size<span style="color:#f92672">=</span>batch_size,
+</span></span><span style="display:flex;"><span>                                          shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, num_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span></code></pre></div><h3 id="visualizing-the-data">
+  Visualizing the data
+  <a class="anchor" href="#visualizing-the-data">#</a>
+</h3>
+<p>Let&rsquo;s visualize some images in the dataset.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> os 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ROOT_dir <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;./data/eurosat/2750&#39;</span>
+</span></span><span style="display:flex;"><span>folders <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>listdir(ROOT_dir)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i, label <span style="color:#f92672">in</span> enumerate(folders):
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    file_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>listdir(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(ROOT_dir,label))
+</span></span><span style="display:flex;"><span>    image_ <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(ROOT_dir<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">+</span>label<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">+</span>file_path[random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">100</span>)])
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>imshow(image_)
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>title(label)
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#34;off&#34;</span>) 
+</span></span></code></pre></div><figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_example_data.png?raw=true">
+    <figcaption>
+    <b>Figure 2: Example classes and images</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h3 id="creating-your-cnn-model-for-training">
+  Creating your CNN model for training
+  <a class="anchor" href="#creating-your-cnn-model-for-training">#</a>
+</h3>
+<p>Now that we have prepared the data, we can create our CNN model. We will be using the following architecture for our model:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#66d9ef">as</span> F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Custom class extends the functionality of nn.Module class from PyTorch, </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#which provides the basic building blocks for creating neural networks in PyTorch. </span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Net</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Setting up layers in CNN </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Calling function from nn.Module</span>
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#A 2D convolutional layer with 3 input channels, 6 output, and kernel (filter size) size of 5x5 </span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#A max-pooling layer with kernel size 2x2 and stride of 2</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pool <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>MaxPool2d(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Another convolution layer with 6 input channels, 16 output channels, and a kernel size of 5x5 </span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Three fully-connected linear layers for processing the output of the second convolution network </span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">16</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">13</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">120</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">120</span>, <span style="color:#ae81ff">84</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">84</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Define the foward pass of the network i.e. the computation performed on each input tensor. </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pool(F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>conv1(x)))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pool(F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>conv2(x)))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>flatten(x, <span style="color:#ae81ff">1</span>) <span style="color:#75715e"># flatten all dimensions except batch</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc1(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc2(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>fc3(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span></code></pre></div><p>We can use the following code to print out the summary of the model:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> torchsummary <span style="color:#f92672">import</span> summary
+</span></span><span style="display:flex;"><span>summary(Net(), (<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">64</span>,<span style="color:#ae81ff">64</span>),device<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;cpu&#39;</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">----------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>        Layer (type)               Output Shape         Param <span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================================================================</span>
+</span></span><span style="display:flex;"><span>            Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">60</span>, <span style="color:#ae81ff">60</span>]             <span style="color:#ae81ff">456</span>
+</span></span><span style="display:flex;"><span>         MaxPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">30</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>            Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>           [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">26</span>]           <span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">416</span>
+</span></span><span style="display:flex;"><span>         MaxPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>           [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">13</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>            Linear<span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>                  [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">120</span>]         <span style="color:#ae81ff">324</span>,<span style="color:#ae81ff">600</span>
+</span></span><span style="display:flex;"><span>            Linear<span style="color:#f92672">-</span><span style="color:#ae81ff">6</span>                   [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">84</span>]          <span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">164</span>
+</span></span><span style="display:flex;"><span>            Linear<span style="color:#f92672">-</span><span style="color:#ae81ff">7</span>                   [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>]             <span style="color:#ae81ff">850</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================================================================</span>
+</span></span><span style="display:flex;"><span>Total params: <span style="color:#ae81ff">338</span>,<span style="color:#ae81ff">486</span>
+</span></span><span style="display:flex;"><span>Trainable params: <span style="color:#ae81ff">338</span>,<span style="color:#ae81ff">486</span>
+</span></span><span style="display:flex;"><span>Non<span style="color:#f92672">-</span>trainable params: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>Input size (MB): <span style="color:#ae81ff">0.05</span>
+</span></span><span style="display:flex;"><span>Forward<span style="color:#f92672">/</span>backward <span style="color:#66d9ef">pass</span> size (MB): <span style="color:#ae81ff">0.31</span>
+</span></span><span style="display:flex;"><span>Params size (MB): <span style="color:#ae81ff">1.29</span>
+</span></span><span style="display:flex;"><span>Estimated Total Size (MB): <span style="color:#ae81ff">1.65</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------------------------------------------------------</span>
+</span></span></code></pre></div><h3 id="inspecting-cpugpu-usage-with-pytorch-profiler-and-tensorboard">
+  Inspecting CPU/GPU usage with PyTorch Profiler and TensorBoard
+  <a class="anchor" href="#inspecting-cpugpu-usage-with-pytorch-profiler-and-tensorboard">#</a>
+</h3>
+<p>Before detailing the steps to train the model, we will first look at how to use the PyTorch profiler to inspect the CPU and GPU usage of the model. PyTorch Profiler is useful for measuring the training performance and resource utilization of your model. It tracks sequences of the execution steps that are the most costly in time and memory and visualize the workload distribution between GPUs and CPUs.</p>
+<p>Firstly, let&rsquo;s define a function to train the model. This function will be used to train the model for each batch of data. One important thing to note is that we will be using the <code>to()</code> function to copy the data to the device the model is on.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(model,data,criterion, optimizer,device <span style="color:#f92672">=</span> device):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Copy the data to the device the model is on </span>
+</span></span><span style="display:flex;"><span>    inputs, labels <span style="color:#f92672">=</span> data[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device), data[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Predict the output for given input</span>
+</span></span><span style="display:flex;"><span>    outputs <span style="color:#f92672">=</span> model(inputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Compute the loss</span>
+</span></span><span style="display:flex;"><span>    loss <span style="color:#f92672">=</span> criterion(outputs, labels)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Clear the previous gradients, compute gradients of all variables wrt loss</span>
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Backpropagation, update weights</span>
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Update the parameters</span>
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><p>Next, we can use the profiler to record the execution steps and save the logs to a file. We can then use TensorBoard to visualize the logs. The profiler includes a number of options to customize the profiling behavior. In this example, we will use the following options:</p>
+<ul>
+<li><strong>schedule</strong>: defines the number of steps to wait before starting the profiling, the number of steps to run the profiling for, and the number of steps to repeat the profiling for. In this example, with repeat=4, profiler will record 4 spans, each span consists of 2 wait step, 2 warmup step and 3 active steps. For more information about wait/warmup/active, you can find it [here](<a href="https://pytorch.org/tutorials/recipes/recipes/profiler_recipe">https://pytorch.org/tutorials/recipes/recipes/profiler_recipe</a> html#using-profiler-to-analyze-long-running-jobs#using-profiler-to-analyze-long-running-jobs). It is important to note we are not training the whole model in this example, as it would take a long time to run. Instead, we are only training the model for a few steps.</li>
+<li><strong>on_trace_ready</strong>: defines the action to take when the profiling is complete. In this example, we will save the profiling logs to a file that can be used by TensorBoard.</li>
+<li><strong>profile_memory</strong>: enables memory profiling to measure tensor memory allocation/deallocation.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#GPU ----------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Initialise model </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define device on cuda:0 </span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cuda:0&#39;</span>) 
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> Net()<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define loss function </span>
+</span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()<span style="color:#f92672">.</span>cuda()<span style="color:#75715e">#Loss function computes the value between the predicted values and the labels. In this case, we are using Cross-Entropy loss, but many other loss functions are also avaible from nn. Such as focal loss </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define optimizer function </span>
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>SGD(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, momentum<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>) <span style="color:#75715e">#Optimizer function aims to reduce the loss function&#39;s value by changing the weight vector values through backpropagation in neural networks. We are using Stochastic gradient decent as our optimiser, with learning rate 0.01 and momentum 0.9 </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Set random seed for reproducibility</span>
+</span></span><span style="display:flex;"><span>torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>manual_seed(<span style="color:#ae81ff">42</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Profiler</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>profile(
+</span></span><span style="display:flex;"><span>       schedule<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>schedule(
+</span></span><span style="display:flex;"><span>        wait<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        warmup<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        active<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>        repeat<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>), 
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Saving the profiling logs to a file that can be used by TensorBoard </span>
+</span></span><span style="display:flex;"><span>        on_trace_ready<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>tensorboard_trace_handler(<span style="color:#e6db74">&#39;./log/gpu_profile&#39;</span>),
+</span></span><span style="display:flex;"><span>        profile_memory<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>        ) <span style="color:#66d9ef">as</span> prof:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> step, batch_data <span style="color:#f92672">in</span> enumerate(train_loader,<span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> step <span style="color:#f92672">&gt;=</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        train(model <span style="color:#f92672">=</span>model , data <span style="color:#f92672">=</span>batch_data, criterion <span style="color:#f92672">=</span> loss_fn, optimizer <span style="color:#f92672">=</span> optimizer,device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        prof<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#CPU ----------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Reinitialise model, loss function, optimizer and random seed </span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cpu&#39;</span>)
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> Net()<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>SGD(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, momentum<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>)
+</span></span><span style="display:flex;"><span>torch<span style="color:#f92672">.</span>manual_seed(<span style="color:#ae81ff">42</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>profile(
+</span></span><span style="display:flex;"><span>       schedule<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>schedule(
+</span></span><span style="display:flex;"><span>        wait<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        warmup<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        active<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>        repeat<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Saving the profiling logs to a file that can be used by TensorBoard </span>
+</span></span><span style="display:flex;"><span>        on_trace_ready<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>tensorboard_trace_handler(<span style="color:#e6db74">&#39;./log/cpu_profile&#39;</span>),
+</span></span><span style="display:flex;"><span>        profile_memory<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>        ) <span style="color:#66d9ef">as</span> prof:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> step, batch_data <span style="color:#f92672">in</span> enumerate(train_loader,<span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> step <span style="color:#f92672">&gt;=</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        train(model <span style="color:#f92672">=</span>model , data <span style="color:#f92672">=</span>batch_data, criterion <span style="color:#f92672">=</span> loss_fn, optimizer <span style="color:#f92672">=</span> optimizer,device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        prof<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><p>We can then use TensorBoard to visualize the profiling logs. The following command will launch TensorBoard and open the profiling dashboard.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%</span>load_ext tensorboard
+</span></span><span style="display:flex;"><span><span style="color:#f92672">%</span>tensorboard <span style="color:#f92672">--</span>logdir <span style="color:#f92672">./</span>log
+</span></span></code></pre></div><p>Or in VSCode, you can press <code>Ctrl+Shift+P</code> and type &ldquo;Open TensorBoard&rdquo;. Then select the log directory.</p>
+<p>The TensorBoard profiling dashboard includes a number of tabs that can be used to visualize the profiling logs. In this example, we will be focusing on the <strong>Overview</strong> which provides a high-level overview of the profiling results. The details of these metrics are <a href="https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md">here</a>.</p>
+<figure title = "GPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_tb_gpu.png?raw=true">
+    <figcaption>
+    <b>Figure 3: Baseline - GPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_tb_cpu.png?raw=true">
+    <figcaption>
+    <b>Figure 4: Baseline - CPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>From Figure 3, it can be observed that the model running on CUDA is not fully utilizing the GPU, with GPU utilization at around 9% and CPU utilization at around 45%. This suggests that the GPU is not being used to its full capacity, and the CPU is carrying out most of the work. This could be due to the size of the data and the model, as the small data size and parameter values in this example can result in a significant overhead in transferring data from the CPU to the GPU. In contrast, the model running on the CPU is not invoking the GPU kernel at all, and most of the work is being carried out by the CPU itself (Figure 4). We can further investigate the profiling logs with the following command line:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(prof<span style="color:#f92672">.</span>key_averages()<span style="color:#f92672">.</span>table(sort_by<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cpu_time_total&#34;</span>, row_limit<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)) 
+</span></span></code></pre></div><p>The GPU profiling logs indicate that the CUDA model is taking an average of 28.665 ms on the CPU and 4.244 ms on the GPU to run. The majority of the time is spent on the <code>enumerate(DataLoader)</code> and <code>ProfilerStep</code> function, which is the function defined to profile and loop over the data. The data transfer from the CPU to the GPU at each step creates a significant overhead, as can be observed from <code>the aten::copy_</code> function, which copies the array back to CUDA as a tensor. In contrast, the CPU model takes about 35.136 ms to run - not much slower than the GPU model. However, the CPU profiling logs reveal that the most expensive function is the actual calculation steps for computing convolution and backpropagation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#GPU profile log ---------------------------- </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-------------------------------------------------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  
+</span></span><span style="display:flex;"><span>                                                   Name    Self CPU <span style="color:#f92672">%</span>      Self CPU   CPU total <span style="color:#f92672">%</span>     CPU total  CPU time avg     Self CUDA   Self CUDA <span style="color:#f92672">%</span>    CUDA total  CUDA time avg       CPU Mem  Self CPU Mem      CUDA Mem  Self CUDA Mem    <span style="color:#75715e"># of Calls  </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-------------------------------------------------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  
+</span></span><span style="display:flex;"><span>                                          ProfilerStep<span style="color:#f92672">*</span>        <span style="color:#ae81ff">38.03</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">10.902</span>ms        <span style="color:#ae81ff">80.41</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">23.050</span>ms       <span style="color:#ae81ff">7.683</span>ms       <span style="color:#ae81ff">0.000</span>us         <span style="color:#ae81ff">0.00</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">2.117</span>ms     <span style="color:#ae81ff">705.667</span>us       <span style="color:#ae81ff">1.88</span> Mb      <span style="color:#f92672">-</span><span style="color:#ae81ff">5.63</span> Mb           <span style="color:#ae81ff">0</span> b     <span style="color:#f92672">-</span><span style="color:#ae81ff">46.64</span> Mb             <span style="color:#ae81ff">3</span>  
+</span></span><span style="display:flex;"><span>enumerate(DataLoader)_MultiProcessingDataLoaderIter<span style="color:#f92672">...</span>        <span style="color:#ae81ff">13.73</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">3.935</span>ms        <span style="color:#ae81ff">14.02</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">4.019</span>ms       <span style="color:#ae81ff">1.340</span>ms       <span style="color:#ae81ff">0.000</span>us         <span style="color:#ae81ff">0.00</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">0.000</span>us       <span style="color:#ae81ff">0.000</span>us       <span style="color:#ae81ff">7.50</span> Mb       <span style="color:#ae81ff">7.50</span> Mb           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">3</span>  
+</span></span><span style="display:flex;"><span>                                               aten::to         <span style="color:#ae81ff">0.06</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">17.000</span>us         <span style="color:#ae81ff">8.47</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">2.428</span>ms     <span style="color:#ae81ff">142.824</span>us       <span style="color:#ae81ff">0.000</span>us         <span style="color:#ae81ff">0.00</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">1.079</span>ms      <span style="color:#ae81ff">63.471</span>us           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b       <span style="color:#ae81ff">5.63</span> Mb           <span style="color:#ae81ff">0</span> b            <span style="color:#ae81ff">17</span>  
+</span></span><span style="display:flex;"><span>                                       cudaLaunchKernel         <span style="color:#ae81ff">8.42</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">2.415</span>ms         <span style="color:#ae81ff">8.42</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">2.415</span>ms       <span style="color:#ae81ff">8.564</span>us       <span style="color:#ae81ff">0.000</span>us         <span style="color:#ae81ff">0.00</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">0.000</span>us       <span style="color:#ae81ff">0.000</span>us           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">282</span>  
+</span></span><span style="display:flex;"><span>                                         aten::_to_copy         <span style="color:#ae81ff">0.18</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">52.000</span>us         <span style="color:#ae81ff">8.41</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">2.411</span>ms     <span style="color:#ae81ff">401.833</span>us       <span style="color:#ae81ff">0.000</span>us         <span style="color:#ae81ff">0.00</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">1.079</span>ms     <span style="color:#ae81ff">179.833</span>us           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b       <span style="color:#ae81ff">5.63</span> Mb           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                                            aten::copy_         <span style="color:#ae81ff">0.27</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">77.000</span>us         <span style="color:#ae81ff">7.94</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">2.275</span>ms     <span style="color:#ae81ff">379.167</span>us       <span style="color:#ae81ff">1.079</span>ms        <span style="color:#ae81ff">25.42</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">1.079</span>ms     <span style="color:#ae81ff">179.833</span>us           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                                        cudaMemcpyAsync         <span style="color:#ae81ff">6.77</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">1.940</span>ms         <span style="color:#ae81ff">6.77</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">1.940</span>ms     <span style="color:#ae81ff">323.333</span>us       <span style="color:#ae81ff">0.000</span>us         <span style="color:#ae81ff">0.00</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">0.000</span>us       <span style="color:#ae81ff">0.000</span>us           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                                Optimizer<span style="color:#f92672">.</span>step<span style="color:#75715e">#SGD.step         2.21%     633.000us         6.36%       1.822ms     607.333us       0.000us         0.00%     228.000us      76.000us         -12 b        -804 b           0 b           0 b             3  </span>
+</span></span><span style="display:flex;"><span>    autograd::engine::evaluate_function: AddmmBackward0         <span style="color:#ae81ff">0.78</span><span style="color:#f92672">%</span>     <span style="color:#ae81ff">223.000</span>us         <span style="color:#ae81ff">5.32</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">1.524</span>ms     <span style="color:#ae81ff">169.333</span>us       <span style="color:#ae81ff">0.000</span>us         <span style="color:#ae81ff">0.00</span><span style="color:#f92672">%</span>     <span style="color:#ae81ff">288.000</span>us      <span style="color:#ae81ff">32.000</span>us           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b       <span style="color:#ae81ff">5.07</span> Mb      <span style="color:#f92672">-</span><span style="color:#ae81ff">1.34</span> Mb             <span style="color:#ae81ff">9</span>  
+</span></span><span style="display:flex;"><span>                                             aten::add_         <span style="color:#ae81ff">2.90</span><span style="color:#f92672">%</span>     <span style="color:#ae81ff">830.000</span>us         <span style="color:#ae81ff">5.28</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">1.513</span>ms      <span style="color:#ae81ff">15.760</span>us     <span style="color:#ae81ff">275.000</span>us         <span style="color:#ae81ff">6.48</span><span style="color:#f92672">%</span>     <span style="color:#ae81ff">275.000</span>us       <span style="color:#ae81ff">2.865</span>us           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b           <span style="color:#ae81ff">0</span> b            <span style="color:#ae81ff">96</span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-------------------------------------------------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  
+</span></span><span style="display:flex;"><span>Self CPU time total: <span style="color:#ae81ff">28.665</span>ms
+</span></span><span style="display:flex;"><span>Self CUDA time total: <span style="color:#ae81ff">4.244</span>ms
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU profile log ----------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-------------------------------------------------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  
+</span></span><span style="display:flex;"><span>                                                   Name    Self CPU <span style="color:#f92672">%</span>      Self CPU   CPU total <span style="color:#f92672">%</span>     CPU total  CPU time avg       CPU Mem  Self CPU Mem    <span style="color:#75715e"># of Calls  </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-------------------------------------------------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  
+</span></span><span style="display:flex;"><span>                                          ProfilerStep<span style="color:#f92672">*</span>        <span style="color:#ae81ff">12.69</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">4.460</span>ms        <span style="color:#ae81ff">99.79</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">35.061</span>ms      <span style="color:#ae81ff">11.687</span>ms         <span style="color:#f92672">-</span><span style="color:#ae81ff">12</span> b     <span style="color:#f92672">-</span><span style="color:#ae81ff">23.04</span> Mb             <span style="color:#ae81ff">3</span>  
+</span></span><span style="display:flex;"><span>autograd::engine::evaluate_function: ConvolutionBack<span style="color:#f92672">...</span>         <span style="color:#ae81ff">0.24</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">84.000</span>us        <span style="color:#ae81ff">27.60</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">9.697</span>ms       <span style="color:#ae81ff">1.616</span>ms     <span style="color:#f92672">-</span><span style="color:#ae81ff">14.81</span> Mb     <span style="color:#f92672">-</span><span style="color:#ae81ff">17.31</span> Mb             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                                   ConvolutionBackward0         <span style="color:#ae81ff">0.13</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">45.000</span>us        <span style="color:#ae81ff">27.36</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">9.613</span>ms       <span style="color:#ae81ff">1.602</span>ms       <span style="color:#ae81ff">2.50</span> Mb           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                             aten::convolution_backward        <span style="color:#ae81ff">26.92</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">9.460</span>ms        <span style="color:#ae81ff">27.23</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">9.568</span>ms       <span style="color:#ae81ff">1.595</span>ms       <span style="color:#ae81ff">2.50</span> Mb           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                                           aten::conv2d         <span style="color:#ae81ff">0.10</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">34.000</span>us        <span style="color:#ae81ff">15.13</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">5.316</span>ms     <span style="color:#ae81ff">886.000</span>us      <span style="color:#ae81ff">14.84</span> Mb           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                                      aten::convolution         <span style="color:#ae81ff">0.33</span><span style="color:#f92672">%</span>     <span style="color:#ae81ff">115.000</span>us        <span style="color:#ae81ff">15.03</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">5.282</span>ms     <span style="color:#ae81ff">880.333</span>us      <span style="color:#ae81ff">14.84</span> Mb           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                                     aten::_convolution         <span style="color:#ae81ff">0.20</span><span style="color:#f92672">%</span>      <span style="color:#ae81ff">71.000</span>us        <span style="color:#ae81ff">14.71</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">5.167</span>ms     <span style="color:#ae81ff">861.167</span>us      <span style="color:#ae81ff">14.84</span> Mb           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>                               aten::mkldnn_convolution        <span style="color:#ae81ff">14.31</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">5.029</span>ms        <span style="color:#ae81ff">14.50</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">5.096</span>ms     <span style="color:#ae81ff">849.333</span>us      <span style="color:#ae81ff">14.84</span> Mb           <span style="color:#ae81ff">0</span> b             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span>enumerate(DataLoader)_MultiProcessingDataLoaderIter<span style="color:#f92672">...</span>        <span style="color:#ae81ff">11.36</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">3.990</span>ms        <span style="color:#ae81ff">11.54</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">4.053</span>ms       <span style="color:#ae81ff">1.351</span>ms       <span style="color:#ae81ff">5.63</span> Mb       <span style="color:#ae81ff">5.63</span> Mb             <span style="color:#ae81ff">3</span>  
+</span></span><span style="display:flex;"><span>                                       aten::max_pool2d         <span style="color:#ae81ff">1.39</span><span style="color:#f92672">%</span>     <span style="color:#ae81ff">488.000</span>us         <span style="color:#ae81ff">6.47</span><span style="color:#f92672">%</span>       <span style="color:#ae81ff">2.275</span>ms     <span style="color:#ae81ff">379.167</span>us      <span style="color:#ae81ff">11.13</span> Mb       <span style="color:#ae81ff">2.47</span> Mb             <span style="color:#ae81ff">6</span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-------------------------------------------------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  <span style="color:#f92672">------------</span>  
+</span></span><span style="display:flex;"><span>Self CPU time total: <span style="color:#ae81ff">35.136</span>ms
+</span></span></code></pre></div><h3 id="how-can-we-improve-the-computation-speed-on-gpu">
+  How can we improve the computation speed on GPU?
+  <a class="anchor" href="#how-can-we-improve-the-computation-speed-on-gpu">#</a>
+</h3>
+<p>Why do we care about profiling the network? Because we want to know where the bottlenecks are, and how we can improve the performance of the network. In case study 1, we saw that GPU is not always faster than CPU, and we found that the bottleneck is the data transfer between CPU and GPU. There are a few ways to improve the performance on the GPU.</p>
+<ol>
+<li>
+<p>Increase the batch size: By increasing the batch size, the number of times the data needs to be transferred between the CPU and GPU can be reduced, thus reducing the overhead.</p>
+</li>
+<li>
+<p>Use larger models and datasets: Larger models and datasets would increase the time taken for calculations on the CPU, making the overhead of transferring data from CPU to GPU a smaller proportion of the total time.</p>
+</li>
+<li>
+<p>Use data prefetching: By loading the next batch of data onto the GPU while the current batch is being processed, the overhead of data transfer can be reduced.</p>
+</li>
+<li>
+<p>Use different optimizers: The choice of optimizer may also affect the performance of the model depending on the complexity of the model, the amount of training data, and the available computational resources. For example, you might use the stochastic gradient descent (SGD) optimizer for a simple linear model, while you might use more advanced optimizers like Adam or Adagrad for more complex deep learning models.</p>
+</li>
+</ol>
+<h2 id="case-study-2-comparing-model-performance-with-a-fine-tune-model">
+  Case Study 2: Comparing model performance with a fine-tune model
+  <a class="anchor" href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">#</a>
+</h2>
+<p>In this case study, we will be continuing our experiments with a pre-trained model. We will be using the same model and dataset as in case study 1. The only difference is that we will be a model that has already been trained on a large dataset.</p>
+<h3 id="pre-training-and-fine-tuning">
+  Pre-training and fine-tuning
+  <a class="anchor" href="#pre-training-and-fine-tuning">#</a>
+</h3>
+<p>Pretraining and fine-tuning are popular techniques in computer vision for improving the accuracy of deep learning models. <strong>Pretraining</strong> refers to training a deep learning model on a large dataset, typically using a general task like image classification or object detection, to learn general features that can be useful for a variety of tasks. These pretrained models are then fine-tuned on a smaller dataset specific to the target task. <strong>Fine-tuning</strong> involves taking the pretrained model and updating the weights of the final few layers to optimize for the target task. This allows the model to learn task-specific features and adapt to the new dataset, while still leveraging the general features learned during pretraining. By using pretrained models and fine-tuning, deep learning models can achieve higher accuracy on smaller datasets, reduce the amount of data required for training, and speed up the training process.</p>
+<p>One example of a pretrained model is the VGG16 model, which was trained on the ImageNet dataset. The ImageNet dataset contains over 14 million images and 1000 classes. The VGG16 model was trained on the ImageNet dataset to learn general features that can be useful for a variety of tasks. The VGG16 model can be downloaded from the torchvision library.</p>
+<h3 id="initializing-the-model">
+  Initializing the model
+  <a class="anchor" href="#initializing-the-model">#</a>
+</h3>
+<p>We will be using the VGG16 model as our pretrained model. The VGG16 model has 16 layers, including 13 convolutional layers and 3 fully connected layers. The model is pretrained on the ImageNet dataset, which contains 1000 classes. We will be using the VGG16 model to classify our satellite imageries. To begin, we need to download the pretrained network and change the final fully connected layer of the VGG16 model to output 10 classes instead of 1000 classes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>vgg11_bn <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>vgg11_bn(weights<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Freeze weights of all layers except the new classification layer</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> param <span style="color:#f92672">in</span> vgg11_bn<span style="color:#f92672">.</span>parameters():
+</span></span><span style="display:flex;"><span>    param<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span> 
+</span></span><span style="display:flex;"><span>num_ftrs <span style="color:#f92672">=</span> vgg11_bn<span style="color:#f92672">.</span>classifier[<span style="color:#ae81ff">6</span>]<span style="color:#f92672">.</span>in_features
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Replace the final classfication layer </span>
+</span></span><span style="display:flex;"><span>vgg11_bn<span style="color:#f92672">.</span>classifier[<span style="color:#ae81ff">6</span>] <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(num_ftrs,len(classes))
+</span></span><span style="display:flex;"><span>vgg11_bn<span style="color:#f92672">.</span>classifier[<span style="color:#ae81ff">6</span>]<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>  
+</span></span><span style="display:flex;"><span>vgg11_bn<span style="color:#f92672">.</span>train()
+</span></span></code></pre></div><h3 id="quick-inspection-of-the-model">
+  Quick inspection of the model
+  <a class="anchor" href="#quick-inspection-of-the-model">#</a>
+</h3>
+<p>Again we can use the summary function to see the architecture of the model.</p>
+<p>The vgg16 model has in total 128,812,810 parameters, and estimated total size of 506.64 Mb, both of which are much larger than the model we trained in case study 1.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>summary(vgg11_bn, (<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">64</span>,<span style="color:#ae81ff">64</span>),device<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;cpu&#39;</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>        Layer (type)               Output Shape         Param <span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================================================================</span>
+</span></span><span style="display:flex;"><span>            Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>           [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>]           <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">792</span>
+</span></span><span style="display:flex;"><span>       BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>           [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>]             <span style="color:#ae81ff">128</span>
+</span></span><span style="display:flex;"><span>              ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>           [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>         MaxPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>           [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>            Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>]          <span style="color:#ae81ff">73</span>,<span style="color:#ae81ff">856</span>
+</span></span><span style="display:flex;"><span>       BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">6</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>]             <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>              ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">7</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>         MaxPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">8</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>            Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">9</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>]         <span style="color:#ae81ff">295</span>,<span style="color:#ae81ff">168</span>
+</span></span><span style="display:flex;"><span>      BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>]             <span style="color:#ae81ff">512</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">11</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">12</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>]         <span style="color:#ae81ff">590</span>,<span style="color:#ae81ff">080</span>
+</span></span><span style="display:flex;"><span>      BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">13</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>]             <span style="color:#ae81ff">512</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">14</span>          [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        MaxPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">15</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">16</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>]       <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">180</span>,<span style="color:#ae81ff">160</span>
+</span></span><span style="display:flex;"><span>      BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">17</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>]           <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">024</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">18</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">19</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>]       <span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">359</span>,<span style="color:#ae81ff">808</span>
+</span></span><span style="display:flex;"><span>      BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">20</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>]           <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">024</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">21</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        MaxPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">22</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">23</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>]       <span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">359</span>,<span style="color:#ae81ff">808</span>
+</span></span><span style="display:flex;"><span>      BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">24</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>]           <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">024</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">25</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Conv2d<span style="color:#f92672">-</span><span style="color:#ae81ff">26</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>]       <span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">359</span>,<span style="color:#ae81ff">808</span>
+</span></span><span style="display:flex;"><span>      BatchNorm2d<span style="color:#f92672">-</span><span style="color:#ae81ff">27</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>]           <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">024</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">28</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        MaxPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">29</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>AdaptiveAvgPool2d<span style="color:#f92672">-</span><span style="color:#ae81ff">30</span>            [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">7</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Linear<span style="color:#f92672">-</span><span style="color:#ae81ff">31</span>                 [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4096</span>]     <span style="color:#ae81ff">102</span>,<span style="color:#ae81ff">764</span>,<span style="color:#ae81ff">544</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">32</span>                 [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4096</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          Dropout<span style="color:#f92672">-</span><span style="color:#ae81ff">33</span>                 [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4096</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Linear<span style="color:#f92672">-</span><span style="color:#ae81ff">34</span>                 [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4096</span>]      <span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">781</span>,<span style="color:#ae81ff">312</span>
+</span></span><span style="display:flex;"><span>             ReLU<span style="color:#f92672">-</span><span style="color:#ae81ff">35</span>                 [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4096</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          Dropout<span style="color:#f92672">-</span><span style="color:#ae81ff">36</span>                 [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4096</span>]               <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>           Linear<span style="color:#f92672">-</span><span style="color:#ae81ff">37</span>                   [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>]          <span style="color:#ae81ff">40</span>,<span style="color:#ae81ff">970</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================================================================</span>
+</span></span><span style="display:flex;"><span>Total params: <span style="color:#ae81ff">128</span>,<span style="color:#ae81ff">812</span>,<span style="color:#ae81ff">810</span>
+</span></span><span style="display:flex;"><span>Trainable params: <span style="color:#ae81ff">40</span>,<span style="color:#ae81ff">970</span>
+</span></span><span style="display:flex;"><span>Non<span style="color:#f92672">-</span>trainable params: <span style="color:#ae81ff">128</span>,<span style="color:#ae81ff">771</span>,<span style="color:#ae81ff">840</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>Input size (MB): <span style="color:#ae81ff">0.05</span>
+</span></span><span style="display:flex;"><span>Forward<span style="color:#f92672">/</span>backward <span style="color:#66d9ef">pass</span> size (MB): <span style="color:#ae81ff">15.21</span>
+</span></span><span style="display:flex;"><span>Params size (MB): <span style="color:#ae81ff">491.38</span>
+</span></span><span style="display:flex;"><span>Estimated Total Size (MB): <span style="color:#ae81ff">506.64</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------------------------------------------------------</span>
+</span></span></code></pre></div><h3 id="inspecting-cpu-and-gpu-usage-with-vgg16">
+  Inspecting CPU and GPU usage with VGG16
+  <a class="anchor" href="#inspecting-cpu-and-gpu-usage-with-vgg16">#</a>
+</h3>
+<p>Again, we can repeat the same process as in case study 1 to profile CPU and GPU usage - we can change the model input to VGG16 using <code>vgg11_bn = VGG.to(device=device)</code>.</p>
+<figure title = "GPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_vgg_gpu.png?raw=true">
+    <figcaption>
+    <b>Figure 5: VGG16 - GPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_vgg_cpu.png?raw=true">
+    <figcaption>
+    <b>Figure 6: VGG16 - CPU tensorboard</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>Figure 5 and 6 show the GPU and CPU usage for VGG16. We can see that the GPU Utilization and memory usage are much higher than our baseline model in case study 1. This is because the required calculations are much higher for the VGG16 model. Therefore, in theory, we should expect the GPU runtime on VGG16 should outperform the CPU runtime significantly.</p>
+<h3 id="training-the-model">
+  Training the model
+  <a class="anchor" href="#training-the-model">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_model</span>(model, dataloaders, criterion, optimizer, num_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, device<span style="color:#f92672">=</span>device):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Initialize time </span>
+</span></span><span style="display:flex;"><span>    since <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Initialize reporting metrics </span>
+</span></span><span style="display:flex;"><span>    train_acc_history,val_acc_history,train_loss_history,val_loss_history <span style="color:#f92672">=</span> [],[],[],[]
+</span></span><span style="display:flex;"><span>    best_acc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(num_epochs):
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#39;Epoch </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(epoch, num_epochs <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Each epoch has a training and validation phase</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> phase <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;train&#39;</span>, <span style="color:#e6db74">&#39;val&#39;</span>]:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> phase <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;train&#39;</span>:
+</span></span><span style="display:flex;"><span>                model<span style="color:#f92672">.</span>train()  <span style="color:#75715e"># Set model to training mode</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                model<span style="color:#f92672">.</span>eval()   <span style="color:#75715e"># Set model to evaluate mode</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            running_loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+</span></span><span style="display:flex;"><span>            running_corrects <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># Iterate over data.</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> inputs, labels <span style="color:#f92672">in</span> dataloaders[phase]:
+</span></span><span style="display:flex;"><span>                inputs <span style="color:#f92672">=</span> inputs<span style="color:#f92672">.</span>to(device)
+</span></span><span style="display:flex;"><span>                labels <span style="color:#f92672">=</span> labels<span style="color:#f92672">.</span>to(device)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># zero the parameter gradients</span>
+</span></span><span style="display:flex;"><span>                optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># forward</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># track history if only in train</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>set_grad_enabled(phase <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;train&#39;</span>):
+</span></span><span style="display:flex;"><span>                    <span style="color:#75715e"># Get model outputs and calculate loss</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>                    outputs <span style="color:#f92672">=</span> model(inputs)
+</span></span><span style="display:flex;"><span>                    loss <span style="color:#f92672">=</span> criterion(outputs, labels)
+</span></span><span style="display:flex;"><span>                    _, preds <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>max(outputs, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#75715e"># backward + optimize only if in training phase</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> phase <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;train&#39;</span>:
+</span></span><span style="display:flex;"><span>                        loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>                        optimizer<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># statistics</span>
+</span></span><span style="display:flex;"><span>                running_loss <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> inputs<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>                running_corrects <span style="color:#f92672">+=</span> torch<span style="color:#f92672">.</span>sum(preds <span style="color:#f92672">==</span> labels<span style="color:#f92672">.</span>data)<span style="color:#f92672">.</span>type(torch<span style="color:#f92672">.</span>float)<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            epoch_loss <span style="color:#f92672">=</span> running_loss <span style="color:#f92672">/</span> len(dataloaders[phase]<span style="color:#f92672">.</span>dataset)
+</span></span><span style="display:flex;"><span>            epoch_acc <span style="color:#f92672">=</span> running_corrects <span style="color:#f92672">/</span> len(dataloaders[phase]<span style="color:#f92672">.</span>dataset)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Loss: </span><span style="color:#e6db74">{:.4f}</span><span style="color:#e6db74"> Acc: </span><span style="color:#e6db74">{:.4f}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(phase, epoch_loss, epoch_acc))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> phase <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;train&#39;</span>:
+</span></span><span style="display:flex;"><span>                train_acc_history<span style="color:#f92672">.</span>append(epoch_acc)     
+</span></span><span style="display:flex;"><span>                train_loss_history<span style="color:#f92672">.</span>append(epoch_loss)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>: 
+</span></span><span style="display:flex;"><span>                val_acc_history<span style="color:#f92672">.</span>append(epoch_acc)
+</span></span><span style="display:flex;"><span>                val_loss_history<span style="color:#f92672">.</span>append(epoch_loss)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        print()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    time_elapsed <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time() <span style="color:#f92672">-</span> since
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;Training complete in </span><span style="color:#e6db74">{:.0f}</span><span style="color:#e6db74">m </span><span style="color:#e6db74">{:.0f}</span><span style="color:#e6db74">s&#39;</span><span style="color:#f92672">.</span>format(time_elapsed <span style="color:#f92672">//</span> <span style="color:#ae81ff">60</span>, time_elapsed <span style="color:#f92672">%</span> <span style="color:#ae81ff">60</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> train_acc_history,val_acc_history,train_loss_history,val_loss_history,time_elapsed
+</span></span></code></pre></div><h3 id="speed-comparison">
+  Speed comparison
+  <a class="anchor" href="#speed-comparison">#</a>
+</h3>
+<p>We can now compare the speed and accuracy of the CPU and GPU implementations of VGG16 and the baseline model. It is important to note that we are re-initializing the loss function and optimizer on the same device as the model. This is because the loss function and optimizer are also part of the model and will be moved to the same device as the model.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#VGG16</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU----------------------------------------------------------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cpu&#39;</span>) 
+</span></span><span style="display:flex;"><span>vgg11_cpu <span style="color:#f92672">=</span> vgg11_bn<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>SGD(vgg11_cpu<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, momentum<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>) 
+</span></span><span style="display:flex;"><span>train_acc_history,val_acc_history,train_loss_history,val_loss_history,vgg_cpu_time  <span style="color:#f92672">=</span> train_model(vgg11_cpu,dataloader_all,loss_fn, optimizer, num_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, device<span style="color:#f92672">=</span>device) 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#GPU----------------------------------------------------------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cuda:0&#39;</span>) 
+</span></span><span style="display:flex;"><span>vgg11_gpu <span style="color:#f92672">=</span> vgg11_bn<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()<span style="color:#f92672">.</span>cuda()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>SGD(vgg11_gpu<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, momentum<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>) 
+</span></span><span style="display:flex;"><span>train_acc_history,val_acc_history,train_loss_history,val_loss_history,vgg_gpu_time  <span style="color:#f92672">=</span> train_model(vgg11_gpu,dataloader_all,loss_fn, optimizer, num_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, device<span style="color:#f92672">=</span>device)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Baseline</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU----------------------------------------------------------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cpu&#39;</span>)
+</span></span><span style="display:flex;"><span>base_cpu <span style="color:#f92672">=</span> Net()<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>SGD(base_cpu<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, momentum<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>)
+</span></span><span style="display:flex;"><span>base_train_acc_history,base_val_acc_history,base_train_loss_history,base_val_loss_history,baseline_cpu_time  <span style="color:#f92672">=</span> train_model(base_cpu,dataloader_all,loss_fn, optimizer, num_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#GPU----------------------------------------------------------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cuda:0&#39;</span>)
+</span></span><span style="display:flex;"><span>base_gpu <span style="color:#f92672">=</span> Net()<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()<span style="color:#f92672">.</span>cuda()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>SGD(base_gpu<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, momentum<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>)
+</span></span><span style="display:flex;"><span>base_train_acc_history,base_val_acc_history,base_train_loss_history,base_val_loss_history,baseline_gpu_time  <span style="color:#f92672">=</span> train_model(base_gpu,dataloader_all,loss_fn, optimizer, num_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, device<span style="color:#f92672">=</span>device)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>compute_time <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame([baseline_cpu_time,baseline_gpu_time,vgg_cpu_time,vgg_gpu_time],columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;Time&#39;</span>])
+</span></span><span style="display:flex;"><span>compute_time[<span style="color:#e6db74">&#39;Model&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;baseline&#39;</span>,<span style="color:#e6db74">&#39;baseline&#39;</span>,<span style="color:#e6db74">&#39;VGG16&#39;</span>,<span style="color:#e6db74">&#39;VGG16&#39;</span>]
+</span></span><span style="display:flex;"><span>compute_time[<span style="color:#e6db74">&#39;Mode&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;CPU&#39;</span>,<span style="color:#e6db74">&#39;GPU&#39;</span>,<span style="color:#e6db74">&#39;CPU&#39;</span>,<span style="color:#e6db74">&#39;GPU&#39;</span>]
+</span></span><span style="display:flex;"><span>g<span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>catplot(data<span style="color:#f92672">=</span>compute_time, kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;bar&#39;</span>,x<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Model&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Time&#39;</span>,hue<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Mode&#39;</span>)
+</span></span><span style="display:flex;"><span>g<span style="color:#f92672">.</span>set_axis_labels(<span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;Total Time (Seconds)&#34;</span>)
+</span></span></code></pre></div><figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_model_speed_comparison.png?raw=true">
+    <figcaption>
+    <b>Figure 7: Speed comparisons between GPU and CPU on Baseline and VGG16</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>Based on Figure 7, it is evident that the VGG16 model implemented on a GPU is approximately 6 times faster than the same model implemented on a CPU. This can be attributed to the fact that the GPU is capable of parallel processing, thereby reducing the total time required for training the model. However, in the case of the baseline model, the GPU implementation does not exhibit a significant improvement over the CPU implementation. This is due to the fact that the baseline model is relatively simple and does not involve a large amount of computation.</p>
+<h3 id="comparison-of-model-accuracy">
+  Comparison of Model Accuracy
+  <a class="anchor" href="#comparison-of-model-accuracy">#</a>
+</h3>
+<p>The final step is to evaluate the training model on the testing dataset. There are many ways to evaluate the performance of a model. In this case, we will use the accuracy score, which is defined as the number of correct predictions divided by the total number of predictions, and the confusion matrix, which is a table that shows the number of correct and incorrect predictions for each class. The following code block shows how to calculate the accuracy score and confusion matrix for the VGG16 and baseline model.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>,figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">20</span>))
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show_heatmap</span>(test_loader,model,ax,name):
+</span></span><span style="display:flex;"><span>    heatmap <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(data<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,index<span style="color:#f92672">=</span>classes,columns<span style="color:#f92672">=</span>classes)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>        number_corrects <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        number_samples <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> images, labels <span style="color:#f92672">in</span> test_loader:
+</span></span><span style="display:flex;"><span>            images, labels <span style="color:#f92672">=</span> images<span style="color:#f92672">.</span>to(device), labels<span style="color:#f92672">.</span>to(device)
+</span></span><span style="display:flex;"><span>            outputs <span style="color:#f92672">=</span> model(images)
+</span></span><span style="display:flex;"><span>            _, predicted <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>max(outputs, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            number_corrects <span style="color:#f92672">+=</span> (predicted<span style="color:#f92672">==</span>labels)<span style="color:#f92672">.</span>sum()<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>            number_samples <span style="color:#f92672">+=</span> labels<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(labels)):
+</span></span><span style="display:flex;"><span>                true_label <span style="color:#f92672">=</span> labels[i]<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>                predicted_label <span style="color:#f92672">=</span> predicted[i]<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>                heatmap<span style="color:#f92672">.</span>iloc[true_label,predicted_label] <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    sns<span style="color:#f92672">.</span>heatmap(heatmap, annot<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, fmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;d&#34;</span>,cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;YlGnBu&#34;</span>,ax<span style="color:#f92672">=</span>ax) 
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">{</span>name<span style="color:#e6db74">}</span><span style="color:#e6db74">, Overall accuracy </span><span style="color:#e6db74">{</span>(number_corrects <span style="color:#f92672">/</span> number_samples)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span><span style="color:#e6db74">}</span><span style="color:#e6db74">%&#39;</span>) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>show_heatmap(test_loader,vgg11_gpu,ax[<span style="color:#ae81ff">0</span>],<span style="color:#e6db74">&#34;VGG16&#34;</span>)
+</span></span><span style="display:flex;"><span>show_heatmap(test_loader,base_gpu,ax[<span style="color:#ae81ff">1</span>],<span style="color:#e6db74">&#34;Baseline&#34;</span>)
+</span></span></code></pre></div><figure title = "CPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_confusion_matrix.png?raw=true">
+    <figcaption>
+    <b>Figure 8: Overall accuracy and confusion matrix</b>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<p>From Figure 8, it is evident that the VGG16 model has a higher overall accuracy than the baseline model. This is expected because the VGG16 model is a more complex model that is capable of learning more complex patterns in the data. The baseline model is still able to achieve a respectable accuracy of 71% - in future experiments, we can try to improve the accuracy of the baseline model by increasing the number of epochs, optimizing the learning rate, or adding more layers to the model.</p>
+<h2 id="conclusion">
+  Conclusion
+  <a class="anchor" href="#conclusion">#</a>
+</h2>
+<p>In this case study, we showcased the utilization of GPUs to accelerate the classification of satellite images, alongside the use of profiling tools like Tensorboard to visualize CPU/GPU bottlenecks. Our findings show that deep learning models can benefit greatly from GPUs, especially when the model is complex and the data size is substantial.</p>
+<p>While deep learning frameworks like PyTorch and TensorFlow offer a simple API to transfer model/tensor objects from the CPU to the GPU, the overhead of transferring data from the CPU to the GPU can be significant for smaller data or model sizes. Therefore, the performance of the GPU implementation may only be marginally better than that of the CPU implementation in such cases. Consequently, it is imperative to evaluate the data and computation sizes thoroughly before deciding to use a CPU or a GPU.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#geoai-and-deep-learning">GeoAI and Deep Learning</a></li>
+    <li><a href="#objectives">Objectives</a></li>
+    <li><a href="#case-study-1-classifying-eurasat-images-using-convolutional-neural-networks-cnns">Case Study 1: Classifying EuraSat images using Convolutional Neural Networks (CNNs)</a>
+      <ul>
+        <li><a href="#brief-introduction-to-convolutional-neural-networks-cnns">Brief introduction to Convolutional Neural Networks (CNNs)</a></li>
+        <li><a href="#importing-the-libraries">Importing the libraries</a></li>
+        <li><a href="#data-preparation-and-preprocessing">Data preparation and preprocessing</a></li>
+        <li><a href="#visualizing-the-data">Visualizing the data</a></li>
+        <li><a href="#creating-your-cnn-model-for-training">Creating your CNN model for training</a></li>
+        <li><a href="#inspecting-cpugpu-usage-with-pytorch-profiler-and-tensorboard">Inspecting CPU/GPU usage with PyTorch Profiler and TensorBoard</a></li>
+        <li><a href="#how-can-we-improve-the-computation-speed-on-gpu">How can we improve the computation speed on GPU?</a></li>
+      </ul>
+    </li>
+    <li><a href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">Case Study 2: Comparing model performance with a fine-tune model</a>
+      <ul>
+        <li><a href="#pre-training-and-fine-tuning">Pre-training and fine-tuning</a></li>
+        <li><a href="#initializing-the-model">Initializing the model</a></li>
+        <li><a href="#quick-inspection-of-the-model">Quick inspection of the model</a></li>
+        <li><a href="#inspecting-cpu-and-gpu-usage-with-vgg16">Inspecting CPU and GPU usage with VGG16</a></li>
+        <li><a href="#training-the-model">Training the model</a></li>
+        <li><a href="#speed-comparison">Speed comparison</a></li>
+        <li><a href="#comparison-of-model-accuracy">Comparison of Model Accuracy</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
