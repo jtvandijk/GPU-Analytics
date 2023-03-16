@@ -164,6 +164,7 @@ pointInPolys = gpd.sjoin(background_points_shp, country_outline)
 #CPU times: user 8.6 s, sys: 43 ms, total: 8.65 s
 #Wall time: 8.69 s
 ```
+
 Next, we can use the `.point_in_polygon` function from the GPU-accelerated library `cuSpatial`. It is important to note here that the `.point_in_polygon` requires the points to be in the form of a `cudf.DataFrame` and the polygons to be in the form of a `cuspatial.GeoSeries`. Here, we are using the `cuspatial.read_polygon_shapefile()` function to make sure the resulting tuple `poly_offsets`, `poly_ring_offsets`, `poly_points` perfectly matches the input requirements of `point_in_polygon`. 
 
 Because the `.point_in_polygon` function can only handle 31 polygons at a time, we need to split the polygons into batches of 31 polygons. The for loop shown below iterates through each batch and append true values in the array to a new Country ID, matching the spatial indices of the polygons.
@@ -302,7 +303,7 @@ ax.set_title("Distribution of background points across Brazil")
     </figcaption>
     </center>
 </figure>
-```
+
 
 ### Create a multi-band raster from the predictor variables 
 

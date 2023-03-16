@@ -22,7 +22,7 @@ bookSearchExclude: True
 
 
 
-## Introduction
+## Welcome 
 This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy's [Talent Development Award](https://www.thebritishacademy.ac.uk/funding/talent-development-awards/).
 
 In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations. A Graphics Processing Unit (GPU), on the other hand, is designed to execute several tasks simultaneously. GPU-accelerated analytics harness the parallel-capabilities of the GPU to accelerate processing-intensive operations. This can be particularly useful for social and geographic research where the data sets are often large and complex.
@@ -66,3 +66,12 @@ This work is licensed under a
 ## Project reference:
 [TDA21\210069](https://www.thebritishacademy.ac.uk/funding/talent-development-awards/talent-development-awards-past-awards/talent-development-awards-scheme-2021/)
 
+
+## Contact
+
+If you have any questions or comments, please contact [Dr Justin van Dijk](mailto:j.t.vandijk@ucl.ac.uk) or [Mr Jason Chi Sing Tang](mailto:jason.tang.16@ucl.ac.uk).  We would also be happy to hear from you if you have any suggestions for future work. 
+
+--- 
+By Jason Chi Sing Tang, Justin van Dijk, Stephen Law and Anwar Musah 
+
+© Copyright 2023. All rights reserved. 
