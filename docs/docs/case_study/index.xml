@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Case Studies on GPU-based analysis for social and geographic applications</title>
+    <link>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/</link>
+    <description>Recent content in Case Studies on GPU-based analysis for social and geographic applications</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://jasoncpit.github.io/GPU-Analytics/docs/case_study/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Chapter 1 - Address geocoding</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_1/</guid>
+      <description>Address geocoding # Address geocoding, or address matching, is an example of a broad class of data science problems known as data linkage. Data linkage problems involve connecting two datasets together by establishing an association between two records based on one or more common properties. In the case of address geocoding, one would try to assign XY coordinates to a list of address strings derived from, for instance, consumer sources that are not explicitly georeferenced (see, for instance, Lansley et al.</description>
+    </item>
+    
+    <item>
+      <title>Chapter 2 - GeoAI and Deep Learning</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_2/</guid>
+      <description>GeoAI and Deep Learning # GeoAI, or geospatial artificial intelligence (AI), has become a trending topic and the frontier for spatial analytics in Geography (Li and Hsu, 2022). Although the field of AI has experienced highs and lows in the past decades, it has recently gained tremendous momentum because of breakthrough developments in deep (machine) learning, immense available computing power, and the pressing needs for mining and understanding big data.</description>
+    </item>
+    
+    <item>
+      <title>Chapter 3 - Geospatial Operation and Analysis</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_3/</guid>
+      <description>Geospatial Operation and Analysis # Why are we interested in geospatial data? Geospatial data is a type of data that is associated with a location. This location can be a point, a line, a polygon, or a raster. Geospatial data is becoming more and more important, yet the sheer volume of information that is generated made it difficult to handle. In this chapter, we will be exploring the use of GPU for manipulating large-scale geospatial data, and provide a practical example of how we can predict the presence of Aedes aegypti across the globe.</description>
+    </item>
+    
+  </channel>
+</rss>

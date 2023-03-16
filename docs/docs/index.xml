@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docs on GPU-based analysis for social and geographic applications</title>
+    <link>https://jasoncpit.github.io/GPU-Analytics/docs/</link>
+    <description>Recent content in Docs on GPU-based analysis for social and geographic applications</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://jasoncpit.github.io/GPU-Analytics/docs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Preface</title>
+      <link>https://jasoncpit.github.io/GPU-Analytics/docs/preface/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jasoncpit.github.io/GPU-Analytics/docs/preface/about/</guid>
+      <description>GPU-based analysis for social and geographic applications # Introduction # This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy&amp;rsquo;s Talent Development Award.
+In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations.</description>
+    </item>
+    
+  </channel>
+</rss>

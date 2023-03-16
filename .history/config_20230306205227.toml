@@ -1,0 +1,12 @@
+baseURL = 'https://jasoncpit.github.io/GPU-Analytics/'
+languageCode = 'en-us'
+title = 'GPU-based analysis for social and geographic applications'
+theme = 'hugo-book'
+publishDir = "docs"
+
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+

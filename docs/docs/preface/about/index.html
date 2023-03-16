@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GPU-based analysis for social and geographic applications # Introduction # This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy&rsquo;s Talent Development Award.
+In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Preface" />
+<meta property="og:description" content="GPU-based analysis for social and geographic applications # Introduction # This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy&rsquo;s Talent Development Award.
+In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jasoncpit.github.io/GPU-Analytics/docs/preface/about/" /><meta property="article:section" content="docs" />
+
+
+<title>Preface | GPU-based analysis for social and geographic applications</title>
+<link rel="manifest" href="/GPU-Analytics/manifest.json">
+<link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
+  <script defer src="/GPU-Analytics/en.search.min.4fffdebd2f263adfde75d485db20dee5d8928936d7c30293c0736ff1a5aa941f.js" integrity="sha256-T//evS8mOt/eddSF2yDe5diSiTbXwwKTwHNv8aWqlB8=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/GPU-Analytics/"><span>GPU-based analysis for social and geographic applications</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/preface/about/" class="active">Preface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Overview</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/gpu/" class="">GPU</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/about/setting_up/" class="">Setting up the environment for GPU</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Case Studies</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_1/" class="">Chapter 1 - Address geocoding</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_2/" class="">Chapter 2 - GeoAI and Deep Learning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/GPU-Analytics/docs/case_study/chapter_3/" class="">Chapter 3 - Geospatial Operation and Analysis</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/GPU-Analytics/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Preface</strong>
+
+  <label for="toc-control">
+    
+    <img src="/GPU-Analytics/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#who-is-this-document-for">Who is this document for?</a></li>
+    <li><a href="#document-details">Document details</a></li>
+    <li><a href="#project-members">Project members</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#project-reference">Project reference:</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="gpu-based-analysis-for-social-and-geographic-applications">
+  GPU-based analysis for social and geographic applications
+  <a class="anchor" href="#gpu-based-analysis-for-social-and-geographic-applications">#</a>
+</h1>
+<h2 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h2>
+<p>This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy&rsquo;s <a href="https://www.thebritishacademy.ac.uk/funding/talent-development-awards/">Talent Development Award</a>.</p>
+<p>In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations. A Graphics Processing Unit (GPU), on the other hand, is designed to execute several tasks simultaneously. GPU-accelerated analytics harness the parallel-capabilities of the GPU to accelerate processing-intensive operations. This can be particularly useful for social and geographic research where the data sets are often large and complex.</p>
+<p>In this document, we will explore a collection of novel and innovative computational methods in social and geographic data science. This is essential for at least two reasons. First, with the proliferation of large-scale data sets as well as the availability of increasingly powerful personal computing devices over the past decade or so, social science and geography have witnessed a second quantitative revolution - <a href="https://doi.org/10.1177/2053951714528481">Kitchen (2014, p.3)</a> speaks of a fourth paradigm of science with a focus on data-intensive analyses, statistical exploration and data mining. However, there is limited availability of well-documented resources for both social and geographical data science researchers and students in handling large volumes of data in an efficient manner.</p>
+<p>Second, whereas ‘Big Data’ can be very rich sources of information, they tend to be accidental (e.g. a by-product of online transactions) and highly diverse in quality and resolution. As a result, many ‘Big Data’ sources are not representative of the population or phenomenon of study and contain a variety of biases and uncertainties. An illustrative example of the problem is described in <a href="https://doi.org/10.1111/rssa.12713">Van Dijk <em>et al.</em> (2021)</a> where, in the absence of frequently updated data on the nature of residential moves in the United Kingdom, the authors use population registers and administrative data to develop robust annual estimates of residential mobility between all UK neighbourhoods by ascribing individuals that seemingly vacate a property to their most probably residential destination. With circa 7.8 billion possible origin-destination pairings, this was a very time-consuming and computationally intensive model.</p>
+<p>This raises the question of how technological innovations can be harnessed for the benefit of social and geographic data science research: both to enable future highly computationally intensive research as well as how to effectively communicate these new research pipelines to researchers and students within the domains of computational social sciences and quantitative geography.</p>
+<h2 id="who-is-this-document-for">
+  Who is this document for?
+  <a class="anchor" href="#who-is-this-document-for">#</a>
+</h2>
+<p>In this document, we will explicitly explore the potential of GPU with <strong>three case studies</strong>, and best practices for GPU in social and geographic research. This document is aimed at researchers and students in the domains of computational social sciences and quantitative geography who are interested in learning and using GPU as part of their research. It is also aimed at data science and machine learning practitioners who are interested in working with geographical data and problems in a more efficient manner. While some content is aimed at a more technical audience, the document is written in a way that is accessible to a wide audience.</p>
+<p>We also want to highlight that this document is not a comprehensive guide to GPU and GPU programming. Rather, it is a collection of resources and projects that can be used to explore the potential of GPU-based analysis in social and geographic research.</p>
+<h2 id="document-details">
+  Document details
+  <a class="anchor" href="#document-details">#</a>
+</h2>
+<p>In this project we will first explain the basics of GPU and how to configure GPU both locally and on the cloud. We will be using a NVDIA Tesla V100 GPU for our demonstrations, but the code and instructions can be easily adapted to other GPUs.</p>
+<p>After configuration, the usability of GPU-accelerated analytics in the context of three different geographic applications will be benchmarked. The first of these case studies will explore the matching and joining of large address datasets. The second case study will explore the performance of deep learning algorithms for GeoAI applications. The third case study will look specifically at the opportunities for improving the performance of disease risk prediction using raster data. The final deliverable of the project will be a workshop alongside a freely available, shareable digital resource with detailed instructions on how to implement GPU-based analysis in social and geographic research and teaching.</p>
+<h2 id="project-members">
+  Project members
+  <a class="anchor" href="#project-members">#</a>
+</h2>
+<ul>
+<li><a href="https://www.mappingdutchman.com">Dr Justin van Dijk</a></li>
+<li><a href="https://www.turing.ac.uk/people/researchers/stephen-law">Dr Stephen Law</a></li>
+<li><a href="https://www.geog.ucl.ac.uk/people/academic-staff/anwar-musah">Dr Anwar Musah</a></li>
+<li><a href="https://www.ucl.ac.uk/geospatial-analytics/people/jason-chi-sing-tang">Mr Jason Chi Sing Tang</a></li>
+</ul>
+<h2 id="license">
+  License
+  <a class="anchor" href="#license">#</a>
+</h2>
+<p>This work is licensed under a
+<a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p><a href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://licensebuttons.net/l/by-sa/4.0/88x31.png" alt="CC BY-SA 4.0" /></a></p>
+<h2 id="project-reference">
+  Project reference:
+  <a class="anchor" href="#project-reference">#</a>
+</h2>
+<p><a href="https://www.thebritishacademy.ac.uk/funding/talent-development-awards/talent-development-awards-past-awards/talent-development-awards-scheme-2021/">TDA21\210069</a></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#who-is-this-document-for">Who is this document for?</a></li>
+    <li><a href="#document-details">Document details</a></li>
+    <li><a href="#project-members">Project members</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#project-reference">Project reference:</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
