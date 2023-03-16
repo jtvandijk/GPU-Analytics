@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on GPU-based analysis for social and geographic applications</title>
-    <link>https://jasoncpit.github.io/GPU-Analytics/tags/</link>
+    <link>https://jtvandijk.github.io/GPU-Analytics/tags/</link>
     <description>Recent content in Tags on GPU-based analysis for social and geographic applications</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://jasoncpit.github.io/GPU-Analytics/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://jtvandijk.github.io/GPU-Analytics/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
