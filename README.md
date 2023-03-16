@@ -1,7 +1,7 @@
 # GPU-based analysis for social and geographic applications
 
 ## Introduction
-This document provides the tools, the code and utility of the graphics processing unit (GPU) for social and geographic research and applications.This project is funded by The British Academy's [Talent Development Award](https://www.thebritishacademy.ac.uk/funding/talent-development-awards/).
+This document provides the tools, the code and utility of the graphics processing unit (GPU) for social and geographic research and applications. This project is funded by The British Academy's [Talent Development Award](https://www.thebritishacademy.ac.uk/funding/talent-development-awards/).
 
 In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations. A Graphics Processing Units (GPU), on the other hand, is designed to execute several tasks simultaneously. GPU-accelerated analytics harness the parallel-capabilities of the GPU to accelerate processing-intensive operations. This can be particularly useful for social and geographic research where the data sets are often large and complex.
 
