@@ -16,7 +16,7 @@
 <link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
-  <script defer src="/GPU-Analytics/en.search.min.42877e2e624550bab0764f2a4b2e8da86d080649741a107bf9ce078294811d93.js" integrity="sha256-Qod&#43;LmJFULqwdk8qSy6NqG0IBkl0GhB7&#43;c4HgpSBHZM=" crossorigin="anonymous"></script>
+  <script defer src="/GPU-Analytics/en.search.min.4fffdebd2f263adfde75d485db20dee5d8928936d7c30293c0736ff1a5aa941f.js" integrity="sha256-T//evS8mOt/eddSF2yDe5diSiTbXwwKTwHNv8aWqlB8=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -240,7 +240,7 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#how-can-we-improve-the-computation-speed-on-gpu">How can we improve the computation speed on GPU?</a></li>
       </ul>
     </li>
-    <li><a href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">Case Study 2: Comparing model performance with a fine-tune model</a>
+    <li><a href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">Case Study 2: Comparing model performance with a fine tune model</a>
       <ul>
         <li><a href="#pre-training-and-fine-tuning">Pre-training and fine-tuning</a></li>
         <li><a href="#initializing-the-model">Initializing the model</a></li>
@@ -279,7 +279,7 @@ https://github.com/alex-shpak/hugo-book
   Case Study 1: Classifying EuraSat images using Convolutional Neural Networks (CNNs)
   <a class="anchor" href="#case-study-1-classifying-eurasat-images-using-convolutional-neural-networks-cnns">#</a>
 </h2>
-<p>In this case study, we will be using the EuraSat dataset to train a CNN model to classify land use from satellite images. The EuraSat dataset contains 27,000 images of 10 different land use classes. The dataset is available on Kaggle and can be downloaded <a href="https://www.kaggle.com/phylake1337/eurasat-land-use-and-land-cover">here</a>. The dataset is also available on the <a href="https://pytorch.org/vision/stable/datasets.html#eurasat">PyTorch website</a>.</p>
+<p>In this case study, we will be using the EuraSat dataset to train a CNN model to classify land use from satellite images. The EuraSat dataset contains 27,000 images of 10 different land use classes. The dataset is available on the <a href="https://pytorch.org/vision/stable/datasets.html#eurasat">torchvision.datasets</a>.</p>
 <h3 id="brief-introduction-to-convolutional-neural-networks-cnns">
   Brief introduction to Convolutional Neural Networks (CNNs)
   <a class="anchor" href="#brief-introduction-to-convolutional-neural-networks-cnns">#</a>
@@ -306,29 +306,34 @@ https://github.com/alex-shpak/hugo-book
      <center>
      <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_cnn.png?raw=true">
     <figcaption>
-    <b>Figure 1: Framework of a Convolutional Neural Network ,Illustration by [Mathworks](https://uk.mathworks.com/help/deeplearning/ug/introduction-to-convolutional-neural-networks.html)</b>
+    <b>Figure 1: Framework of a Convolutional Neural Network, Illustration by <a href="https://uk.mathworks.com/help/deeplearning/ug/introduction-to-convolutional-neural-networks.html">Mathworks</a>. 
     </b>
     </figcaption>
     </center>
 </figure>
+<p>Let&rsquo;s consider a concrete example to illustrate the scale of matrix multiplication in CNNs and why CPUs may struggle to compute them efficiently.</p>
+<p>Suppose we have a CNN with an input image of size 256x256 (height x width) and 3 color channels (RGB). The first convolutional layer of the network uses 64 filters, each of size 3x3 (height x width). To compute the output for this layer, we need to perform a convolution operation between the input image and each filter, followed by adding a bias term.</p>
+<p>The convolution operation for one filter can be viewed as a series of dot products between the filter and small patches of the input image. In this example, there would be 254x254 such dot products (assuming no padding and a stride of 1). For each dot product, we need to compute the product of 3x3x3 = 27 elements (filter size multiplied by the number of color channels). Therefore, for one filter, there are 254x254x27 = 1,746,696 multiplications. Since there are 64 filters, the total number of multiplications for this layer alone would be 1,746,696x64 = 111,788,544.</p>
+<p>This massive number of multiplications must be executed quickly during the forward pass and the backward pass (for gradient computation) in each iteration of the training process, which typically involves millions of iterations. A CPU, with a limited number of cores (e.g., 4, 8, or 16 cores) and optimized for serial processing, would take a significant amount of time to compute these operations.</p>
+<p>On the other hand, a GPU, with its thousands of smaller cores designed for parallel processing, can execute multiple multiplications concurrently. This parallelism enables the GPU to perform these computations significantly faster than a CPU, greatly reducing the time required for training and making it a more suitable choice for handling large-scale CNN matrix multiplications.</p>
 <p>For more information on CNNs, you can check out this cool <a href="https://poloclub.github.io/cnn-explainer/">blog post</a>.</p>
 <h3 id="importing-the-libraries">
   Importing the libraries
   <a class="anchor" href="#importing-the-libraries">#</a>
 </h3>
 <p>We will be using the following libraries for this case study:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#Importing the libraries</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#standard imports</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Importing the libraries</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Standard imports</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#sklearn standard functions</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sklearn standard functions</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> r2_score,mean_absolute_error,mean_squared_error
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#standard imports for pytorch</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># standard imports for pytorch</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.optim <span style="color:#66d9ef">as</span> optim
@@ -338,11 +343,11 @@ https://github.com/alex-shpak/hugo-book
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch <span style="color:#f92672">import</span> Tensor
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.profiler <span style="color:#f92672">import</span> profile, record_function, ProfilerActivity 
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#torchvision imports</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># torchvision imports</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torchvision
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torchvision.transforms <span style="color:#66d9ef">as</span> transforms
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Other imports </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Other imports </span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tqdm <span style="color:#66d9ef">as</span> tqdm 
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns 
@@ -355,34 +360,34 @@ https://github.com/alex-shpak/hugo-book
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> ssl
 </span></span><span style="display:flex;"><span>ssl<span style="color:#f92672">.</span>_create_default_https_context <span style="color:#f92672">=</span> ssl<span style="color:#f92672">.</span>_create_unverified_context
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define data pre-processing steps</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Define data pre-processing steps</span>
 </span></span><span style="display:flex;"><span>transform <span style="color:#f92672">=</span> transforms<span style="color:#f92672">.</span>Compose(
 </span></span><span style="display:flex;"><span>    [
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Resize images for (64*64)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Resize images for (64*64)</span>
 </span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>Resize((<span style="color:#ae81ff">64</span>,<span style="color:#ae81ff">64</span>)),
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Converts images into Pytorch tensor </span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Pytorch tensors are multi-dimensional arrays that can be processed on GPUs</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Converts images into Pytorch tensor </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Pytorch tensors are multi-dimensional arrays that can be processed on GPUs</span>
 </span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>ToTensor(), 
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Normalise the input data </span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#input data is transformed by subtracting the mean and dividing by the standard deviation for each channel. </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Normalise the input data </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Input data is transformed by subtracting the mean and dividing by the standard deviation for each channel. </span>
 </span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>Normalize((<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>), (<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>))])
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Batch size defines the number of samples processed before the model is updated.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Batch size defines the number of samples processed before the model is updated.</span>
 </span></span><span style="display:flex;"><span>batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">40</span> 
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Loading EuraSAT and transform using the defined function </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Loading EuraSAT and transform using the defined function </span>
 </span></span><span style="display:flex;"><span>dataset <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>datasets<span style="color:#f92672">.</span>EuroSAT(root<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./data&#39;</span>, 
 </span></span><span style="display:flex;"><span>                                        download<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, transform<span style="color:#f92672">=</span>transform)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Data loader creates a PyTorch data loader for a given dataset. </span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#The data loader provides an efficient way to iterate over the data in the dataset</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#and apply batch processing during training.      </span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#num_workers: defines the number of threads to use for loading the data. </span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#If shuffle=True, the data loader will randomly shuffle the data before each epoch to ensure that the model sees a different set of samples each time it is trained.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Data loader creates a PyTorch data loader for a given dataset. </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The data loader provides an efficient way to iterate over the data in the dataset</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and apply batch processing during training.      </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># num_workers: defines the number of threads to use for loading the data. </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># If shuffle=True, the data loader will randomly shuffle the data before each epoch to ensure that the model sees a different set of samples each time it is trained.</span>
 </span></span><span style="display:flex;"><span>data_loader <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>DataLoader(dataset, batch_size<span style="color:#f92672">=</span>batch_size,
 </span></span><span style="display:flex;"><span>                                          shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, num_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Classes -&gt; we have 10 labels </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Classes -&gt; we have 10 labels </span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#&#39;AnnualCrop&#39;, &#39;Forest&#39;, &#39;HerbaceousVegetation&#39;, &#39;Highway&#39;, &#39;Industrial&#39;, &#39;Pasture&#39;, &#39;PermanentCrop&#39;, &#39;Residential&#39;, &#39;River&#39; &#39;SeaLake&#39;</span>
 </span></span><span style="display:flex;"><span>classes <span style="color:#f92672">=</span> data_loader<span style="color:#f92672">.</span>dataset<span style="color:#f92672">.</span>classes
 </span></span><span style="display:flex;"><span>
@@ -390,15 +395,21 @@ https://github.com/alex-shpak/hugo-book
 </span></span><span style="display:flex;"><span>train_len<span style="color:#f92672">=</span>int(len(dataset<span style="color:#f92672">.</span>targets)<span style="color:#f92672">-</span>split)
 </span></span><span style="display:flex;"><span>val_len<span style="color:#f92672">=</span>int(split) 
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Spliting dataset in 75% training, 25% for testing  </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Spliting dataset in 75% training, 25% for testing  </span>
 </span></span><span style="display:flex;"><span>trainset,testset <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>random_split(dataset, [train_len,val_len])
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Create dataloader for training and testing dataset </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create dataloader for training and testing dataset </span>
 </span></span><span style="display:flex;"><span>train_loader <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>DataLoader(trainset, batch_size<span style="color:#f92672">=</span>batch_size,
 </span></span><span style="display:flex;"><span>                                          shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, num_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>test_loader <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>DataLoader(testset, batch_size<span style="color:#f92672">=</span>batch_size,
 </span></span><span style="display:flex;"><span>                                          shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, num_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create dataloader for training and testing dataset  </span>
+</span></span><span style="display:flex;"><span>dataloader_all <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>dataloader_all[<span style="color:#e6db74">&#39;train&#39;</span>] <span style="color:#f92672">=</span> train_loader
+</span></span><span style="display:flex;"><span>dataloader_all[<span style="color:#e6db74">&#39;val&#39;</span>] <span style="color:#f92672">=</span> test_loader                                         
 </span></span></code></pre></div><h3 id="visualizing-the-data">
   Visualizing the data
   <a class="anchor" href="#visualizing-the-data">#</a>
@@ -437,25 +448,25 @@ https://github.com/alex-shpak/hugo-book
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#66d9ef">as</span> F
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Custom class extends the functionality of nn.Module class from PyTorch, </span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#which provides the basic building blocks for creating neural networks in PyTorch. </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Custom class extends the functionality of nn.Module class from PyTorch, </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># which provides the basic building blocks for creating neural networks in PyTorch. </span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Net</span>(nn<span style="color:#f92672">.</span>Module):
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Setting up layers in CNN </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Setting up layers in CNN </span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Calling function from nn.Module</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Calling function from nn.Module</span>
 </span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#A 2D convolutional layer with 3 input channels, 6 output, and kernel (filter size) size of 5x5 </span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># A 2D convolutional layer with 3 input channels, 6 output, and kernel (filter size) size of 5x5 </span>
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">5</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#A max-pooling layer with kernel size 2x2 and stride of 2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># A max-pooling layer with kernel size 2x2 and stride of 2</span>
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pool <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>MaxPool2d(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Another convolution layer with 6 input channels, 16 output channels, and a kernel size of 5x5 </span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Another convolution layer with 6 input channels, 16 output channels, and a kernel size of 5x5 </span>
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">5</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#Three fully-connected linear layers for processing the output of the second convolution network </span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Three fully-connected linear layers for processing the output of the second convolution network </span>
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">16</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">13</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">120</span>)
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">120</span>, <span style="color:#ae81ff">84</span>)
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">84</span>, <span style="color:#ae81ff">10</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Define the foward pass of the network i.e. the computation performed on each input tensor. </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Define the foward pass of the network i.e. the computation performed on each input tensor. </span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
 </span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pool(F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>conv1(x)))
 </span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pool(F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>conv2(x)))
@@ -491,10 +502,10 @@ https://github.com/alex-shpak/hugo-book
   Inspecting CPU/GPU usage with PyTorch Profiler and TensorBoard
   <a class="anchor" href="#inspecting-cpugpu-usage-with-pytorch-profiler-and-tensorboard">#</a>
 </h3>
-<p>Before detailing the steps to train the model, we will first look at how to use the PyTorch profiler to inspect the CPU and GPU usage of the model. PyTorch Profiler is useful for measuring the training performance and resource utilization of your model. It tracks sequences of the execution steps that are the most costly in time and memory and visualize the workload distribution between GPUs and CPUs.</p>
+<p>Before detailing the steps to train the model, we will first look at how to use the <strong>PyTorch profiler</strong> to inspect the CPU and GPU usage of the model. PyTorch Profiler is useful for measuring the training performance and resource utilization of your model. It tracks sequences of the execution steps that are the most costly in time and memory and visualize the workload distribution between GPUs and CPUs.</p>
 <p>Firstly, let&rsquo;s define a function to train the model. This function will be used to train the model for each batch of data. One important thing to note is that we will be using the <code>to()</code> function to copy the data to the device the model is on.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(model,data,criterion, optimizer,device <span style="color:#f92672">=</span> device):
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Copy the data to the device the model is on </span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(model, data, criterion, optimizer, device <span style="color:#f92672">=</span> device):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Copy the data to the device the model is on, data[0] is the input, data[1] is the label assuming we are using the dataloader </span>
 </span></span><span style="display:flex;"><span>    inputs, labels <span style="color:#f92672">=</span> data[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device), data[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Predict the output for given input</span>
@@ -517,21 +528,21 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>on_trace_ready</strong>: defines the action to take when the profiling is complete. In this example, we will save the profiling logs to a file that can be used by TensorBoard.</li>
 <li><strong>profile_memory</strong>: enables memory profiling to measure tensor memory allocation/deallocation.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#GPU ----------------------------</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Initialise model </span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define device on cuda:0 </span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># GPU ----------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialise model </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Define device on cuda:0 </span>
 </span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cuda:0&#39;</span>) 
 </span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> Net()<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define loss function </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Define loss function </span>
 </span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()<span style="color:#f92672">.</span>cuda()<span style="color:#75715e">#Loss function computes the value between the predicted values and the labels. In this case, we are using Cross-Entropy loss, but many other loss functions are also avaible from nn. Such as focal loss </span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Define optimizer function </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Define optimizer function </span>
 </span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>SGD(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, momentum<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>) <span style="color:#75715e">#Optimizer function aims to reduce the loss function&#39;s value by changing the weight vector values through backpropagation in neural networks. We are using Stochastic gradient decent as our optimiser, with learning rate 0.01 and momentum 0.9 </span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Set random seed for reproducibility</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set random seed for reproducibility</span>
 </span></span><span style="display:flex;"><span>torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>manual_seed(<span style="color:#ae81ff">42</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Profiler</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Profiler</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>profile(
 </span></span><span style="display:flex;"><span>       schedule<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>schedule(
 </span></span><span style="display:flex;"><span>        wait<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
@@ -547,8 +558,8 @@ https://github.com/alex-shpak/hugo-book
 </span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
 </span></span><span style="display:flex;"><span>        train(model <span style="color:#f92672">=</span>model , data <span style="color:#f92672">=</span>batch_data, criterion <span style="color:#f92672">=</span> loss_fn, optimizer <span style="color:#f92672">=</span> optimizer,device<span style="color:#f92672">=</span>device)
 </span></span><span style="display:flex;"><span>        prof<span style="color:#f92672">.</span>step()
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#CPU ----------------------------</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#Reinitialise model, loss function, optimizer and random seed </span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># CPU ----------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Reinitialise model, loss function, optimizer and random seed </span>
 </span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cpu&#39;</span>)
 </span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> Net()<span style="color:#f92672">.</span>to(device<span style="color:#f92672">=</span>device)
 </span></span><span style="display:flex;"><span>loss_fn <span style="color:#f92672">=</span>  nn<span style="color:#f92672">.</span>CrossEntropyLoss()
@@ -574,7 +585,7 @@ https://github.com/alex-shpak/hugo-book
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%</span>load_ext tensorboard
 </span></span><span style="display:flex;"><span><span style="color:#f92672">%</span>tensorboard <span style="color:#f92672">--</span>logdir <span style="color:#f92672">./</span>log
 </span></span></code></pre></div><p>Or in VSCode, you can press <code>Ctrl+Shift+P</code> and type &ldquo;Open TensorBoard&rdquo;. Then select the log directory.</p>
-<p>The TensorBoard profiling dashboard includes a number of tabs that can be used to visualize the profiling logs. In this example, we will be focusing on the <strong>Overview</strong> which provides a high-level overview of the profiling results. The details of these metrics are <a href="https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md">here</a>.</p>
+<p>The TensorBoard profiling dashboard includes a number of tabs that can be used to visualize the profiling logs. In this example, we will be focusing on the <strong>Overview</strong> which provides a high-level overview of the profiling results. For more details on these metrics, you can learn more about it from <a href="https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md">here</a>.</p>
 <figure title = "GPU tensorboard">
      <center>
      <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/chp2_tb_gpu.png?raw=true">
@@ -650,7 +661,7 @@ https://github.com/alex-shpak/hugo-book
 </li>
 </ol>
 <h2 id="case-study-2-comparing-model-performance-with-a-fine-tune-model">
-  Case Study 2: Comparing model performance with a fine-tune model
+  Case Study 2: Comparing model performance with a fine tune model
   <a class="anchor" href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">#</a>
 </h2>
 <p>In this case study, we will be continuing our experiments with a pre-trained model. We will be using the same model and dataset as in case study 1. The only difference is that we will be a model that has already been trained on a large dataset.</p>
@@ -665,7 +676,8 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#initializing-the-model">#</a>
 </h3>
 <p>We will be using the VGG16 model as our pretrained model. The VGG16 model has 16 layers, including 13 convolutional layers and 3 fully connected layers. The model is pretrained on the ImageNet dataset, which contains 1000 classes. We will be using the VGG16 model to classify our satellite imageries. To begin, we need to download the pretrained network and change the final fully connected layer of the VGG16 model to output 10 classes instead of 1000 classes.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>vgg11_bn <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>vgg11_bn(weights<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Use the pretrained model from torchvision library, weights = True means we are using the pretrained weights </span>
+</span></span><span style="display:flex;"><span>vgg11_bn <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>vgg11_bn(weights<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># Freeze weights of all layers except the new classification layer</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> param <span style="color:#f92672">in</span> vgg11_bn<span style="color:#f92672">.</span>parameters():
 </span></span><span style="display:flex;"><span>    param<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span> 
@@ -760,6 +772,7 @@ https://github.com/alex-shpak/hugo-book
   Training the model
   <a class="anchor" href="#training-the-model">#</a>
 </h3>
+<p>We can now compare the speed and accuracy of the CPU and GPU implementations of VGG16 and the baseline model. It is important to note that we are re-initializing the loss function and optimizer on the same device as the model. This is because the loss function and optimizer are also part of the model and will be moved to the same device as the model.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_model</span>(model, dataloaders, criterion, optimizer, num_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, device<span style="color:#f92672">=</span>device):
 </span></span><span style="display:flex;"><span>    
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Initialize time </span>
@@ -833,7 +846,6 @@ https://github.com/alex-shpak/hugo-book
   Speed comparison
   <a class="anchor" href="#speed-comparison">#</a>
 </h3>
-<p>We can now compare the speed and accuracy of the CPU and GPU implementations of VGG16 and the baseline model. It is important to note that we are re-initializing the loss function and optimizer on the same device as the model. This is because the loss function and optimizer are also part of the model and will be moved to the same device as the model.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#VGG16</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#CPU----------------------------------------------------------------------------------------------------------------</span>
 </span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cpu&#39;</span>) 
@@ -915,8 +927,8 @@ https://github.com/alex-shpak/hugo-book
   Conclusion
   <a class="anchor" href="#conclusion">#</a>
 </h2>
-<p>In this case study, we showcased the utilization of GPUs to accelerate the classification of satellite images, alongside the use of profiling tools like Tensorboard to visualize CPU/GPU bottlenecks. Our findings show that deep learning models can benefit greatly from GPUs, especially when the model is complex and the data size is substantial.</p>
-<p>While deep learning frameworks like PyTorch and TensorFlow offer a simple API to transfer model/tensor objects from the CPU to the GPU, the overhead of transferring data from the CPU to the GPU can be significant for smaller data or model sizes. Therefore, the performance of the GPU implementation may only be marginally better than that of the CPU implementation in such cases. Consequently, it is imperative to evaluate the data and computation sizes thoroughly before deciding to use a CPU or a GPU.</p>
+<p>In this case study, we showcased the utilization of GPUs to accelerate the classification of satellite images, alongside the use of profiling tools such as Tensorboard to visualize CPU/GPU bottlenecks. Our findings show that deep learning models can benefit greatly from GPUs, especially when the model is complex and the data size is substantial.</p>
+<p>While deep learning frameworks like PyTorch and TensorFlow offer a simple API to transfer model/tensor objects from the CPU to the GPU, the overhead of transferring data from the CPU to the GPU can be significant for smaller data or model sizes. Therefore, the performance of the GPU implementation may only be marginally better than that of the CPU implementation in such cases. Consequently, it is imperative to thoroughly evaluate the data and computation sizes before deciding whether to use a CPU or a GPU.</p>
 </article>
  
       
@@ -971,7 +983,7 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#how-can-we-improve-the-computation-speed-on-gpu">How can we improve the computation speed on GPU?</a></li>
       </ul>
     </li>
-    <li><a href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">Case Study 2: Comparing model performance with a fine-tune model</a>
+    <li><a href="#case-study-2-comparing-model-performance-with-a-fine-tune-model">Case Study 2: Comparing model performance with a fine tune model</a>
       <ul>
         <li><a href="#pre-training-and-fine-tuning">Pre-training and fine-tuning</a></li>
         <li><a href="#initializing-the-model">Initializing the model</a></li>

@@ -16,7 +16,7 @@
 <link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
-  <script defer src="/GPU-Analytics/en.search.min.42877e2e624550bab0764f2a4b2e8da86d080649741a107bf9ce078294811d93.js" integrity="sha256-Qod&#43;LmJFULqwdk8qSy6NqG0IBkl0GhB7&#43;c4HgpSBHZM=" crossorigin="anonymous"></script>
+  <script defer src="/GPU-Analytics/en.search.min.4fffdebd2f263adfde75d485db20dee5d8928936d7c30293c0736ff1a5aa941f.js" integrity="sha256-T//evS8mOt/eddSF2yDe5diSiTbXwwKTwHNv8aWqlB8=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -228,7 +228,7 @@ https://github.com/alex-shpak/hugo-book
 <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#getting-started-google-colab">Getting started: Google Colab</a>
+    <li><a href="#google-colab">Google Colab</a>
       <ul>
         <li><a href="#how-to-start">How to start?</a></li>
         <li><a href="#enabling-gpu-support">Enabling GPU support</a></li>
@@ -262,11 +262,11 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#introduction">#</a>
 </h2>
 <p>Setting up the environment for GPU can be challenging, as every computer has different hardware and software configurations. There are no universal instructions that will work for everyone, but in this chapter, we will discuss how to set up the environment using Google Colab as well as a GPU on a remote server. We will also highlight the steps to verify that the GPU is working properly.</p>
-<h2 id="getting-started-google-colab">
-  Getting started: Google Colab
-  <a class="anchor" href="#getting-started-google-colab">#</a>
+<h2 id="google-colab">
+  Google Colab
+  <a class="anchor" href="#google-colab">#</a>
 </h2>
-<p><a href="https://colab.research.google.com/">Google Colab</a> is a cloud-based platform that allows you to run <a href="https://jupyter.org/">Jupyter notebooks</a> in the Cloud with support for GPU-acceleration. Google Colab is free to use, and you do not need to install any software or setup CUDA manually. It comes with already pre-installed libraries such as <em>Pandas</em> or <em>NumPy</em>, so you do not need to run <strong>pip install</strong> by yourself.</p>
+<p><a href="https://colab.research.google.com/">Google Colab</a> is a cloud-based platform that allows you to run <a href="https://jupyter.org/">Jupyter Notebook</a> in the Cloud with support for GPU-acceleration. Google Colab is free to use, and you do not need to install any software or setup CUDA manually. It comes with pre-installed libraries such as <em>Pandas</em> or <em>NumPy</em>, so you do not need to run <strong>pip install</strong> yourself.</p>
 <h3 id="how-to-start">
   How to start?
   <a class="anchor" href="#how-to-start">#</a>
@@ -310,10 +310,10 @@ https://github.com/alex-shpak/hugo-book
   Verify GPU access
   <a class="anchor" href="#verify-gpu-access">#</a>
 </h3>
-<p>After you enable GPU support, you can verify that the GPU is working properly by running the  code below in a code block in your notebook.</p>
+<p>After you enable GPU support, you can verify that the GPU is working properly by running the code below in your notebook.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span>nvidia<span style="color:#f92672">-</span>smi
-</span></span></code></pre></div><p><strong>nvidia-smi</strong> (NVIDIA System Management Interface) is a tool to query, monitor and configure NVIDIA GPUs. It ships with and is installed along with the NVIDIA driver and it is tied to that specific driver version. It is a tool written using the NVIDIA Management Library (NVML), which you can also find the Python bindings in the PyPI package <em>pynvml</em>.</p>
-<p>This outputs a summary table (see <strong>Figure 4</strong> for an example output), where you will find the following useful information:</p>
+</span></span></code></pre></div><p><strong>nvidia-smi</strong> (NVIDIA System Management Interface) is a tool to query, monitor and configure NVIDIA GPUs. It ships with and is installed along with the NVIDIA driver, and it is tied to that specific driver version. It is a tool written using the NVIDIA Management Library (NVML), which you can also find the Python bindings in the PyPI package <em>pynvml</em>.</p>
+<p><strong>nvidia-smi</strong>  outputs a summary table (see <strong>Figure 4</strong> for an example output), where you will find the following useful information:</p>
 <ul>
 <li><strong>Name</strong>: The name of the GPU.</li>
 <li><strong>Memory</strong>: The amount of memory available on the GPU.</li>
@@ -343,9 +343,8 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#best-practices">#</a>
 </h3>
 <p>Google Colab is a great tool for running GPU-accelerated notebooks in the cloud. However, there are some limitations that you should be aware of.</p>
-<p><strong>Notebooks are not persistent</strong>: When you create a notebook in Google Colab, it is stored in the Cloud. However, the notebook is not persistent. This means that if you close the notebook, the notebook will be deleted. If you want to save your notebook, you need to download it to your local machine.</p>
-<p><strong>Google Colab is not an unrestricted resource</strong>: Google Colab is free to use, but they limit the amount of time you can use the GPU. Google Colab will automatically disconnects the notebook if we leave it idle for more than 30 minutes, meaning that your training will be interrupted and you will have to restart it. Nevertheless, you can run the free of charge notebooks for at most 12 hours at a time as explained in the <a href="https://research.google.com/colaboratory/faq.html#gpu-time-limit">FAQ</a>. If you want to use the GPU for more than 12 consecutive hours or require access to more memory, you can consider <a href="https://colab.research.google.com/signup/pricing?utm_source=resource_tab&amp;utm_medium=link&amp;utm_campaign=want_more_resources">switching to the paid version of Colab</a>.</p>
-<p><strong>Working with data</strong>: You can access your files that are stored on Google Drive directly from Google Colab. To do this, you need to mount your Google Drive to the notebook. You can do this by running the following code in a code block in your notebook. Use the batch command <code>!cd</code> the <em>Files</em> panel on the left to access your files.</p>
+<p><strong>Google Colab is not an unrestricted resource</strong>: Google Colab is free to use, but they limit the amount of time you can use the GPU. Google Colab will automatically disconnect the notebook if we leave it idle for more than 30 minutes, meaning that your training will be interrupted and you will have to restart it. Nevertheless, you can run the free of charge notebooks for at most 12 hours at a time as explained in the <a href="https://research.google.com/colaboratory/faq.html#gpu-time-limit">FAQ</a>. If you want to use the GPU for more than 12 consecutive hours or require access to more memory, you can consider <a href="https://colab.research.google.com/signup/pricing?utm_source=resource_tab&amp;utm_medium=link&amp;utm_campaign=want_more_resources">switching to the paid version of Colab</a>.</p>
+<p><strong>Working with data</strong>: You can access your files that are stored on Google Drive directly from Google Colab. To do this, you need to mount your Google Drive to the notebook. You can do this by running the following code in a code block in your notebook. Use the bash command <code>!cd</code> the <em>Files</em> panel on the left to access your files.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">from</span> google.colab <span style="color:#f92672">import</span> drive
 </span></span><span style="display:flex;"><span>drive<span style="color:#f92672">.</span>mount(<span style="color:#e6db74">&#39;/content/drive&#39;</span>)
 </span></span></code></pre></div><p>You can also upload or download a file (or files) from/to your computer using the following code.</p>
@@ -354,7 +353,7 @@ https://github.com/alex-shpak/hugo-book
 </span></span><span style="display:flex;"><span>files<span style="color:#f92672">.</span>upload()
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#Download a file to your computer</span>
 </span></span><span style="display:flex;"><span>files<span style="color:#f92672">.</span>download(<span style="color:#e6db74">&#39;path/to/your/file&#39;</span>)
-</span></span></code></pre></div><p><strong>Ensure all files have been completely copied to your Google Drive</strong>: As mentioned above, Colab can and will terminate your session due to inactivity. To ensure that your final model and data is saved to your Google Drive, call <code>drive.flush_and_unmount()</code> before you terminate your session. Furthermore, you can checkpoint your model during training process and save it to your Google Drive as well.</p>
+</span></span></code></pre></div><p><strong>Ensure all files are completely copied to your Google Drive</strong>: As mentioned above, Colab can and will terminate your session due to inactivity. To ensure that your final model and data is saved to your Google Drive, call <code>drive.flush_and_unmount()</code> before you terminate your session. Furthermore, you can checkpoint your model during training process and save it to your Google Drive as well.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">from</span> google.colab <span style="color:#f92672">import</span> drive
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(<span style="color:#f92672">...</span>) <span style="color:#75715e"># Training your model</span>
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#39;path/to/your/model&#39;</span>) <span style="color:#75715e"># Save your model</span>
@@ -395,12 +394,12 @@ https://github.com/alex-shpak/hugo-book
 </h3>
 <p>You can start the JupyterLab server using the following bash command.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jupyter lab --no-browser
-</span></span></code></pre></div><p>This will start the JupyterLab server and you will be able to access it from your browser.</p>
+</span></span></code></pre></div><p>This will start the JupyterLab server, and you will be able to access it from your browser.</p>
 <h2 id="getting-started-local-machine">
   Getting started: Local machine
   <a class="anchor" href="#getting-started-local-machine">#</a>
 </h2>
-<p>If your local machine has a supported GPU, you might be able to install the CUDA toolkit. Most of GPU-accelerated libraries build on top of the CUDA framework. Therefore, you need to have a GPU that supports CUDA. You can check the <a href="https://developer.nvidia.com/cuda-gpus">CUDA GPU support matrix</a> to see if your GPU is supported. Of course, you should have a decent CPU, RAM and Storage to be able to do some leverage the power of the GPU.</p>
+<p>If your local machine has a supported GPU, you might be able to install the CUDA toolkit. Most of GPU-accelerated libraries build on top of the CUDA framework. Therefore, you need to have a GPU that supports CUDA. You can check the <a href="https://developer.nvidia.com/cuda-gpus">CUDA GPU support matrix</a> to see if your GPU is supported. Of course, you should have a decent CPU, RAM and Storage to be able to leverage the power of the GPU.</p>
 <p>For the minimum hardware requirements, we recommend the following:</p>
 <ul>
 <li><strong>CPU</strong>: Minimum 4 cores at 2.6GHz; at least 16GB of RAM.</li>
@@ -449,7 +448,7 @@ https://github.com/alex-shpak/hugo-book
 <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#getting-started-google-colab">Getting started: Google Colab</a>
+    <li><a href="#google-colab">Google Colab</a>
       <ul>
         <li><a href="#how-to-start">How to start?</a></li>
         <li><a href="#enabling-gpu-support">Enabling GPU support</a></li>

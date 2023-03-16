@@ -30,7 +30,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://jasoncpit.github.io/GPU-Analytics/docs/case_study/chapter_3/</guid>
-      <description>Introduction # Why are we interested in geospatial data? Geospatial data is a type of data that is associated with a location. This location can be a point, a line, a polygon, or a raster. Geospatial data is becoming more and more important, yet the sheer volume of information that is generated made it difficult to handle. In this chapter, we will be exploring the use of GPU for manipulating large-scale geospatial data, and provide a practical example of how we can predict the presence of Aedes aegypti across the globe.</description>
+      <description>Geospatial Operation and Analysis # Why are we interested in geospatial data? Geospatial data is a type of data that is associated with a location. This location can be a point, a line, a polygon, or a raster. Geospatial data is becoming more and more important, yet the sheer volume of information that is generated made it difficult to handle. In this chapter, we will be exploring the use of GPU for manipulating large-scale geospatial data, and provide a practical example of how we can predict the presence of Aedes aegypti across the globe.</description>
     </item>
     
     <item>
@@ -39,7 +39,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://jasoncpit.github.io/GPU-Analytics/docs/about/gpu/</guid>
-      <description>Introduction # Over the past few decades, social science research has faced challenges due to a lack of available data, the cost and time needed to conduct surveys, and limitations on computational power for analysis. These issues have been exacerbated by a decline in survey quality as well as an increase in biases in the characteristics of respondents. There was also no guarantee that long-term, time-consuming surveys would continue to be available due to fiscal austerity (Singleton et al.</description>
+      <description>Introduction # Over the past few decades, geographic and social science research has faced challenges due to a lack of available data, the cost and time needed to conduct surveys, and limitations on computational power for analysis. These issues have been exacerbated by a decline in survey quality as well as an increase in biases in the characteristics of respondents. There was also no guarantee that long-term, time-consuming surveys would continue to be available due to fiscal austerity (Singleton et al.</description>
     </item>
     
     <item>
@@ -48,7 +48,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://jasoncpit.github.io/GPU-Analytics/docs/preface/about/</guid>
-      <description>GPU-based analysis for social and geographic applications # Introduction # This document provides the tools, the code and utility of the graphics processing unit (GPU) for social and geographic research and applications.This project is funded by The British Academy&amp;rsquo;s Talent Development Award.
+      <description>GPU-based analysis for social and geographic applications # Introduction # This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy&amp;rsquo;s Talent Development Award.
 In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations.</description>
     </item>
     
