@@ -4,19 +4,17 @@
 	<meta name="generator" content="Hugo 0.111.3">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="GPU-based analysis for social and geographic applications # Introduction # This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy&rsquo;s Talent Development Award.
+In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations.">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="GPU-based analysis for social and geographic applications" />
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Home Page" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://jasoncpit.github.io/GPU-Analytics/" />
-<title>GPU-based analysis for social and geographic applications | GPU-based analysis for social and geographic applications</title>
+<meta property="og:url" content="https://jtvandijk.github.io/GPU-Analytics/" />
+<title>Home Page | GPU-based analysis for social and geographic applications</title>
 <link rel="manifest" href="/GPU-Analytics/manifest.json">
 <link rel="icon" href="/GPU-Analytics/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/GPU-Analytics/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
-  <script defer src="/GPU-Analytics/flexsearch.min.js"></script>
-  <script defer src="/GPU-Analytics/en.search.min.4fffdebd2f263adfde75d485db20dee5d8928936d7c30293c0736ff1a5aa941f.js" integrity="sha256-T//evS8mOt/eddSF2yDe5diSiTbXwwKTwHNv8aWqlB8=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://jasoncpit.github.io/GPU-Analytics/index.xml" title="GPU-based analysis for social and geographic applications" />
+<link rel="stylesheet" href="/GPU-Analytics/book.min.a82d7e77ceb134d151c4d7e381eeb30623fbd5a524d58c584d8716ecec0205bd.css" integrity="sha256-qC1&#43;d86xNNFRxNfjge6zBiP71aUk1YxYTYcW7OwCBb0=" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" href="https://jtvandijk.github.io/GPU-Analytics/index.xml" title="GPU-based analysis for social and geographic applications" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -37,12 +35,6 @@ https://github.com/alex-shpak/hugo-book
 </h2>
 
 
-<div class="book-search">
-  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
-  <div class="book-search-spinner hidden"></div>
-  <ul id="book-search-results"></ul>
-</div>
-
 
 
 
@@ -60,19 +52,6 @@ https://github.com/alex-shpak/hugo-book
 
   
   <ul>
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/GPU-Analytics/docs/preface/about/" class="">Preface</a>
-  
-
-        </li>
-      
     
       
         <li>
@@ -187,6 +166,18 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+  
+<ul>
+  
+  <li>
+    <a href="https://github.com/jtvandijk/GPU-Analytics"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
 
 
 
@@ -211,7 +202,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/GPU-Analytics/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>GPU-based analysis for social and geographic applications</strong>
+  <strong>Home Page</strong>
 
   <label for="toc-control">
     
@@ -225,7 +216,20 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#gpu-based-analysis-for-social-and-geographic-applications">GPU-based analysis for social and geographic applications</a>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#who-is-this-document-for">Who is this document for?</a></li>
+        <li><a href="#document-details">Document details</a></li>
+        <li><a href="#project-members">Project members</a></li>
+        <li><a href="#license">License</a></li>
+        <li><a href="#project-reference">Project reference:</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
 
@@ -236,7 +240,62 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"></article>
+  <article class="markdown"><h1 id="gpu-based-analysis-for-social-and-geographic-applications">
+  GPU-based analysis for social and geographic applications
+  <a class="anchor" href="#gpu-based-analysis-for-social-and-geographic-applications">#</a>
+</h1>
+<figure title = "GPU tensorboard">
+     <center>
+     <p><img src="https://github.com/jasoncpit/GPU-Analytics/blob/master/Pictures/cover.jpeg?raw=true">
+    <figcaption>
+    </b>
+    </figcaption>
+    </center>
+</figure>
+<h2 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h2>
+<p>This document provides the tools, the code and utility of the Graphics Processing Unit (GPU) for social and geographic research and applications. This project is funded by The British Academy&rsquo;s <a href="https://www.thebritishacademy.ac.uk/funding/talent-development-awards/">Talent Development Award</a>.</p>
+<p>In most cases data science tasks are executed on local servers or personal devices where calculations are handled by one or more Central Processing Units (CPUs). CPUs can only handle one task at the time, meaning that the computational time for millions of sequential operations can only be sped up by adding more CPUs and parallelising these calculations. A Graphics Processing Unit (GPU), on the other hand, is designed to execute several tasks simultaneously. GPU-accelerated analytics harness the parallel-capabilities of the GPU to accelerate processing-intensive operations. This can be particularly useful for social and geographic research where the data sets are often large and complex.</p>
+<p>In this document, we will explore a collection of novel and innovative computational methods in social and geographic data science. This is essential for at least two reasons. First, with the proliferation of large-scale data sets as well as the availability of increasingly powerful personal computing devices over the past decade or so, social science and geography have witnessed a second quantitative revolution - <a href="https://doi.org/10.1177/2053951714528481">Kitchen (2014, p.3)</a> speaks of a fourth paradigm of science with a focus on data-intensive analyses, statistical exploration and data mining. However, there is limited availability of well-documented resources for both social and geographical data science researchers and students in handling large volumes of data in an efficient manner.</p>
+<p>Second, whereas ‘Big Data’ can be very rich sources of information, they tend to be accidental (e.g. a by-product of online transactions) and highly diverse in quality and resolution. As a result, many ‘Big Data’ sources are not representative of the population or phenomenon of study and contain a variety of biases and uncertainties. An illustrative example of the problem is described in <a href="https://doi.org/10.1111/rssa.12713">Van Dijk <em>et al.</em> (2021)</a> where, in the absence of frequently updated data on the nature of residential moves in the United Kingdom, the authors use population registers and administrative data to develop robust annual estimates of residential mobility between all UK neighbourhoods by ascribing individuals that seemingly vacate a property to their most probably residential destination. With circa 7.8 billion possible origin-destination pairings, this was a very time-consuming and computationally intensive model.</p>
+<p>This raises the question of how technological innovations can be harnessed for the benefit of social and geographic data science research: both to enable future highly computationally intensive research as well as how to effectively communicate these new research pipelines to researchers and students within the domains of computational social sciences and quantitative geography.</p>
+<h2 id="who-is-this-document-for">
+  Who is this document for?
+  <a class="anchor" href="#who-is-this-document-for">#</a>
+</h2>
+<p>In this document, we will explicitly explore the potential of GPU with <strong>three case studies</strong>, and best practices for GPU in social and geographic research. This document is aimed at researchers and students in the domains of computational social sciences and quantitative geography who are interested in learning and using GPU as part of their research. It is also aimed at data science and machine learning practitioners who are interested in working with geographical data and problems in a more efficient manner. While some content is aimed at a more technical audience, the document is written in a way that is accessible to a wide audience.</p>
+<p>We also want to highlight that this document is not a comprehensive guide to GPU and GPU programming. Rather, it is a collection of resources and projects that can be used to explore the potential of GPU-based analysis in social and geographic research.</p>
+<h2 id="document-details">
+  Document details
+  <a class="anchor" href="#document-details">#</a>
+</h2>
+<p>In this project we will first explain the basics of GPU and how to configure GPU both locally and on the cloud. We will be using a NVDIA Tesla V100 GPU for our demonstrations, but the code and instructions can be easily adapted to other GPUs.</p>
+<p>After configuration, the usability of GPU-accelerated analytics in the context of three different geographic applications will be benchmarked. The first of these case studies will explore the matching and joining of large address datasets. The second case study will explore the performance of deep learning algorithms for GeoAI applications. The third case study will look specifically at the opportunities for improving the performance of disease risk prediction using raster data. The final deliverable of the project will be a workshop alongside a freely available, shareable digital resource with detailed instructions on how to implement GPU-based analysis in social and geographic research and teaching.</p>
+<h2 id="project-members">
+  Project members
+  <a class="anchor" href="#project-members">#</a>
+</h2>
+<ul>
+<li><a href="https://www.mappingdutchman.com">Dr Justin van Dijk</a></li>
+<li><a href="https://www.turing.ac.uk/people/researchers/stephen-law">Dr Stephen Law</a></li>
+<li><a href="https://www.geog.ucl.ac.uk/people/academic-staff/anwar-musah">Dr Anwar Musah</a></li>
+<li><a href="https://www.ucl.ac.uk/geospatial-analytics/people/jason-chi-sing-tang">Mr Jason Chi Sing Tang</a></li>
+</ul>
+<h2 id="license">
+  License
+  <a class="anchor" href="#license">#</a>
+</h2>
+<p>This work is licensed under a
+<a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p><a href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://licensebuttons.net/l/by-sa/4.0/88x31.png" alt="CC BY-SA 4.0" /></a></p>
+<h2 id="project-reference">
+  Project reference:
+  <a class="anchor" href="#project-reference">#</a>
+</h2>
+<p><a href="https://www.thebritishacademy.ac.uk/funding/talent-development-awards/talent-development-awards-past-awards/talent-development-awards-scheme-2021/">TDA21\210069</a></p>
+</article>
  
       
 
@@ -261,6 +320,10 @@ https://github.com/alex-shpak/hugo-book
 
       
   
+  <div class="book-comments">
+
+</div>
+  
  
 
       <label for="menu-control" class="hidden book-menu-overlay"></label>
@@ -271,7 +334,20 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#gpu-based-analysis-for-social-and-geographic-applications">GPU-based analysis for social and geographic applications</a>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#who-is-this-document-for">Who is this document for?</a></li>
+        <li><a href="#document-details">Document details</a></li>
+        <li><a href="#project-members">Project members</a></li>
+        <li><a href="#license">License</a></li>
+        <li><a href="#project-reference">Project reference:</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
  
