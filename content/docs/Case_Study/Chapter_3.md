@@ -106,7 +106,7 @@ fig.subplots_adjust(hspace=-0.5, wspace=0)
 
 ### Prepare data for pseudo-background points as absence 
 
-Next, we need to prepare the background data. What is the background data? With Background data we are not attempting to guess point locations where an event is absent. Here, we are rather trying to characterise the environment of the study region. In this sense, background is the same, irrespective of where the point fire are found or not. Background data establishes the environmental domain of the study, whilst presence data should establish under which conditions a fire is more likely to be present than on average. 
+Next, we need to prepare the background data. What is the background data? With background data we are not attempting to guess point locations where an event is absent. Here, we are rather trying to characterise the environment of the study region. In this sense, background is the same, irrespective of where the point fire are found or not. Background data establishes the environmental domain of the study, whilst presence data should establish under which conditions a fire is more likely to be present than on average. 
 
 There are several ways to generate background data. In R, we can use the `spsample()` function from the `sp` package to generate randomly-distributed points with defined spatial boundaries. However, in Python, there is no pre-built function to help us. Instead, we will generate random points across the world and filter out the points that are outside the country boundary. Here is the code to generate random points across the world.
 
@@ -343,7 +343,6 @@ background_env['Presence'] = 0
 input_data = pd.concat([aedes_env,background_env],axis=0)
 input_data[input_data<0]  =0
 ```
-#Save
 
 ### Preparation of training & test data for prediction & model cross-validation
 
